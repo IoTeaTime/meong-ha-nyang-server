@@ -11,6 +11,11 @@ jobs:
     name: Jira 이슈 생성
     runs-on: ubuntu-latest
     steps:
+      - name: 이슈 담당자 자동 할당
+        uses: pozil/auto-assign-issue@v2
+        with:
+          assignees: ${{ github.actor }}
+
       - name: 원채 Jira 로그인
         uses: atlassian/gajira-login@v3
         if: github.actor == 'ywonchae1'
