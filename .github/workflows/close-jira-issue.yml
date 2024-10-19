@@ -1,0 +1,46 @@
+name: Jira 이슈 닫기
+on:
+  issues:
+    types:
+      - closed
+      
+jobs:
+  close-jira-issue:
+    permissions: write-all
+
+    name: Jira 이슈 닫기
+    runs-on: ubuntu-latest
+    steps:
+      - name: 원채 Jira 로그인
+        uses: atlassian/gajira-login@v3
+        if: github.actor == 'ywonchae1'
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_WONCHAE_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_WONCHAE_USER_EMAIL }}
+
+      - name: 유진 Jira 로그인
+        uses: atlassian/gajira-login@v3
+        if: github.actor == 'sseoU'
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_YOUJIN_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_YOUJIN_USER_EMAIL }}
+
+      # 다른 팀원 계정 연결 필요
+
+      - name: Jira 이슈 키 찾기
+        id: issue-key
+        uses: atlassian/gajira-find-issue-key@master
+        with:
+          string: ${{ github.event.issue.title }}
+
+      - name: 오늘 날짜 생성
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        
+      - name: Jira 이슈 완료로 이동
+        uses: atlassian/gajira-transition@v3
+        with:
+          issue: ${{ steps.issue-key.outputs.issue }}
+          transition: "Done"
