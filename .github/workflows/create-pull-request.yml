@@ -1,0 +1,21 @@
+name: 풀리퀘스트 생성
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  create-pull-request:
+    permissions: write-all
+
+    name: 풀리퀘스트 설정 자동화
+    runs-on: ubuntu-latest
+    steps:
+      - name: 담당자와 리뷰어 자동 할당
+        uses: hkusu/review-assign-action@v1
+        with:
+          assignees: ${{ github.actor }}
+          reviewers: ${{ vars.REVIEWERS }}
+
+      - name: 풀리퀘스트 라벨링
+        uses: actions/labeler@v5
