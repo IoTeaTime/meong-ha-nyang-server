@@ -22,7 +22,7 @@ jobs:
 
       - name: 환경변수 파일 주입
         run: |
-          cd module-presentation/src/main/resources
+          cd src/main/resources
           echo "${{ secrets.APPLICATION_SECRETS }}" > ./application-secret.properties
 
       - name: Gradle Wrapper 권한 부여
