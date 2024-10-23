@@ -9,5 +9,4 @@ public class MeongHaNyangServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(MeongHaNyangServerApplication.class, args);
     }
-
 }
