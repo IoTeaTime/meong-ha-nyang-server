@@ -72,10 +72,6 @@ jobs:
             ${{ github.event.issue.body }}
           mode: md2jira
 
-      - name: 오늘 날짜 생성
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-
       - name: Jira에 이슈 생성
         id: create
         uses: atlassian/gajira-create@v3
@@ -86,7 +82,6 @@ jobs:
           description: "${{ steps.md2jira.outputs.output-text }}"
           fields: |
             {
-              "customfield_10039": "${{ steps.date.outputs.date }}",
               "parent": {
                 "key": "${{ steps.issue-parser.outputs.issueparser_parentKey }}"
               }
