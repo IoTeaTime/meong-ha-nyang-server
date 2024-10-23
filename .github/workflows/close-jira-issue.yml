@@ -50,6 +50,10 @@ jobs:
         uses: atlassian/gajira-find-issue-key@master
         with:
           string: ${{ github.event.issue.title }}
+
+      - name: 오늘 날짜 생성
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
         
       - name: Jira 이슈 완료로 이동
         uses: atlassian/gajira-transition@v3
