@@ -6,12 +6,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum SuccessTypeCode implements TypeCodeIfs {
-    //성공
-    OK(200,"OK","success"),
-    //생성
-    CREATE(201,"CREATE","success")
-    ;
-
+    // 성공
+    OK(200, "OK", "success"),
+    // 생성
+    CREATE(201, "CREATE", "success");
 
     private final Integer code;
     private final String message;
