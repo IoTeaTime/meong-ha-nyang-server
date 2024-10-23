@@ -4,9 +4,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-**/application-secret.properties
-**/data.sql
-generated
 
 ### STS ###
 .apt_generated
@@ -19,7 +16,6 @@ generated
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-**/generated_tests
 
 ### IntelliJ IDEA ###
 .idea
@@ -39,12 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### .RUN ###
-Application.run.xml
-
-### localhost.p12
-localhost.p12
 
 ### macOS ###
 # General
