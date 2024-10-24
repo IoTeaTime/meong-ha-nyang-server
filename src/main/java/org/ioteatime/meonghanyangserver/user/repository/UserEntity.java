@@ -1,10 +1,10 @@
 package org.ioteatime.meonghanyangserver.user.repository;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @Entity
 @NoArgsConstructor
 public class UserEntity {
@@ -13,13 +13,13 @@ public class UserEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String nickname;
-
-    @Column(nullable = false)
     private String email;
+
+    @Column private String profileImgUrl;
 
     @Column(nullable = false)
     private String password;
 
-    @Column private String profile_img_url;
+    @Column(nullable = false)
+    private String nickname;
 }
