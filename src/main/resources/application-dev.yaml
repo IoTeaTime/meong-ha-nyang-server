@@ -1,9 +1,8 @@
-
 spring:
   datasource:
-    url: jdbc:mariadb://127.0.0.1:3306/meong-ha-nyang?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
-    username: root
-    password: maria
+    url: ${MARIA_URL}
+    username: ${MARIA_USERNAME}
+    password: ${MARIA_PASSWORD}
     driverClassName: org.mariadb.jdbc.Driver
   jpa:
     show-sql: true

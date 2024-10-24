@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:application-secret.properties
   application:
     name: meong-ha-nyang-server
   profiles:
