@@ -1,8 +1,8 @@
 package org.ioteatime.meonghanyangserver.user.service;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
+import org.ioteatime.meonghanyangserver.user.dto.UserDto;
 import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,19 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public Optional<UserEntity> getUserDetail(Long userId) {
-        return userRepository.findById(userId);
+    public UserDto getUserDetail(Long userId) {
+        UserEntity userEntity =
+                userRepository
+                        .findById(userId)
+                        .orElseThrow(
+                                () ->
+                                        new IllegalArgumentException(
+                                                "User not found with ID: " + userId));
+
+        return new UserDto(
+                userEntity.getId(),
+                userEntity.getEmail(),
+                userEntity.getProfileImgUrl(),
+                userEntity.getNickname());
     }
 }
