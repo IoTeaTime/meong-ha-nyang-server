@@ -22,5 +22,5 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column private String profile_img_url;
+    @Column private String profileImgUrl;
 }
