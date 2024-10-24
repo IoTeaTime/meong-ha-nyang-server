@@ -43,7 +43,13 @@ jobs:
           JIRA_API_TOKEN: ${{ secrets.JIRA_KYONGJAE_API_TOKEN }}
           JIRA_USER_EMAIL: ${{ secrets.JIRA_KYONGJAE_USER_EMAIL }}
 
-      # 다른 팀원 계정 연결 필요
+      - name: 지인 Jira 로그인
+        uses: atlassian/gajira-login@v3
+        if: github.actor == 'OziinG'
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_JIIN_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_JIIN_USER_EMAIL }}
 
       - name: Jira 이슈 키 찾기
         id: issue-key
