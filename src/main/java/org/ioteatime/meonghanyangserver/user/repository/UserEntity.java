@@ -2,9 +2,10 @@ package org.ioteatime.meonghanyangserver.user.repository;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @Entity
 @NoArgsConstructor
 public class UserEntity {
