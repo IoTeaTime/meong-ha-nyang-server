@@ -1,7 +1,6 @@
 package org.ioteatime.meonghanyangserver.user.repository;
 
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +21,5 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column
-    private String profile_img_url;
+    @Column private String profile_img_url;
 }
