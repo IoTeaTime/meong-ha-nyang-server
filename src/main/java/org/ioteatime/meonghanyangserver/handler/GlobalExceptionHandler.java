@@ -15,12 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<Api<Object>> exception(
-            Exception exception
-    ){
-        log.info("",exception);
-        return ResponseEntity
-                .status(500)
-                .body(Api.ERROR(ErrorTypeCode.SERVER_ERROR));
+    public ResponseEntity<Api<Object>> exception(Exception exception) {
+        log.info("", exception);
+        return ResponseEntity.status(500).body(Api.ERROR(ErrorTypeCode.SERVER_ERROR));
     }
 }
