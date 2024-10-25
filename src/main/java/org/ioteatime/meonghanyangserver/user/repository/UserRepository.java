@@ -7,4 +7,6 @@ public interface UserRepository {
     Optional<UserEntity> findById(Long userId);
 
     void deleteById(Long userId);
+
+    UserEntity save(UserEntity UserEntity);
 }

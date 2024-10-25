@@ -19,4 +19,9 @@ public class UserRepositoryImpl implements UserRepository {
     public void deleteById(Long userId) {
         jpaUserRepository.deleteById(userId);
     }
+
+    @Override
+    public UserEntity save(UserEntity userEntity) {
+        return jpaUserRepository.save(userEntity);
+    }
 }
