@@ -21,7 +21,7 @@ public class UserController implements UserApi {
         return Api.OK(userDto);
     }
 
-    @DeleteMapping("/edit/delete/{userId}")
+    @DeleteMapping("/{userId}")
     public Api<Object> deleteUser(Long userId) {
         userService.deleteUser(userId);
         return Api.OK();
