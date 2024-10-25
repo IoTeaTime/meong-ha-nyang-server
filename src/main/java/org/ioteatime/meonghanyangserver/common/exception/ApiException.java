@@ -1,11 +1,11 @@
-package org.team5.interview_partner.common.exception;
+package org.ioteatime.meonghanyangserver.common.exception;
 
 import lombok.Getter;
 import org.ioteatime.meonghanyangserver.common.error.TypeCodeIfs;
 
 @Getter
 public class ApiException extends RuntimeException
-        implements org.team5.interview_partner.common.exception.ApiExceptionItf {
+        implements org.ioteatime.meonghanyangserver.common.exception.ApiExceptionItf {
     private final TypeCodeIfs typeCodeIfs;
     private final String errorDescription;
 
