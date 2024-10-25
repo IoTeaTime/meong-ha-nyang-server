@@ -3,7 +3,6 @@ package org.ioteatime.meonghanyangserver.user.dto.response;
 import java.util.Optional;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 
-
 public record UserDetailResponse(Long id, String email, String profileImgUrl, String nickname) {
     public static UserDetailResponse from(Optional<UserEntity> optionalUser) {
         UserEntity user =
