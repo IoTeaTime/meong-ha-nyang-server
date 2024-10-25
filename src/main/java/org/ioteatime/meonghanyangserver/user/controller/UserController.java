@@ -1,25 +1,22 @@
 package org.ioteatime.meonghanyangserver.user.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
-import org.ioteatime.meonghanyangserver.user.dto.UserDto;
-import org.ioteatime.meonghanyangserver.user.service.JoinService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
+import org.ioteatime.meonghanyangserver.user.service.UserService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/open-api/auth")
-public class UserController {
+@RequestMapping("/api/user")
+public class UserController implements UserApi {
+    private final UserService userService;
 
-    private final JoinService joinService;
-
-    @PostMapping("/sign-up")
-    public Api<Object> registerUser(@Valid @RequestBody UserDto userDto) {
-        joinService.joinProcess(userDto);
-        return Api.CREATE();
+    @GetMapping("/{userId}")
+    public Api<UserDetailResponse> getUserDetail(Long userId) {
+        UserDetailResponse userDto = userService.getUserDetail(userId);
+        return Api.OK(userDto);
     }
 }
