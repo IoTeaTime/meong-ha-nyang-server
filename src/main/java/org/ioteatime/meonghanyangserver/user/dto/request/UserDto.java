@@ -12,19 +12,31 @@ public class UserDto {
 
     @NotBlank(message = "이메일을 입력해주세요.")
     @Email(message = "이메일 형식으로 입력해주세요.")
-    @Schema(description = "사용자의 이메일", example = "test@test.com", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(
+            description = "사용자의 이메일",
+            example = "test@test.com",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     private String email;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
-    @Schema(description = "사용자의 비밀번호", example = "testpassword", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(
+            description = "사용자의 비밀번호",
+            example = "testpassword",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     private String password;
 
     @NotBlank(message = "비밀번호를 확인해주세요.")
-    @Schema(description = "비밀번호 확인", example = "testpassword", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(
+            description = "비밀번호 확인",
+            example = "testpassword",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     private String passwordConfirm;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
-    @Schema(description = "사용자의 닉네임", example = "mynickname", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(
+            description = "사용자의 닉네임",
+            example = "mynickname",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     private String nickname;
 
     @Schema(description = "사용자의 프로필 이미지 URL", example = "http://example.com/example.jpg")

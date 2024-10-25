@@ -4,8 +4,7 @@ import lombok.Getter;
 import org.ioteatime.meonghanyangserver.common.error.TypeCodeIfs;
 
 @Getter
-public class ApiException extends RuntimeException
-        implements org.ioteatime.meonghanyangserver.common.exception.ApiExceptionItf {
+public class ApiException extends RuntimeException implements ApiExceptionItf {
     private final TypeCodeIfs typeCodeIfs;
     private final String errorDescription;
 

@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "base")
 @NoArgsConstructor
+@Table(name = "user")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,17 +27,11 @@ public class UserEntity {
 
     @Builder
     public UserEntity(
-            Long id,
-            String email,
-            String password,
-            String nickname,
-            String profileImgUrl) {
+            Long id, String email, String password, String nickname, String profileImgUrl) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.profileImgUrl = profileImgUrl;
-
     }
-
 }

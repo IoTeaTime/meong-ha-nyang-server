@@ -49,7 +49,6 @@ spotless {
     java {
         target('**/*.java')
         targetExclude('modules/*/generated/**/*.*')
-        lineEndings = 'unix'
         importOrder()
         removeUnusedImports()
         googleJavaFormat().aosp().formatJavadoc(false)
