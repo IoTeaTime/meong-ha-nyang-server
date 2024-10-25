@@ -8,5 +8,7 @@ public interface UserRepository {
 
     Optional<UserEntity> findByEmail(String email);
 
+    void deleteById(Long userId);
+
     UserEntity save(UserEntity UserEntity);
 }

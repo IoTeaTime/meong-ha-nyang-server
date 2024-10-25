@@ -20,4 +20,8 @@ public class UserService {
 
         return UserDetailResponse.from(userEntity);
     }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }

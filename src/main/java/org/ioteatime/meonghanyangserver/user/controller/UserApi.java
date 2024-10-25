@@ -11,4 +11,7 @@ public interface UserApi {
 
     @Operation(summary = "회원 상세 정보를 조회합니다.")
     Api<UserDetailResponse> getUserDetail(@PathVariable("userId") Long userId);
+
+    @Operation(summary = "회원 정보를 삭제합니다.")
+    Api<Object> deleteUser(@PathVariable("userId") Long userId);
 }
