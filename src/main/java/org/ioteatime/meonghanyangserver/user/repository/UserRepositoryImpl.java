@@ -16,6 +16,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        return jpaUserRepository.findByEmail(email);
+    }
+
+    @Override
     public void deleteById(Long userId) {
         jpaUserRepository.deleteById(userId);
     }
