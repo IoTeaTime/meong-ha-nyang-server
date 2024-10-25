@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.user.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
@@ -13,8 +14,8 @@ public class UserController {
 
     private final UserService userService;
 
-    // User의 고유 ID를 확인하여 회원 정보를 반환합니다.
     @GetMapping("/{userId}")
+    @Operation(summary = "회원 상세 정보를 조회합니다.")
     public Api<UserDetailResponse> getUserDetail(@PathVariable("userId") Long userId) {
         UserDetailResponse userDto = userService.getUserDetail(userId);
         return Api.OK(userDto);
