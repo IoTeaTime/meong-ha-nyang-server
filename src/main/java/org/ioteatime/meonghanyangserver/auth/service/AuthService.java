@@ -1,7 +1,10 @@
 package org.ioteatime.meonghanyangserver.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.auth.dto.request.EmailCheckRequest;
 import org.ioteatime.meonghanyangserver.clients.google.GoogleMailClient;
+import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
+import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.ioteatime.meonghanyangserver.user.dto.UserDto;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
@@ -35,5 +38,13 @@ public class AuthService {
     public void send(String email) {
         // TODO. Redis 적용 후 코드 발급 구현 필요
         googleMailClient.sendMail(email, "hello", "world");
+    }
+
+    public UserSimpleResponse verifyEmail(EmailCheckRequest emailCheckRequest) {
+        UserEntity userEntity =
+                userRepository
+                        .findByEmail(emailCheckRequest.getEmail())
+                        .orElseThrow(() -> new ApiException(ErrorTypeCode.NULL_POINT));
+        return new UserSimpleResponse(userEntity.getId(), userEntity.getEmail());
     }
 }

@@ -3,10 +3,10 @@ package org.ioteatime.meonghanyangserver.user.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class UserDto {
 
@@ -33,10 +33,7 @@ public class UserDto {
     private String passwordConfirm;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
-    @Schema(
-            description = "사용자의 닉네임",
-            example = "mynickname",
-            requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "사용자의 닉네임")
     private String nickname;
 
     @Schema(description = "사용자의 프로필 이미지 URL", example = "http://example.com/example.jpg")

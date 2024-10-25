@@ -3,12 +3,8 @@ package org.ioteatime.meonghanyangserver.user.controller;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
-import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
 import org.ioteatime.meonghanyangserver.user.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,12 +16,5 @@ public class UserController implements UserApi {
     public Api<UserDetailResponse> getUserDetail(Long userId) {
         UserDetailResponse userDto = userService.getUserDetail(userId);
         return Api.OK(userDto);
-    }
-
-    // Email 중복 확인
-    @GetMapping("/checkEmail/{email}")
-    public Api<UserSimpleResponse> duplicateEmail(@PathVariable String email) {
-        UserSimpleResponse response = userService.userProcess(email);
-        return Api.OK(response);
     }
 }

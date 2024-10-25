@@ -2,14 +2,13 @@ package org.ioteatime.meonghanyangserver.auth.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.auth.dto.request.EmailCheckRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.SendEmailRequest;
 import org.ioteatime.meonghanyangserver.auth.service.AuthService;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.user.dto.UserDto;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +26,13 @@ public class AuthController implements AuthApi {
     public Api<?> verifyEmail(@Valid @RequestBody SendEmailRequest sendEmailReq) {
         authService.send(sendEmailReq.email());
         return Api.OK();
+    }
+
+    // Email 중복 확인
+    @PostMapping("/check-email")
+    public Api<UserSimpleResponse> duplicateEmail(
+            @RequestBody EmailCheckRequest emailCheckRequest) {
+        UserSimpleResponse response = authService.verifyEmail(emailCheckRequest);
+        return Api.OK(response);
     }
 }
