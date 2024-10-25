@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/open-api/auth")
-public class LoginController implements LoginApi{
+public class LoginController implements LoginApi {
     private final LoginService loginService;
+
     @Override
     @PostMapping("/sign-in")
     public Api<LoginResponse> login(LoginDto loginDto) {

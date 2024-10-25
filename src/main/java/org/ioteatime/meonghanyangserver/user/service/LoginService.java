@@ -20,11 +20,16 @@ public class LoginService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
+
     public LoginResponse login(LoginDto loginDto) {
-        UserEntity userEntity = userRepository.findByEmail(loginDto.getEmail())
-                .orElseThrow(()->new ApiException(ErrorTypeCode.BAD_REQUEST,"없는 회원입니다."));
-        //바말번호 확인
-        boolean passwordMatch = bCryptPasswordEncoder.matches(loginDto.getPassword(), userEntity.getPassword());
+        UserEntity userEntity =
+                userRepository
+                        .findByEmail(loginDto.getEmail())
+                        .orElseThrow(
+                                () -> new ApiException(ErrorTypeCode.BAD_REQUEST, "없는 회원입니다."));
+        // 바말번호 확인
+        boolean passwordMatch =
+                bCryptPasswordEncoder.matches(loginDto.getPassword(), userEntity.getPassword());
         if (!passwordMatch) {
             throw new ApiException(ErrorTypeCode.BAD_REQUEST, "비밀번호가 틀렸습니다.");
         }
@@ -32,12 +37,10 @@ public class LoginService {
         String accessToken = jwtUtils.generateAccessToken(userEntity);
         String refreshToken = jwtUtils.generateRefreshToken(userEntity);
 
-        if(accessToken.isEmpty() || refreshToken.isEmpty()){
+        if (accessToken.isEmpty() || refreshToken.isEmpty()) {
             throw new ApiException(ErrorTypeCode.SERVER_ERROR);
         }
-        RefreshToken refreshTokenEntity = RefreshToken.builder()
-                .refreshToken(refreshToken)
-                .build();
+        RefreshToken refreshTokenEntity = RefreshToken.builder().refreshToken(refreshToken).build();
 
         refreshTokenRepository.save(refreshTokenEntity);
 
