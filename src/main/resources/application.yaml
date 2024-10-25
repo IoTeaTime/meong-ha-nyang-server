@@ -12,3 +12,7 @@ spring:
       hibernate:
         jdbc:
           time_zone: Asia/Seoul
+
+google:
+  service-account: ${GCP_SERVICE_ACCOUNT}
+  official-gmail: ${OFFICIAL_GMAIL}
