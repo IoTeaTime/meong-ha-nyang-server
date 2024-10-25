@@ -19,15 +19,12 @@ import org.springframework.stereotype.Component;
 public class JwtUtils {
     private Key hmacKey;
 
-    //    private final RefreshTokenRepository refreshTokenRepository;
-
     public JwtUtils(Environment env) {
         this.hmacKey =
                 hmacKey =
                         new SecretKeySpec(
                                 Base64.getDecoder().decode(env.getProperty("token.secret")),
                                 SignatureAlgorithm.HS256.getJcaName());
-        //        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     public String generateAccessToken(UserEntity userEntity) {
@@ -36,7 +33,6 @@ public class JwtUtils {
         String jwtToken =
                 Jwts.builder()
                         .claim("name", userEntity.getNickname())
-                        .claim("sub", userEntity.getEmail())
                         .claim("jti", String.valueOf(userEntity.getId()))
                         .claim("role", "ROLE_USER")
                         .claim("iat", nowDate)
@@ -53,15 +49,12 @@ public class JwtUtils {
         String jwtToken =
                 Jwts.builder()
                         .claim("name", userEntity.getNickname())
-                        .claim("sub", userEntity.getEmail())
                         .claim("jti", String.valueOf(userEntity.getId()))
                         .claim("role", "ROLE_USER")
                         .claim("iat", nowDate)
                         .claim("exp", expiration)
                         .signWith(hmacKey)
                         .compact();
-        //        RefreshToken refreshToken = new RefreshToken(userEntity.getUsername(),jwtToken);
-        //        refreshTokenRepository.save(refreshToken);
         log.debug(jwtToken);
         return jwtToken;
     }
