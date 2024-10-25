@@ -1,6 +1,7 @@
-package org.ioteatime.meonghanyangserver.user.service;
+package org.ioteatime.meonghanyangserver.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.clients.google.GoogleMailClient;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.ioteatime.meonghanyangserver.user.dto.UserDto;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class JoinService {
-
+public class AuthService {
     private final UserRepository userRepository;
+    private final GoogleMailClient googleMailClient;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserSimpleResponse joinProcess(UserDto userDto) {
@@ -29,5 +30,10 @@ public class JoinService {
 
         // 회원가입 응답 생성
         return new UserSimpleResponse(userEntity.getId(), userEntity.getEmail());
+    }
+
+    public void send(String email) {
+        // TODO. Redis 적용 후 코드 발급 구현 필요
+        googleMailClient.sendMail(email, "hello", "world");
     }
 }
