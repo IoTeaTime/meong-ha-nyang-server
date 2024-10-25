@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.common.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import org.ioteatime.meonghanyangserver.common.error.TypeCodeIfs;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 // 공통 응답 class
 public class Api<T> {
     private Result result;
