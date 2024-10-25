@@ -1,4 +1,4 @@
-package org.team5.interview_partner.common.exception;
+package org.ioteatime.meonghanyangserver.common.exception;
 
 import org.ioteatime.meonghanyangserver.common.error.TypeCodeIfs;
 
