@@ -1,4 +1,4 @@
-package org.ioteatime.meonghanyangserver.user.repository.redis;
+package org.ioteatime.meonghanyangserver.redis;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

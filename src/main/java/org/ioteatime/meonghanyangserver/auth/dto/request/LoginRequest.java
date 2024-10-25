@@ -1,10 +1,10 @@
-package org.ioteatime.meonghanyangserver.user.dto.request;
+package org.ioteatime.meonghanyangserver.auth.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class LoginDto {
+public class LoginRequest {
     @NotBlank private String email;
     @NotBlank private String password;
 }

@@ -1,4 +1,4 @@
-package org.ioteatime.meonghanyangserver.user.dto.response;
+package org.ioteatime.meonghanyangserver.auth.dto.reponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

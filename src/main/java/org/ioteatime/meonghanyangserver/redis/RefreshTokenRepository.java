@@ -1,4 +1,4 @@
-package org.ioteatime.meonghanyangserver.user.repository.redis;
+package org.ioteatime.meonghanyangserver.redis;
 
 import org.springframework.data.repository.CrudRepository;
 
