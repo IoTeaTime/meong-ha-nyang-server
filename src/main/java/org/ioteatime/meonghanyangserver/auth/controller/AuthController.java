@@ -2,7 +2,9 @@ package org.ioteatime.meonghanyangserver.auth.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.EmailCheckRequest;
+import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.SendEmailRequest;
 import org.ioteatime.meonghanyangserver.auth.service.AuthService;
 import org.ioteatime.meonghanyangserver.common.api.Api;
@@ -34,5 +36,12 @@ public class AuthController implements AuthApi {
             @RequestBody EmailCheckRequest emailCheckRequest) {
         UserSimpleResponse response = authService.verifyEmail(emailCheckRequest);
         return Api.OK(response);
+    }
+
+    @Override
+    @PostMapping("/sign-in")
+    public Api<LoginResponse> login(LoginRequest loginRequest) {
+        LoginResponse loginResponse = authService.login(loginRequest);
+        return Api.CREATE(loginResponse);
     }
 }

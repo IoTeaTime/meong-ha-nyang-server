@@ -6,7 +6,9 @@ import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 public interface UserRepository {
     Optional<UserEntity> findById(Long userId);
 
-    UserEntity save(UserEntity UserEntity);
-
     Optional<UserEntity> findByEmail(String email);
+
+    void deleteById(Long userId);
+
+    UserEntity save(UserEntity UserEntity);
 }

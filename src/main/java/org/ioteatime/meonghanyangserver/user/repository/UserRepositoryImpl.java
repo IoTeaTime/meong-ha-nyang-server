@@ -16,12 +16,17 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public UserEntity save(UserEntity userEntity) {
-        return jpaUserRepository.save(userEntity);
+    public Optional<UserEntity> findByEmail(String email) {
+        return jpaUserRepository.findByEmail(email);
     }
 
     @Override
-    public Optional<UserEntity> findByEmail(String email) {
-        return jpaUserRepository.findByEmail(email);
+    public void deleteById(Long userId) {
+        jpaUserRepository.deleteById(userId);
+    }
+
+    @Override
+    public UserEntity save(UserEntity userEntity) {
+        return jpaUserRepository.save(userEntity);
     }
 }
