@@ -17,5 +17,6 @@ public interface UserApi {
     Api<Object> deleteUser(@PathVariable("userId") Long userId);
 
     @Operation(summary = "회원의 비밀번호를 변경합니다.")
-    Api<Object> changeUserPassword(@PathVariable("userId") Long userId, @RequestBody String newPassword);
+    Api<Object> changeUserPassword(
+            @PathVariable("userId") Long userId, @RequestBody String newPassword);
 }

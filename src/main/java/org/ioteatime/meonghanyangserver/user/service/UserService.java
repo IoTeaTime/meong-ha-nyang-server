@@ -33,8 +33,10 @@ public class UserService {
         UserEntity userEntity =
                 userRepository
                         .findById(userId)
-                        .orElseThrow(() -> new ApiException(
-                                ErrorTypeCode.BAD_REQUEST, "User not found"));
+                        .orElseThrow(
+                                () ->
+                                        new ApiException(
+                                                ErrorTypeCode.BAD_REQUEST, "User not found"));
 
         String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
 

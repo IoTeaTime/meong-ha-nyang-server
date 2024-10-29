@@ -25,8 +25,7 @@ public class UserController implements UserApi {
     }
 
     @PutMapping("/{userId}")
-    public Api<Object> changeUserPassword(
-            Long userId, String newPassword) {
+    public Api<Object> changeUserPassword(Long userId, String newPassword) {
         userService.changeUserPassword(userId, newPassword);
         return Api.OK();
     }

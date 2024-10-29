@@ -37,8 +37,7 @@ public class UserEntity {
 
     public void setPassword(String encodedPassword) {
         if (encodedPassword == null || encodedPassword.isBlank()) {
-            throw new ApiException(
-                    ErrorTypeCode.BAD_REQUEST, "Password is empty");
+            throw new ApiException(ErrorTypeCode.BAD_REQUEST, "Password is empty");
         }
         this.password = encodedPassword;
     }
