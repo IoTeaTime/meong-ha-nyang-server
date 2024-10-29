@@ -41,6 +41,5 @@ public class UserService {
         String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
 
         userEntity.setPassword(encodedPassword);
-        userRepository.save(userEntity);
     }
 }
