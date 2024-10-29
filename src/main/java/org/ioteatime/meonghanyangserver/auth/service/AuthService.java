@@ -2,6 +2,7 @@ package org.ioteatime.meonghanyangserver.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
+import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.clients.google.GoogleMailClient;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
@@ -81,6 +82,40 @@ public class AuthService {
                 userRepository
                         .findByEmail(email)
                         .orElseThrow(() -> new ApiException(ErrorTypeCode.NULL_POINT));
-        return new UserSimpleResponse(userEntity.getId(), userEntity.getEmail());
+        return UserSimpleResponse.from(userEntity);
+    }
+
+    public RefreshResponse reissueAccessToken(String authorizationHeader) {
+        String refreshToken = authorizationHeader.replace("Bearer ", "");
+
+        RefreshToken storedToken =
+                refreshTokenRepository
+                        .findByRefreshToken(refreshToken)
+                        .orElseThrow(
+                                () ->
+                                        new ApiException(
+                                                ErrorTypeCode.BAD_REQUEST,
+                                                "유효하지 않은 Refresh token입니다."));
+
+        if (!storedToken.getRefreshToken().equals(refreshToken)) {
+            throw new ApiException(ErrorTypeCode.BAD_REQUEST, "토큰이 일치하지 않습니다.");
+        }
+
+        String email = jwtUtils.getSubjectFromToken(refreshToken);
+        UserEntity userEntity =
+                userRepository
+                        .findByEmail(email)
+                        .orElseThrow(
+                                () ->
+                                        new ApiException(
+                                                ErrorTypeCode.BAD_REQUEST, "유효하지 않은 사용자입니다."));
+
+        if (!jwtUtils.validateToken(refreshToken, userEntity)) {
+            throw new ApiException(ErrorTypeCode.BAD_REQUEST, "Refresh token이 만료되었습니다.");
+        }
+
+        String newAccessToken = jwtUtils.generateAccessToken(userEntity);
+
+        return new RefreshResponse(newAccessToken);
     }
 }
