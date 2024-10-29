@@ -1,9 +1,13 @@
 package org.ioteatime.meonghanyangserver.user.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
+import org.ioteatime.meonghanyangserver.user.dto.CustomUserDetail;
+import org.ioteatime.meonghanyangserver.user.dto.request.ChangePasswordRequest;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
 import org.ioteatime.meonghanyangserver.user.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,9 +28,16 @@ public class UserController implements UserApi {
         return Api.OK();
     }
 
-    @PutMapping("/{userId}")
-    public Api<Object> changeUserPassword(Long userId, String newPassword) {
-        userService.changeUserPassword(userId, newPassword);
+    @PutMapping("/password")
+    public Api<Object> changeUserPassword(
+            Authentication authentication, @RequestBody @Valid ChangePasswordRequest request) {
+
+        CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+        Long userId = userDetails.getUserEntity().getId();
+
+        userService.changeUserPassword(
+                userId, request.getCurrentPassword(), request.getNewPassword());
+
         return Api.OK();
     }
 }
