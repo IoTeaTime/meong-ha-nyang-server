@@ -3,7 +3,6 @@ package org.ioteatime.meonghanyangserver.user.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
-import org.ioteatime.meonghanyangserver.user.dto.CustomUserDetail;
 import org.ioteatime.meonghanyangserver.user.dto.request.ChangePasswordRequest;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
 import org.ioteatime.meonghanyangserver.user.service.UserService;
@@ -32,11 +31,7 @@ public class UserController implements UserApi {
     public Api<Object> changeUserPassword(
             Authentication authentication, @RequestBody @Valid ChangePasswordRequest request) {
 
-        CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
-        Long userId = userDetails.getUserEntity().getId();
-
-        userService.changeUserPassword(
-                userId, request.getCurrentPassword(), request.getNewPassword());
+        userService.changeUserPassword(authentication, request);
 
         return Api.OK();
     }
