@@ -33,6 +33,7 @@ public class JwtUtils {
         String jwtToken =
                 Jwts.builder()
                         .claim("name", userEntity.getNickname())
+                        .claim("sub", userEntity.getEmail())
                         .claim("jti", String.valueOf(userEntity.getId()))
                         .claim("role", "ROLE_USER")
                         .claim("iat", nowDate)
@@ -49,6 +50,7 @@ public class JwtUtils {
         String jwtToken =
                 Jwts.builder()
                         .claim("name", userEntity.getNickname())
+                        .claim("sub", userEntity.getEmail())
                         .claim("jti", String.valueOf(userEntity.getId()))
                         .claim("role", "ROLE_USER")
                         .claim("iat", nowDate)

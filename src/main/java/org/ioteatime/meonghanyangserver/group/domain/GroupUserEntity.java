@@ -1,18 +1,25 @@
 package org.ioteatime.meonghanyangserver.group.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 
 @Data
 @Entity
 @Table(name = "group_user")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class GroupUserEntity {
-    @EmbeddedId
-    private GroupUserId id;
+    @EmbeddedId private GroupUserId id;
 
     @Column(nullable = false, length = 10)
-    private String role;
+    @Enumerated(value = EnumType.STRING)
+    private GroupUserRole role;
 
     @ManyToOne
     @MapsId("groupId")
@@ -21,6 +28,6 @@ public class GroupUserEntity {
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true)
     private UserEntity user;
 }
