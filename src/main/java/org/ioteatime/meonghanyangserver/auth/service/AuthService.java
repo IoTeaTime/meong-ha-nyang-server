@@ -2,7 +2,6 @@ package org.ioteatime.meonghanyangserver.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
-import org.ioteatime.meonghanyangserver.auth.dto.request.EmailCheckRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.clients.google.GoogleMailClient;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
@@ -77,10 +76,10 @@ public class AuthService {
         googleMailClient.sendMail(email, "hello", "world");
     }
 
-    public UserSimpleResponse verifyEmail(EmailCheckRequest emailCheckRequest) {
+    public UserSimpleResponse verifyEmail(String email) {
         UserEntity userEntity =
                 userRepository
-                        .findByEmail(emailCheckRequest.getEmail())
+                        .findByEmail(email)
                         .orElseThrow(() -> new ApiException(ErrorTypeCode.NULL_POINT));
         return new UserSimpleResponse(userEntity.getId(), userEntity.getEmail());
     }

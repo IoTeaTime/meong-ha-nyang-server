@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
-import org.ioteatime.meonghanyangserver.auth.dto.request.EmailCheckRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.SendEmailRequest;
 import org.ioteatime.meonghanyangserver.common.api.Api;
@@ -24,5 +23,5 @@ public interface AuthApi {
     Api<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest);
 
     @Operation(summary = "이메일 중복을 확인 합니다.")
-    Api<UserSimpleResponse> duplicateEmail(@RequestBody EmailCheckRequest emailCheckRequest);
+    Api<UserSimpleResponse> duplicateEmail(@Valid @RequestBody SendEmailRequest email);
 }

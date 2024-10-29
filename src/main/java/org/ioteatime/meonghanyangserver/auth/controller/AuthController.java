@@ -3,7 +3,6 @@ package org.ioteatime.meonghanyangserver.auth.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
-import org.ioteatime.meonghanyangserver.auth.dto.request.EmailCheckRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.SendEmailRequest;
 import org.ioteatime.meonghanyangserver.auth.service.AuthService;
@@ -33,8 +32,8 @@ public class AuthController implements AuthApi {
     // Email 중복 확인
     @PostMapping("/check-email")
     public Api<UserSimpleResponse> duplicateEmail(
-            @RequestBody EmailCheckRequest emailCheckRequest) {
-        UserSimpleResponse response = authService.verifyEmail(emailCheckRequest);
+            @Valid @RequestBody SendEmailRequest sendEmailReq) {
+        UserSimpleResponse response = authService.verifyEmail(sendEmailReq.email());
         return Api.OK(response);
     }
 
