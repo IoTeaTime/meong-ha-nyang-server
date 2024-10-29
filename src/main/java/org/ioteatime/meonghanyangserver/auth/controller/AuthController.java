@@ -3,15 +3,13 @@ package org.ioteatime.meonghanyangserver.auth.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
+import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.SendEmailRequest;
 import org.ioteatime.meonghanyangserver.auth.service.AuthService;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.user.dto.UserDto;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,5 +34,12 @@ public class AuthController implements AuthApi {
     public Api<LoginResponse> login(LoginRequest loginRequest) {
         LoginResponse loginResponse = authService.login(loginRequest);
         return Api.CREATE(loginResponse);
+    }
+
+    @PostMapping("/refresh-token")
+    public Api<RefreshResponse> refreshToken(
+            @RequestHeader("Authorization") String authorizationHeader) {
+        RefreshResponse refreshResponse = authService.reissueAccessToken(authorizationHeader);
+        return Api.OK(refreshResponse);
     }
 }
