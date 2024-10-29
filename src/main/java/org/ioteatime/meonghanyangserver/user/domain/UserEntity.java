@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
+import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 
 @Getter
 @Entity
@@ -31,5 +33,13 @@ public class UserEntity {
         this.email = email;
         this.password = password;
         this.profileImgUrl = profileImgUrl;
+    }
+
+    public void setPassword(String encodedPassword) {
+        if (encodedPassword == null || encodedPassword.isBlank()) {
+            throw new ApiException(
+                    ErrorTypeCode.BAD_REQUEST, "Password is empty");
+        }
+        this.password = encodedPassword;
     }
 }

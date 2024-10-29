@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
 import org.ioteatime.meonghanyangserver.user.service.UserService;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +21,13 @@ public class UserController implements UserApi {
     @DeleteMapping("/{userId}")
     public Api<Object> deleteUser(Long userId) {
         userService.deleteUser(userId);
+        return Api.OK();
+    }
+
+    @PutMapping("/{userId}")
+    public Api<Object> changeUserPassword(
+            Long userId, String newPassword) {
+        userService.changeUserPassword(userId, newPassword);
         return Api.OK();
     }
 }

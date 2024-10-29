@@ -1,9 +1,12 @@
 package org.ioteatime.meonghanyangserver.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
+import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
 import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserDetailResponse getUserDetail(Long userId) {
         UserEntity userEntity =
@@ -23,5 +27,18 @@ public class UserService {
 
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public void changeUserPassword(Long userId, String newPassword) {
+        UserEntity userEntity =
+                userRepository
+                        .findById(userId)
+                        .orElseThrow(() -> new ApiException(
+                                ErrorTypeCode.BAD_REQUEST, "User not found"));
+
+        String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
+
+        userEntity.setPassword(encodedPassword);
+        userRepository.save(userEntity);
     }
 }
