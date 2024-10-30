@@ -4,18 +4,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
-<<<<<<< HEAD
 import org.ioteatime.meonghanyangserver.auth.dto.request.EmailRequest;
-=======
->>>>>>> 62ffa31dd136cdd1181a8eebe8d5a6380205b3bf
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.service.AuthService;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.user.dto.UserDto;
-<<<<<<< HEAD
 import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
-=======
->>>>>>> 62ffa31dd136cdd1181a8eebe8d5a6380205b3bf
 import org.springframework.web.bind.annotation.*;
 
 @RestController
