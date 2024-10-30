@@ -47,14 +47,16 @@ public class AuthService {
 
         GroupUserRole groupUserRole = GroupUserRole.ROLE_PARTICIPANT;
 
-        if(existGroupUser){
-            GroupUserEntity groupUserEntity = groupUserRepository.findGroupUser(userEntity)
-                    .orElseThrow(()->new ApiException(ErrorTypeCode.BAD_REQUEST));
+        if (existGroupUser) {
+            GroupUserEntity groupUserEntity =
+                    groupUserRepository
+                            .findGroupUser(userEntity)
+                            .orElseThrow(() -> new ApiException(ErrorTypeCode.BAD_REQUEST));
             groupUserRole = groupUserEntity.getRole();
         }
 
-        String accessToken = jwtUtils.generateAccessToken(userEntity,groupUserRole);
-        String refreshToken = jwtUtils.generateRefreshToken(userEntity,groupUserRole);
+        String accessToken = jwtUtils.generateAccessToken(userEntity, groupUserRole);
+        String refreshToken = jwtUtils.generateRefreshToken(userEntity, groupUserRole);
 
         if (accessToken.isEmpty() || refreshToken.isEmpty()) {
             throw new ApiException(ErrorTypeCode.SERVER_ERROR);
@@ -100,7 +102,20 @@ public class AuthService {
     }
 
     public RefreshResponse reissueAccessToken(String authorizationHeader) {
-        String refreshToken = authorizationHeader.replace("Bearer ", "");
+        String refreshToken = jwtUtils.extractTokenFromHeader(authorizationHeader);
+
+        Long userId = jwtUtils.getIdFromToken(refreshToken);
+        UserEntity userEntity =
+                userRepository
+                        .findById(userId)
+                        .orElseThrow(
+                                () ->
+                                        new ApiException(
+                                                ErrorTypeCode.BAD_REQUEST, "유효하지 않은 사용자입니다."));
+
+        if (!jwtUtils.validateToken(refreshToken, userEntity)) {
+            throw new ApiException(ErrorTypeCode.BAD_REQUEST, "Refresh token이 만료되었거나 유효하지 않습니다.");
+        }
 
         RefreshToken storedToken =
                 refreshTokenRepository
@@ -115,26 +130,15 @@ public class AuthService {
             throw new ApiException(ErrorTypeCode.BAD_REQUEST, "토큰이 일치하지 않습니다.");
         }
 
-        Long email = jwtUtils.getJwtIdFromToken(refreshToken);
-        UserEntity userEntity =
-                userRepository
-                        .findById(email)
-                        .orElseThrow(
-                                () ->
-                                        new ApiException(
-                                                ErrorTypeCode.BAD_REQUEST, "유효하지 않은 사용자입니다."));
-
-        if (!jwtUtils.validateToken(refreshToken, userEntity)) {
-            throw new ApiException(ErrorTypeCode.BAD_REQUEST, "Refresh token이 만료되었습니다.");
-        }
-
         boolean existGroupUser = groupUserRepository.existsGroupUser(userEntity);
 
         GroupUserRole groupUserRole = GroupUserRole.ROLE_PARTICIPANT;
 
-        if(existGroupUser){
-            GroupUserEntity groupUserEntity = groupUserRepository.findGroupUser(userEntity)
-                    .orElseThrow(()->new ApiException(ErrorTypeCode.BAD_REQUEST));
+        if (existGroupUser) {
+            GroupUserEntity groupUserEntity =
+                    groupUserRepository
+                            .findGroupUser(userEntity)
+                            .orElseThrow(() -> new ApiException(ErrorTypeCode.BAD_REQUEST));
             groupUserRole = groupUserEntity.getRole();
         }
 

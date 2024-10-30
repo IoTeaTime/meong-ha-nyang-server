@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
 import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
-import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
 import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
 import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
@@ -46,13 +45,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String jwtToken = null;
         Long jwtId = null;
-        GroupUserRole groupUserRole = GroupUserRole.ROLE_PARTICIPANT;
+        GroupUserRole groupUserRole = null;
 
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwtToken = authorizationHeader.substring(7);
-            jwtId = jwtUtils.getJwtIdFromToken(jwtToken);
+            jwtId = jwtUtils.getIdFromToken(jwtToken);
+            groupUserRole = jwtUtils.getRoleFromToken(jwtToken);
             log.debug("jwt : ", jwtToken);
         } else {
             log.error("Authorization 헤더 누락 또는 토큰 형식 오류");
@@ -64,17 +64,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                             .findById(jwtId)
                             .orElseThrow(() -> new ApiException(ErrorTypeCode.BAD_REQUEST));
 
-            boolean existGroupUser = groupUserRepository.existsGroupUser(entity);
-
-            if(existGroupUser){
-                GroupUserEntity groupUserEntity = groupUserRepository.findGroupUser(entity)
-                        .orElseThrow(()->new ApiException(ErrorTypeCode.BAD_REQUEST));
-                groupUserRole = groupUserEntity.getRole();
-            }
-
             log.debug(entity.getEmail());
             if (jwtUtils.validateToken(jwtToken, entity)) {
-                CustomUserDetail customUserDetail = new CustomUserDetail(entity,groupUserRole);
+                CustomUserDetail customUserDetail = new CustomUserDetail(entity, groupUserRole);
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                         new UsernamePasswordAuthenticationToken(
                                 customUserDetail, null, customUserDetail.getAuthorities());
