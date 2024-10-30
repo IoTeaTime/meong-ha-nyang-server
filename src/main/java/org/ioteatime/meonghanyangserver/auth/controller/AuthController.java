@@ -37,11 +37,10 @@ public class AuthController implements AuthApi {
         return Api.OK(response);
     }
 
-    @Override
     @PostMapping("/sign-in")
     public Api<LoginResponse> login(LoginRequest loginRequest) {
         LoginResponse loginResponse = authService.login(loginRequest);
-        return Api.CREATE(loginResponse);
+        return Api.OK(loginResponse);
     }
 
     @PostMapping("/refresh-token")

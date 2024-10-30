@@ -8,6 +8,7 @@ import org.ioteatime.meonghanyangserver.clients.google.GoogleMailClient;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
 import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
+import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
 import org.ioteatime.meonghanyangserver.redis.RefreshToken;
 import org.ioteatime.meonghanyangserver.redis.RefreshTokenRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
@@ -25,6 +26,7 @@ public class AuthService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtils jwtUtils;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final GroupUserRepository groupUserRepository;
 
     public LoginResponse login(LoginRequest loginRequest) {
         UserEntity userEntity =
@@ -32,7 +34,7 @@ public class AuthService {
                         .findByEmail(loginRequest.getEmail())
                         .orElseThrow(
                                 () -> new ApiException(ErrorTypeCode.BAD_REQUEST, "없는 회원입니다."));
-        // 비밀번호 확인
+
         boolean passwordMatch =
                 bCryptPasswordEncoder.matches(loginRequest.getPassword(), userEntity.getPassword());
         if (!passwordMatch) {
@@ -48,6 +50,8 @@ public class AuthService {
         RefreshToken refreshTokenEntity = RefreshToken.builder().refreshToken(refreshToken).build();
 
         refreshTokenRepository.save(refreshTokenEntity);
+        accessToken = jwtUtils.includeBearer(accessToken);
+        refreshToken = jwtUtils.includeBearer(refreshToken);
 
         return LoginResponse.builder()
                 .userId(userEntity.getId())
@@ -115,7 +119,7 @@ public class AuthService {
         }
 
         String newAccessToken = jwtUtils.generateAccessToken(userEntity);
-
+        newAccessToken = jwtUtils.includeBearer(newAccessToken);
         return new RefreshResponse(newAccessToken);
     }
 }

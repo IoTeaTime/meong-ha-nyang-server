@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class GroupController implements GroupApi {
     private final GroupService groupService;
 
-    @Override
     @PostMapping
     public Api<CreateGroupResponse> createGroup(Authentication authentication) {
         CreateGroupResponse createGroupResponse = groupService.createGroup(authentication);

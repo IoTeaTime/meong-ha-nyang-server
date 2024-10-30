@@ -6,5 +6,5 @@ import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 public interface GroupUserRepository {
     GroupUserEntity createGroupUser(GroupUserEntity groupUserEntity);
 
-    boolean findGroupUser(UserEntity userEntity);
+    boolean existsGroupUser(UserEntity userEntity);
 }

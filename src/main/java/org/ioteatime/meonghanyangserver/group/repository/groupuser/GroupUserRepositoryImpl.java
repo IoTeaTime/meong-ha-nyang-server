@@ -16,7 +16,7 @@ public class GroupUserRepositoryImpl implements GroupUserRepository {
     }
 
     @Override
-    public boolean findGroupUser(UserEntity userEntity) {
+    public boolean existsGroupUser(UserEntity userEntity) {
         boolean groupUser = jpaGroupUserRepository.existsByUser(userEntity);
         return groupUser;
     }
