@@ -1,14 +1,6 @@
 package org.ioteatime.meonghanyangserver.auth.dto.reponse;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
-public class RefreshResponse {
-    private String accessToken;
-}
+public record RefreshResponse(@NotNull String accessToken) {}

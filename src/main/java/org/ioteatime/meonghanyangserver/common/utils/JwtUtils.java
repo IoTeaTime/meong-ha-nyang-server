@@ -98,4 +98,13 @@ public class JwtUtils {
 
         return subject != null && email != null && subject.equals(email);
     }
+
+    public String extractTokenFromHeader(String authorizationHeader) {
+        return authorizationHeader.replace("Bearer ", "");
+    }
+
+    public Long getIdFromToken(String token) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return Long.valueOf(String.valueOf(claims.get("jti")));
+    }
 }

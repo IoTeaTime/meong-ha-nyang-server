@@ -78,7 +78,20 @@ public class AuthService {
     }
 
     public RefreshResponse reissueAccessToken(String authorizationHeader) {
-        String refreshToken = authorizationHeader.replace("Bearer ", "");
+        String refreshToken = jwtUtils.extractTokenFromHeader(authorizationHeader);
+
+        Long userId = jwtUtils.getIdFromToken(refreshToken);
+        UserEntity userEntity =
+                userRepository
+                        .findById(userId)
+                        .orElseThrow(
+                                () ->
+                                        new ApiException(
+                                                ErrorTypeCode.BAD_REQUEST, "유효하지 않은 사용자입니다."));
+
+        if (!jwtUtils.validateToken(refreshToken, userEntity)) {
+            throw new ApiException(ErrorTypeCode.BAD_REQUEST, "Refresh token이 만료되었거나 유효하지 않습니다.");
+        }
 
         RefreshToken storedToken =
                 refreshTokenRepository
@@ -91,19 +104,6 @@ public class AuthService {
 
         if (!storedToken.getRefreshToken().equals(refreshToken)) {
             throw new ApiException(ErrorTypeCode.BAD_REQUEST, "토큰이 일치하지 않습니다.");
-        }
-
-        String email = jwtUtils.getSubjectFromToken(refreshToken);
-        UserEntity userEntity =
-                userRepository
-                        .findByEmail(email)
-                        .orElseThrow(
-                                () ->
-                                        new ApiException(
-                                                ErrorTypeCode.BAD_REQUEST, "유효하지 않은 사용자입니다."));
-
-        if (!jwtUtils.validateToken(refreshToken, userEntity)) {
-            throw new ApiException(ErrorTypeCode.BAD_REQUEST, "Refresh token이 만료되었습니다.");
         }
 
         String newAccessToken = jwtUtils.generateAccessToken(userEntity);
