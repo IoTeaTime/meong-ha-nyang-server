@@ -1,0 +1,9 @@
+# 외부 키와 관련된 설정
+
+token:
+  expiration-time: 86400000
+  secret: ${JWT_SECRET}
+
+google:
+  service-account: ${GCP_SERVICE_ACCOUNT}
+  official-gmail: ${OFFICIAL_GMAIL}
