@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
+import org.ioteatime.meonghanyangserver.auth.mapper.AuthEntityMapper;
+import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
 import org.ioteatime.meonghanyangserver.clients.google.GoogleMailClient;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
 import org.ioteatime.meonghanyangserver.common.exception.ApiException;
@@ -53,27 +55,14 @@ public class AuthService {
         accessToken = jwtUtils.includeBearer(accessToken);
         refreshToken = jwtUtils.includeBearer(refreshToken);
 
-        return LoginResponse.builder()
-                .userId(userEntity.getId())
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        return AuthResponseMapper.from(userEntity.getId(), accessToken, refreshToken);
     }
 
     public UserSimpleResponse joinProcess(UserDto userDto) {
         String encodedPassword = bCryptPasswordEncoder.encode(userDto.getPassword());
+        UserEntity user = userRepository.save(AuthEntityMapper.of(userDto, encodedPassword));
 
-        UserEntity userEntity =
-                UserEntity.builder()
-                        .nickname(userDto.getNickname())
-                        .email(userDto.getEmail())
-                        .password(encodedPassword)
-                        .build();
-
-        userRepository.save(userEntity);
-
-        // 회원가입 응답 생성
-        return new UserSimpleResponse(userEntity.getId(), userEntity.getEmail());
+        return AuthResponseMapper.from(user.getId(), user.getEmail());
     }
 
     public void send(String email) {
@@ -86,7 +75,8 @@ public class AuthService {
                 userRepository
                         .findByEmail(email)
                         .orElseThrow(() -> new ApiException(ErrorTypeCode.NULL_POINT));
-        return UserSimpleResponse.from(userEntity);
+
+        return AuthResponseMapper.from(userEntity.getId(), userEntity.getEmail());
     }
 
     public RefreshResponse reissueAccessToken(String authorizationHeader) {
@@ -120,6 +110,7 @@ public class AuthService {
 
         String newAccessToken = jwtUtils.generateAccessToken(userEntity);
         newAccessToken = jwtUtils.includeBearer(newAccessToken);
-        return new RefreshResponse(newAccessToken);
+
+        return AuthResponseMapper.from(newAccessToken);
     }
 }

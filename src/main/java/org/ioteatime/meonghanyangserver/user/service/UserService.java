@@ -6,6 +6,7 @@ import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.ioteatime.meonghanyangserver.user.dto.request.ChangePasswordRequest;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
+import org.ioteatime.meonghanyangserver.user.mapper.UserResponseMapper;
 import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class UserService {
                         .findById(userId)
                         .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        return UserDetailResponse.from(userEntity);
+        return UserResponseMapper.from(userEntity);
     }
 
     public void deleteUser(Long userId) {
