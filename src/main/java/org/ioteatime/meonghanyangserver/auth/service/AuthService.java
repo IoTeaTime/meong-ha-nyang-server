@@ -77,6 +77,7 @@ public class AuthService {
         googleMailClient.sendMail(email, "hello", "world");
     }
 
+<<<<<<< HEAD
     public UserSimpleResponse verifyEmail(String email) {
         UserEntity userEntity =
                 userRepository
@@ -85,6 +86,8 @@ public class AuthService {
         return UserSimpleResponse.from(userEntity);
     }
 
+=======
+>>>>>>> 62ffa31dd136cdd1181a8eebe8d5a6380205b3bf
     public RefreshResponse reissueAccessToken(String authorizationHeader) {
         String refreshToken = authorizationHeader.replace("Bearer ", "");
 

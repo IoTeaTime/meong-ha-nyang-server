@@ -5,7 +5,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
+<<<<<<< HEAD
 import org.ioteatime.meonghanyangserver.auth.dto.request.EmailRequest;
+=======
+>>>>>>> 62ffa31dd136cdd1181a8eebe8d5a6380205b3bf
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.user.dto.UserDto;
@@ -24,9 +27,12 @@ public interface AuthApi {
     @Operation(summary = "로그인을 합니다.")
     Api<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest);
 
+<<<<<<< HEAD
     @Operation(summary = "이메일 중복을 확인 합니다.")
     Api<UserSimpleResponse> duplicateEmail(@Valid @RequestBody EmailRequest email);
 
+=======
+>>>>>>> 62ffa31dd136cdd1181a8eebe8d5a6380205b3bf
     @Operation(summary = "토큰을 다시 생성합니다.")
     Api<RefreshResponse> refreshToken(@RequestHeader("Authorization") String authorizationHeader);
 }
