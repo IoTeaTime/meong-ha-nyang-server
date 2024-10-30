@@ -1,6 +1,7 @@
 package org.ioteatime.meonghanyangserver.group.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
@@ -27,5 +28,11 @@ public class GroupController implements GroupApi {
     public Api<GroupInfoResponse> getUserGroupInfo(@LoginMember Long userId) {
         GroupInfoResponse groupInfoResponse = groupUserService.getUserGroupInfo(userId);
         return Api.OK(groupInfoResponse);
+    }
+
+    @GetMapping("/cctv")
+    public Api<CctvInviteResponse> generateCctvInvite(@LoginMember Long userId) {
+        CctvInviteResponse cctvInviteResponse = groupUserService.generateCctvInvite(userId);
+        return Api.OK(cctvInviteResponse);
     }
 }

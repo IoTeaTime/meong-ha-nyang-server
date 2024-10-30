@@ -2,6 +2,7 @@ package org.ioteatime.meonghanyangserver.group.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
@@ -15,4 +16,7 @@ public interface GroupApi {
 
     @Operation(summary = "그룹 id를 조회합니다")
     Api<GroupInfoResponse> getUserGroupInfo(@LoginMember Long userId);
+
+    @Operation(summary = "그룹 id와 신호 채널 이름을 전달합니다.")
+    Api<CctvInviteResponse> generateCctvInvite(@LoginMember Long userId);
 }

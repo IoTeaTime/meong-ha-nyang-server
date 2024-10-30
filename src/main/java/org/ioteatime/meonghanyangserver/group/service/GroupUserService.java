@@ -1,6 +1,8 @@
 package org.ioteatime.meonghanyangserver.group.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
+import org.ioteatime.meonghanyangserver.cctv.service.CctvService;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
 import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GroupUserService {
     private final GroupUserRepository groupUserRepository;
+    private final CctvService cctvService;
 
     // input user
     public void createGroupUser(
@@ -40,5 +43,18 @@ public class GroupUserService {
                                                 ErrorTypeCode.BAD_REQUEST, "Group not found"));
 
         return new GroupInfoResponse(groupUserEntity.getGroup().getId());
+    }
+
+    public CctvInviteResponse generateCctvInvite(Long userId) {
+        GroupUserEntity groupUserEntity =
+                groupUserRepository
+                        .findByUserId(userId)
+                        .orElseThrow(
+                                () ->
+                                        new ApiException(
+                                                ErrorTypeCode.BAD_REQUEST, "Group not found"));
+        String kvsChannelName = cctvService.generateKvsChannelName();
+
+        return new CctvInviteResponse(groupUserEntity.getGroup().getId(), kvsChannelName);
     }
 }
