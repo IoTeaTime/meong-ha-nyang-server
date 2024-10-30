@@ -39,7 +39,6 @@ public class JwtUtils {
                         .claim("exp", expiration)
                         .signWith(hmacKey)
                         .compact();
-        jwtToken = excludeBearer(jwtToken);
         log.debug(jwtToken);
         return jwtToken;
     }
@@ -57,7 +56,6 @@ public class JwtUtils {
                         .claim("exp", expiration)
                         .signWith(hmacKey)
                         .compact();
-        jwtToken = excludeBearer(jwtToken);
         log.debug(jwtToken);
         return jwtToken;
     }
@@ -102,7 +100,7 @@ public class JwtUtils {
         return Long.valueOf(String.valueOf(claims.get("jti")));
     }
 
-    private String excludeBearer(String token) {
+    public String includeBearer(String token) {
         return "Bearer " + token;
     }
 

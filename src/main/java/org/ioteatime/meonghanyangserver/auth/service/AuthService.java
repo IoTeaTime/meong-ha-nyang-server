@@ -64,6 +64,8 @@ public class AuthService {
         RefreshToken refreshTokenEntity = RefreshToken.builder().refreshToken(refreshToken).build();
 
         refreshTokenRepository.save(refreshTokenEntity);
+        accessToken = jwtUtils.includeBearer(accessToken);
+        refreshToken = jwtUtils.includeBearer(refreshToken);
 
         return LoginResponse.builder()
                 .userId(userEntity.getId())
@@ -143,7 +145,7 @@ public class AuthService {
         }
 
         String newAccessToken = jwtUtils.generateAccessToken(userEntity, groupUserRole);
-
+        newAccessToken = jwtUtils.includeBearer(newAccessToken);
         return new RefreshResponse(newAccessToken);
     }
 }
