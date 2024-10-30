@@ -93,7 +93,7 @@ public class JwtUtils {
     }
 
     public String extractTokenFromHeader(String authorizationHeader) {
-        return authorizationHeader.replace("Bearer ", "");
+        return authorizationHeader.substring(7);
     }
 
     public Long getIdFromToken(String token) {
