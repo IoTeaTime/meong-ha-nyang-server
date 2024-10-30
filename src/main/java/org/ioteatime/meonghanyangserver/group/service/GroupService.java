@@ -26,7 +26,7 @@ public class GroupService {
 
         UserEntity userEntity = userDetails.getUserEntity();
 
-        boolean groupUserEntity = groupUserService.findGroupUser(userEntity);
+        boolean groupUserEntity = groupUserService.existsGroupUser(userEntity);
 
         if (groupUserEntity) {
             throw new ApiException(ErrorTypeCode.BAD_REQUEST);

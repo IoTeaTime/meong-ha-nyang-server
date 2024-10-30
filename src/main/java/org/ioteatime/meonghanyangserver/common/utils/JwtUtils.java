@@ -8,8 +8,12 @@ import java.security.Key;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -27,36 +31,38 @@ public class JwtUtils {
                                 SignatureAlgorithm.HS256.getJcaName());
     }
 
-    public String generateAccessToken(UserEntity userEntity) {
+    public String generateAccessToken(UserEntity userEntity, GroupUserRole groupUserRole) {
         Date nowDate = new Date();
         Date expiration = new Date(nowDate.getTime() + Duration.ofHours(2).toMillis());
         String jwtToken =
                 Jwts.builder()
                         .claim("name", userEntity.getNickname())
-                        .claim("sub", userEntity.getEmail())
+                        .claim("sub", "meong-ha-nyang")
                         .claim("jti", String.valueOf(userEntity.getId()))
-                        .claim("role", "ROLE_USER")
+                        .claim("role", groupUserRole)
                         .claim("iat", nowDate)
                         .claim("exp", expiration)
                         .signWith(hmacKey)
                         .compact();
+        jwtToken = "Bearer "+jwtToken;
         log.debug(jwtToken);
         return jwtToken;
     }
 
-    public String generateRefreshToken(UserEntity userEntity) {
+    public String generateRefreshToken(UserEntity userEntity, GroupUserRole groupUserRole) {
         Date nowDate = new Date();
         Date expiration = new Date(nowDate.getTime() + Duration.ofDays(30).toMillis());
         String jwtToken =
                 Jwts.builder()
                         .claim("name", userEntity.getNickname())
-                        .claim("sub", userEntity.getEmail())
+                        .claim("sub", "meong-ha-nyang")
                         .claim("jti", String.valueOf(userEntity.getId()))
-                        .claim("role", "ROLE_USER")
+                        .claim("role", groupUserRole)
                         .claim("iat", nowDate)
                         .claim("exp", expiration)
                         .signWith(hmacKey)
                         .compact();
+        jwtToken = "Bearer "+jwtToken;
         log.debug(jwtToken);
         return jwtToken;
     }
@@ -66,9 +72,9 @@ public class JwtUtils {
         return jwt.getBody();
     }
 
-    public String getSubjectFromToken(String token) {
+    public Long getJwtIdFromToken(String token) {
         final Claims claims = getAllClaimsFromToken(token);
-        return claims.getSubject();
+        return Long.valueOf(claims.getId());
     }
 
     public String getNameFromToken(String token) {
@@ -93,9 +99,9 @@ public class JwtUtils {
         }
 
         // 토큰 내용을 검증
-        String subject = getSubjectFromToken(token);
-        String email = userEntity.getEmail();
+        Long jwtId = getJwtIdFromToken(token);
+        Long id = userEntity.getId();
 
-        return subject != null && email != null && subject.equals(email);
+        return id != null && Objects.equals(jwtId, id);
     }
 }

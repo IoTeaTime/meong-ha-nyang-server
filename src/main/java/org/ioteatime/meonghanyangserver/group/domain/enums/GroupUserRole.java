@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum GroupUserRole {
     ROLE_USER("USER"),
-    ROLE_MASTER("MASTER");
+    ROLE_MASTER("MASTER"),
+
+    ROLE_PARTICIPANT("PARTICIPANT");
 
     private final String description;
 }

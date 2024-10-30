@@ -5,6 +5,8 @@ import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class GroupUserRepositoryImpl implements GroupUserRepository {
@@ -16,8 +18,14 @@ public class GroupUserRepositoryImpl implements GroupUserRepository {
     }
 
     @Override
-    public boolean findGroupUser(UserEntity userEntity) {
+    public boolean existsGroupUser(UserEntity userEntity) {
         boolean groupUser = jpaGroupUserRepository.existsByUser(userEntity);
         return groupUser;
+    }
+
+    @Override
+    public Optional<GroupUserEntity> findGroupUser(UserEntity userEntity) {
+        Optional<GroupUserEntity> groupUserEntity = jpaGroupUserRepository.findByUser(userEntity);
+        return groupUserEntity;
     }
 }
