@@ -77,6 +77,14 @@ public class AuthService {
         googleMailClient.sendMail(email, "hello", "world");
     }
 
+    public UserSimpleResponse verifyEmail(String email) {
+        UserEntity userEntity =
+                userRepository
+                        .findByEmail(email)
+                        .orElseThrow(() -> new ApiException(ErrorTypeCode.NULL_POINT));
+        return UserSimpleResponse.from(userEntity);
+    }
+
     public RefreshResponse reissueAccessToken(String authorizationHeader) {
         String refreshToken = jwtUtils.extractTokenFromHeader(authorizationHeader);
 

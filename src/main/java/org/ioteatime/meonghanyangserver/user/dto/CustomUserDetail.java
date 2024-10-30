@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @RequiredArgsConstructor
 public class CustomUserDetail implements UserDetails {
-    private UserEntity usersEntity;
+    private UserEntity userEntity;
 
-    public CustomUserDetail(UserEntity usersEntity) {
-        this.usersEntity = usersEntity;
+    public CustomUserDetail(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     @Override
@@ -25,11 +25,15 @@ public class CustomUserDetail implements UserDetails {
 
     @Override
     public String getPassword() {
-        return usersEntity.getPassword();
+        return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return usersEntity.getEmail();
+        return userEntity.getEmail();
+    }
+
+    public Long getId() {
+        return userEntity.getId();
     }
 }

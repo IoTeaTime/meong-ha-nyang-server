@@ -13,7 +13,7 @@ spring:
       default_batch_fetch_size: 100
   servlet:
     multipart:
-      location: D:\\shieldus\\interviewPartner\\uploads\\
+      location: C:\\multipart\\uploads\\
       max-file-size: 10MB
       max-request-size: 10MB
   data:

@@ -5,6 +5,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
-public record SendEmailRequest(
+public record EmailRequest(
         @Valid @Email @NotNull @Schema(description = "이메일", example = "example@gmail.com")
                 String email) {}
