@@ -58,10 +58,11 @@ public class JwtUtils {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        Jws<Claims> jwt = Jwts.parser()
-                .verifyWith(key) // SecretKey를 이용한 서명 검증
-                .build()
-                .parseSignedClaims(token);
+        Jws<Claims> jwt =
+                Jwts.parser()
+                        .verifyWith(key) // SecretKey를 이용한 서명 검증
+                        .build()
+                        .parseSignedClaims(token);
         return jwt.getPayload();
     }
 
