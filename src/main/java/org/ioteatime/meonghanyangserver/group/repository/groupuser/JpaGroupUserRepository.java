@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface JpaGroupUserRepository extends JpaRepository<GroupUserEntity, GroupUserId> {
     boolean existsByUser(UserEntity userEntity);
 
-    Optional<GroupUserEntity> findByUser(UserEntity userEntity);
+    Optional<GroupUserEntity> findByUserId(Long userId);
 }

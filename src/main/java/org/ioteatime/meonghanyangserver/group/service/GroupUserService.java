@@ -1,9 +1,12 @@
 package org.ioteatime.meonghanyangserver.group.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
+import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
 import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
+import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
 import org.ioteatime.meonghanyangserver.group.mapper.groupuser.GroupUserEntityMapper;
 import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
@@ -25,5 +28,17 @@ public class GroupUserService {
     public boolean existsGroupUser(UserEntity userEntity) {
         boolean groupUser = groupUserRepository.existsGroupUser(userEntity);
         return groupUser;
+    }
+
+    public GroupInfoResponse getUserGroupInfo(Long userId) {
+        GroupUserEntity groupUserEntity =
+                groupUserRepository
+                        .findByUserId(userId)
+                        .orElseThrow(
+                                () ->
+                                        new ApiException(
+                                                ErrorTypeCode.BAD_REQUEST, "Group not found"));
+
+        return new GroupInfoResponse(groupUserEntity.getGroup().getId());
     }
 }
