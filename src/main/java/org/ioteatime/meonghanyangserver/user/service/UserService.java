@@ -4,11 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
 import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
-import org.ioteatime.meonghanyangserver.user.dto.CustomUserDetail;
 import org.ioteatime.meonghanyangserver.user.dto.request.ChangePasswordRequest;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
 import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,11 +32,9 @@ public class UserService {
     }
 
     @Transactional
-    public void changeUserPassword(Authentication authentication, ChangePasswordRequest request) {
+    public void changeUserPassword(Long userId, ChangePasswordRequest request) {
         String currentPassword = request.getCurrentPassword();
         String newPassword = request.getNewPassword();
-        CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
-        Long userId = userDetails.getUserEntity().getId();
 
         UserEntity userEntity =
                 userRepository

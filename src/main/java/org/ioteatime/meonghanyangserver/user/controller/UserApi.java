@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.ioteatime.meonghanyangserver.common.api.Api;
+import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.ioteatime.meonghanyangserver.user.dto.request.ChangePasswordRequest;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,9 +17,9 @@ public interface UserApi {
     Api<UserDetailResponse> getUserDetail(@PathVariable("userId") Long userId);
 
     @Operation(summary = "회원 정보를 삭제합니다.")
-    Api<Object> deleteUser(@PathVariable("userId") Long userId);
+    Api<Object> deleteUser(@LoginMember Long userId);
 
     @Operation(summary = "회원의 비밀번호를 변경합니다.")
     Api<Object> changeUserPassword(
-            Authentication authentication, @RequestBody @Valid ChangePasswordRequest request);
+            @LoginMember Long userId, @RequestBody @Valid ChangePasswordRequest request);
 }
