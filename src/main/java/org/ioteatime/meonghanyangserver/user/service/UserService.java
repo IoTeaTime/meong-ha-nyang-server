@@ -2,7 +2,7 @@ package org.ioteatime.meonghanyangserver.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
-import org.ioteatime.meonghanyangserver.common.exception.ApiException;
+import org.ioteatime.meonghanyangserver.common.exception.ApiExceptionImpl;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.ioteatime.meonghanyangserver.user.dto.request.ChangePasswordRequest;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
@@ -42,11 +42,11 @@ public class UserService {
                         .findById(userId)
                         .orElseThrow(
                                 () ->
-                                        new ApiException(
+                                        new ApiExceptionImpl(
                                                 ErrorTypeCode.BAD_REQUEST, "User not found"));
 
         if (!bCryptPasswordEncoder.matches(currentPassword, userEntity.getPassword())) {
-            throw new ApiException(ErrorTypeCode.BAD_REQUEST, "현재 비밀번호가 일치하지 않습니다.");
+            throw new ApiExceptionImpl(ErrorTypeCode.BAD_REQUEST, "현재 비밀번호가 일치하지 않습니다.");
         }
 
         // Dirty-Checking Password Change

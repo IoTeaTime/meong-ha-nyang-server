@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
-import org.ioteatime.meonghanyangserver.common.exception.ApiException;
+import org.ioteatime.meonghanyangserver.common.exception.ApiExceptionImpl;
 
 @Getter
 @Entity
@@ -39,7 +39,7 @@ public class UserEntity {
 
     public void setPassword(String encodedPassword) {
         if (encodedPassword == null || encodedPassword.isBlank()) {
-            throw new ApiException(ErrorTypeCode.BAD_REQUEST, "Password is empty");
+            throw new ApiExceptionImpl(ErrorTypeCode.BAD_REQUEST, "Password is empty");
         }
         this.password = encodedPassword;
     }
