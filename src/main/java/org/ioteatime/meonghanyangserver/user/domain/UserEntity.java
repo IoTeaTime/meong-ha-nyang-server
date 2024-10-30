@@ -28,10 +28,12 @@ public class UserEntity {
     @Column private String profileImgUrl;
 
     @Builder
-    public UserEntity(String nickname, String email, String password, String profileImgUrl) {
-        this.nickname = nickname;
+    public UserEntity(
+            Long id, String email, String password, String nickname, String profileImgUrl) {
+        this.id = id;
         this.email = email;
         this.password = password;
+        this.nickname = nickname;
         this.profileImgUrl = profileImgUrl;
     }
 
