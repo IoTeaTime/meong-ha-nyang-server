@@ -1,6 +1,5 @@
 package org.ioteatime.meonghanyangserver.group.repository.groupuser;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
@@ -20,11 +19,5 @@ public class GroupUserRepositoryImpl implements GroupUserRepository {
     public boolean existsGroupUser(UserEntity userEntity) {
         boolean groupUser = jpaGroupUserRepository.existsByUser(userEntity);
         return groupUser;
-    }
-
-    @Override
-    public Optional<GroupUserEntity> findGroupUser(UserEntity userEntity) {
-        Optional<GroupUserEntity> groupUserEntity = jpaGroupUserRepository.findByUser(userEntity);
-        return groupUserEntity;
     }
 }

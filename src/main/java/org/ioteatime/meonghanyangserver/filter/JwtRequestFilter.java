@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
 import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
-import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
 import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.ioteatime.meonghanyangserver.user.dto.CustomUserDetail;
@@ -45,14 +44,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String jwtToken = null;
         Long jwtId = null;
-        GroupUserRole groupUserRole = null;
 
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwtToken = authorizationHeader.substring(7);
             jwtId = jwtUtils.getIdFromToken(jwtToken);
-            groupUserRole = jwtUtils.getRoleFromToken(jwtToken);
             log.debug("jwt : ", jwtToken);
         } else {
             log.error("Authorization 헤더 누락 또는 토큰 형식 오류");
@@ -66,7 +63,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             log.debug(entity.getEmail());
             if (jwtUtils.validateToken(jwtToken, entity)) {
-                CustomUserDetail customUserDetail = new CustomUserDetail(entity, groupUserRole);
+                CustomUserDetail customUserDetail = new CustomUserDetail(entity);
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                         new UsernamePasswordAuthenticationToken(
                                 customUserDetail, null, customUserDetail.getAuthorities());

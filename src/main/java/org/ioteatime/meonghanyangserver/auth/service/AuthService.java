@@ -8,8 +8,6 @@ import org.ioteatime.meonghanyangserver.clients.google.GoogleMailClient;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
 import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
-import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
-import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
 import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
 import org.ioteatime.meonghanyangserver.redis.RefreshToken;
 import org.ioteatime.meonghanyangserver.redis.RefreshTokenRepository;
@@ -43,20 +41,8 @@ public class AuthService {
             throw new ApiException(ErrorTypeCode.BAD_REQUEST, "비밀번호가 틀렸습니다.");
         }
 
-        boolean existGroupUser = groupUserRepository.existsGroupUser(userEntity);
-
-        GroupUserRole groupUserRole = GroupUserRole.ROLE_PARTICIPANT;
-
-        if (existGroupUser) {
-            GroupUserEntity groupUserEntity =
-                    groupUserRepository
-                            .findGroupUser(userEntity)
-                            .orElseThrow(() -> new ApiException(ErrorTypeCode.BAD_REQUEST));
-            groupUserRole = groupUserEntity.getRole();
-        }
-
-        String accessToken = jwtUtils.generateAccessToken(userEntity, groupUserRole);
-        String refreshToken = jwtUtils.generateRefreshToken(userEntity, groupUserRole);
+        String accessToken = jwtUtils.generateAccessToken(userEntity);
+        String refreshToken = jwtUtils.generateRefreshToken(userEntity);
 
         if (accessToken.isEmpty() || refreshToken.isEmpty()) {
             throw new ApiException(ErrorTypeCode.SERVER_ERROR);
@@ -132,19 +118,7 @@ public class AuthService {
             throw new ApiException(ErrorTypeCode.BAD_REQUEST, "토큰이 일치하지 않습니다.");
         }
 
-        boolean existGroupUser = groupUserRepository.existsGroupUser(userEntity);
-
-        GroupUserRole groupUserRole = GroupUserRole.ROLE_PARTICIPANT;
-
-        if (existGroupUser) {
-            GroupUserEntity groupUserEntity =
-                    groupUserRepository
-                            .findGroupUser(userEntity)
-                            .orElseThrow(() -> new ApiException(ErrorTypeCode.BAD_REQUEST));
-            groupUserRole = groupUserEntity.getRole();
-        }
-
-        String newAccessToken = jwtUtils.generateAccessToken(userEntity, groupUserRole);
+        String newAccessToken = jwtUtils.generateAccessToken(userEntity);
         newAccessToken = jwtUtils.includeBearer(newAccessToken);
         return new RefreshResponse(newAccessToken);
     }

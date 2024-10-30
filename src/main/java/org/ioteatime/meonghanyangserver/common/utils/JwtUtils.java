@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Objects;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
-import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -18,15 +17,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class JwtUtils {
-    private SecretKey hmacKey;
+    private final SecretKey key;
 
     public JwtUtils(Environment env) {
         String secretKeyString = env.getProperty("token.secret");
         byte[] decodedKey = Base64.getDecoder().decode(secretKeyString);
-        this.hmacKey = Keys.hmacShaKeyFor(decodedKey);
+        this.key = Keys.hmacShaKeyFor(decodedKey);
     }
 
-    public String generateAccessToken(UserEntity userEntity, GroupUserRole groupUserRole) {
+    public String generateAccessToken(UserEntity userEntity) {
         Date nowDate = new Date();
         Date expiration = new Date(nowDate.getTime() + Duration.ofHours(2).toMillis());
         String jwtToken =
@@ -34,16 +33,15 @@ public class JwtUtils {
                         .claim("name", userEntity.getNickname())
                         .claim("sub", "meong-ha-nyang")
                         .claim("jti", String.valueOf(userEntity.getId()))
-                        .claim("role", groupUserRole)
                         .claim("iat", nowDate)
                         .claim("exp", expiration)
-                        .signWith(hmacKey)
+                        .signWith(key)
                         .compact();
         log.debug(jwtToken);
         return jwtToken;
     }
 
-    public String generateRefreshToken(UserEntity userEntity, GroupUserRole groupUserRole) {
+    public String generateRefreshToken(UserEntity userEntity) {
         Date nowDate = new Date();
         Date expiration = new Date(nowDate.getTime() + Duration.ofDays(30).toMillis());
         String jwtToken =
@@ -51,18 +49,20 @@ public class JwtUtils {
                         .claim("name", userEntity.getNickname())
                         .claim("sub", "meong-ha-nyang")
                         .claim("jti", String.valueOf(userEntity.getId()))
-                        .claim("role", groupUserRole)
                         .claim("iat", nowDate)
                         .claim("exp", expiration)
-                        .signWith(hmacKey)
+                        .signWith(key)
                         .compact();
         log.debug(jwtToken);
         return jwtToken;
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        Jws<Claims> jwt = Jwts.parser().setSigningKey(hmacKey).build().parseClaimsJws(token);
-        return jwt.getBody();
+        Jws<Claims> jwt = Jwts.parser()
+                .verifyWith(key) // SecretKey를 이용한 서명 검증
+                .build()
+                .parseSignedClaims(token);
+        return jwt.getPayload();
     }
 
     public String getNameFromToken(String token) {
@@ -102,11 +102,5 @@ public class JwtUtils {
 
     public String includeBearer(String token) {
         return "Bearer " + token;
-    }
-
-    public GroupUserRole getRoleFromToken(String token) {
-        final Claims claims = getAllClaimsFromToken(token);
-        GroupUserRole groupUserRole = GroupUserRole.valueOf(String.valueOf(claims.get("role")));
-        return groupUserRole;
     }
 }
