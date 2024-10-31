@@ -2,7 +2,6 @@ package org.ioteatime.meonghanyangserver.auth.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
-import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.EmailRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.VerifyEmailRequest;
@@ -47,12 +46,5 @@ public class AuthController implements AuthApi {
     public Api<LoginResponse> login(LoginRequest loginRequest) {
         LoginResponse loginResponse = authService.login(loginRequest);
         return Api.success(AuthSuccessType.SIGN_IN, loginResponse);
-    }
-
-    @PostMapping("/refresh-token")
-    public Api<RefreshResponse> refreshToken(
-            @RequestHeader("Authorization") String authorizationHeader) {
-        RefreshResponse refreshResponse = authService.reissueAccessToken(authorizationHeader);
-        return Api.success(AuthSuccessType.REISSUE_ACCESS_TOKEN, refreshResponse);
     }
 }

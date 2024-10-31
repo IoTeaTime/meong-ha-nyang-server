@@ -2,6 +2,7 @@ package org.ioteatime.meonghanyangserver.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.AuthSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
@@ -33,5 +34,12 @@ public class UserController implements UserApi {
             @LoginMember Long userId, @RequestBody @Valid ChangePasswordRequest request) {
         userService.changeUserPassword(userId, request);
         return Api.success(AuthSuccessType.UPDATE_PASSWORD);
+    }
+
+    @PostMapping("/refresh-token")
+    public Api<RefreshResponse> refreshToken(
+            @RequestHeader("Authorization") String authorizationHeader) {
+        RefreshResponse refreshResponse = userService.reissueAccessToken(authorizationHeader);
+        return Api.success(AuthSuccessType.REISSUE_ACCESS_TOKEN, refreshResponse);
     }
 }
