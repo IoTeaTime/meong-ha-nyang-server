@@ -8,7 +8,8 @@ public enum AuthSuccessType implements SuccessTypeCode {
     REISSUE_ACCESS_TOKEN(200, "OK", "ACCESS TOKEN 재발행에 성공하였습니다."),
     GET_USER_DETAIL(200, "OK", "회원 단건 조회에 성공하였습니다."),
     DELETE_USER(200, "OK", "회원 삭제에 성공하였습니다."),
-    UPDATE_PASSWORD(200, "OK", "비밀번호 수정에 성공하였습니다.");
+    UPDATE_PASSWORD(200, "OK", "비밀번호 수정에 성공하였습니다."),
+    VERIFY_EMAIL_CODE(200, "OK", "이메일 인증 코드 검증에 성공하였습니다.");
 
     private final Integer code;
     private final String message;

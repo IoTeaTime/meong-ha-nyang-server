@@ -29,7 +29,7 @@ public class GroupService {
         boolean groupUserEntity = groupUserService.existsGroupUser(userEntity);
 
         if (groupUserEntity) {
-            throw new BadRequestException(GroupErrorType.ALREADY_EXSIST);
+            throw new BadRequestException(GroupErrorType.ALREADY_EXISTS);
         }
 
         String roomName = userEntity.getNickname() + " 그룹";

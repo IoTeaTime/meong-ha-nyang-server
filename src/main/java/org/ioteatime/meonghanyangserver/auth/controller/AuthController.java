@@ -6,6 +6,7 @@ import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.EmailRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
+import org.ioteatime.meonghanyangserver.auth.dto.request.VerifyEmailRequest;
 import org.ioteatime.meonghanyangserver.auth.service.AuthService;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.AuthSuccessType;
@@ -26,9 +27,15 @@ public class AuthController implements AuthApi {
     }
 
     @PostMapping("/email-verification")
-    public Api<?> verifyEmail(@Valid @RequestBody EmailRequest emailReq) {
+    public Api<?> sendEmailCode(@Valid @RequestBody EmailRequest emailReq) {
         authService.send(emailReq.email());
         return Api.success(AuthSuccessType.SEND_EMAIL_CODE);
+    }
+
+    @PostMapping("/check-verification")
+    public Api<?> verifyEmail(VerifyEmailRequest verifyEmailRequest) {
+        authService.verifyEmailCode(verifyEmailRequest.email(), verifyEmailRequest.code());
+        return Api.success(AuthSuccessType.VERIFY_EMAIL_CODE);
     }
 
     // Email 중복 확인

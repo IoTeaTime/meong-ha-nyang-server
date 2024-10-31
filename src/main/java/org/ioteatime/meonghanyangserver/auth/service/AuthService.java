@@ -12,8 +12,8 @@ import org.ioteatime.meonghanyangserver.auth.mapper.AuthEntityMapper;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
 import org.ioteatime.meonghanyangserver.clients.google.GoogleMailClient;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
-import org.ioteatime.meonghanyangserver.common.exception.InternalServerException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
+import org.ioteatime.meonghanyangserver.common.exception.UnauthorizedException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
 import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
@@ -111,6 +111,16 @@ public class AuthService {
         return AuthResponseMapper.from(userEntity.getId(), userEntity.getEmail());
     }
 
+    public void verifyEmailCode(String email, String code) {
+        EmailCode emailCode =
+                emailCodeRepository
+                        .findByEmail(email)
+                        .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
+        if (!code.equals(emailCode.getCode())) {
+            throw new UnauthorizedException(AuthErrorType.CODE_NOT_EQUALS);
+        }
+    }
+
     public RefreshResponse reissueAccessToken(String authorizationHeader) {
         String refreshToken = jwtUtils.extractTokenFromHeader(authorizationHeader);
 
@@ -131,7 +141,7 @@ public class AuthService {
                                 () -> new NotFoundException(AuthErrorType.REFRESH_TOKEN_INVALID));
 
         if (!storedToken.getRefreshToken().equals(refreshToken)) {
-            throw new InternalServerException(AuthErrorType.TOKEN_NOT_EQUALS);
+            throw new BadRequestException(AuthErrorType.TOKEN_NOT_EQUALS);
         }
 
         String newAccessToken = jwtUtils.generateAccessToken(userEntity);
