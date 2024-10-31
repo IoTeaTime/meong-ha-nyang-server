@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum ErrorTypeCode implements TypeCodeIfs {
+public enum ErrorTypeCode implements TypeCode {
     // 잘못된 요청
     BAD_REQUEST(400, "bad request", "잘못된 요청"),
     // 서버 오류

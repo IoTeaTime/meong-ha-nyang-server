@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ioteatime.meonghanyangserver.common.error.TypeCodeIfs;
+import org.ioteatime.meonghanyangserver.common.error.TypeCode;
 
 @Data
 @AllArgsConstructor
@@ -33,17 +33,17 @@ public class Api<T> {
     }
 
     // 정상 응답
-    public static <T> Api<T> OK(TypeCodeIfs typeCodeIfs, T data) {
+    public static <T> Api<T> OK(TypeCode typeCode, T data) {
         Api<T> api = new Api<T>();
-        api.result = Result.OK(typeCodeIfs);
+        api.result = Result.OK(typeCode);
         api.body = data;
         return api;
     }
 
     // 정상 응답
-    public static <T> Api<T> OK(TypeCodeIfs typeCodeIfs) {
+    public static <T> Api<T> OK(TypeCode typeCode) {
         Api<T> api = new Api<T>();
-        api.result = Result.OK(typeCodeIfs);
+        api.result = Result.OK(typeCode);
         return api;
     }
 
@@ -60,23 +60,23 @@ public class Api<T> {
         return api;
     }
 
-    public static Api<Object> CREATE(TypeCodeIfs typeCodeIfs) {
+    public static Api<Object> CREATE(TypeCode typeCode) {
         Api<Object> api = new Api<>();
-        api.result = Result.CREATE(typeCodeIfs);
+        api.result = Result.CREATE(typeCode);
         return api;
     }
 
-    public static <T> Api<T> CREATE(TypeCodeIfs typeCodeIfs, T data) {
+    public static <T> Api<T> CREATE(TypeCode typeCode, T data) {
         Api<T> api = new Api<T>();
-        api.result = Result.CREATE(typeCodeIfs);
+        api.result = Result.CREATE(typeCode);
         api.body = data;
         return api;
     }
 
     // 에러 응답
-    public static Api<Object> ERROR(TypeCodeIfs typeCodeIfs) {
+    public static Api<Object> ERROR(TypeCode typeCode) {
         Api<Object> api = new Api<Object>();
-        api.result = Result.ERROR(typeCodeIfs);
+        api.result = Result.ERROR(typeCode);
         return api;
     }
 }

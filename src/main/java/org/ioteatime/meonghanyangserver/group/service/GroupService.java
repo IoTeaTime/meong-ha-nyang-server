@@ -2,7 +2,7 @@ package org.ioteatime.meonghanyangserver.group.service;
 
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
-import org.ioteatime.meonghanyangserver.common.exception.ApiException;
+import org.ioteatime.meonghanyangserver.common.exception.ApiExceptionImpl;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
@@ -29,7 +29,7 @@ public class GroupService {
         boolean groupUserEntity = groupUserService.existsGroupUser(userEntity);
 
         if (groupUserEntity) {
-            throw new ApiException(ErrorTypeCode.BAD_REQUEST);
+            throw new ApiExceptionImpl(ErrorTypeCode.BAD_REQUEST);
         }
 
         String roomName = userEntity.getNickname() + " 그룹";

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.error.SuccessTypeCode;
-import org.ioteatime.meonghanyangserver.common.error.TypeCodeIfs;
+import org.ioteatime.meonghanyangserver.common.error.TypeCode;
 
 @Builder
 @Data
@@ -26,11 +26,11 @@ public class Result {
     }
 
     // 성공 응답 커스텀
-    public static Result OK(TypeCodeIfs typeCodeIfs) {
+    public static Result OK(TypeCode typeCode) {
         return Result.builder()
-                .code(typeCodeIfs.getCode())
-                .message(typeCodeIfs.getMessage())
-                .description(typeCodeIfs.getDescription())
+                .code(typeCode.getCode())
+                .message(typeCode.getMessage())
+                .description(typeCode.getDescription())
                 .build();
     }
 
@@ -43,19 +43,19 @@ public class Result {
                 .build();
     }
 
-    public static Result CREATE(TypeCodeIfs typeCodeIfs) {
+    public static Result CREATE(TypeCode typeCode) {
         return Result.builder()
-                .code(typeCodeIfs.getCode())
-                .message(typeCodeIfs.getMessage())
-                .description(typeCodeIfs.getDescription())
+                .code(typeCode.getCode())
+                .message(typeCode.getMessage())
+                .description(typeCode.getDescription())
                 .build();
     }
 
     // 에러 응답
-    public static Result ERROR(TypeCodeIfs typeCodeIfs) {
+    public static Result ERROR(TypeCode typeCode) {
         return Result.builder()
-                .code(typeCodeIfs.getCode())
-                .message(typeCodeIfs.getMessage())
+                .code(typeCode.getCode())
+                .message(typeCode.getMessage())
                 .description("ERROR")
                 .build();
     }
