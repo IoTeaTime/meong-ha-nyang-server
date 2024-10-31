@@ -11,8 +11,10 @@ import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthEntityMapper;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
 import org.ioteatime.meonghanyangserver.clients.google.GoogleMailClient;
-import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
-import org.ioteatime.meonghanyangserver.common.exception.ApiExceptionImpl;
+import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
+import org.ioteatime.meonghanyangserver.common.exception.InternalServerException;
+import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
+import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
 import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
 import org.ioteatime.meonghanyangserver.redis.EmailCode;
@@ -20,7 +22,7 @@ import org.ioteatime.meonghanyangserver.redis.EmailCodeRepository;
 import org.ioteatime.meonghanyangserver.redis.RefreshToken;
 import org.ioteatime.meonghanyangserver.redis.RefreshTokenRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
-import org.ioteatime.meonghanyangserver.user.dto.UserDto;
+import org.ioteatime.meonghanyangserver.user.dto.request.JoinRequest;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
 import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,21 +42,20 @@ public class AuthService {
     public LoginResponse login(LoginRequest loginRequest) {
         UserEntity userEntity =
                 userRepository
-                        .findByEmail(loginRequest.getEmail())
-                        .orElseThrow(
-                                () -> new ApiExceptionImpl(ErrorTypeCode.BAD_REQUEST, "없는 회원입니다."));
+                        .findByEmail(loginRequest.email())
+                        .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
 
         boolean passwordMatch =
-                bCryptPasswordEncoder.matches(loginRequest.getPassword(), userEntity.getPassword());
+                bCryptPasswordEncoder.matches(loginRequest.password(), userEntity.getPassword());
         if (!passwordMatch) {
-            throw new ApiExceptionImpl(ErrorTypeCode.BAD_REQUEST, "비밀번호가 틀렸습니다.");
+            throw new BadRequestException(AuthErrorType.PASSWORD_NOT_MATCH);
         }
 
         String accessToken = jwtUtils.generateAccessToken(userEntity);
         String refreshToken = jwtUtils.generateRefreshToken(userEntity);
 
         if (accessToken.isEmpty() || refreshToken.isEmpty()) {
-            throw new ApiExceptionImpl(ErrorTypeCode.SERVER_ERROR);
+            throw new NotFoundException(AuthErrorType.TOKEN_NOT_FOUND);
         }
         RefreshToken refreshTokenEntity = RefreshToken.builder().refreshToken(refreshToken).build();
 
@@ -65,7 +66,7 @@ public class AuthService {
         return AuthResponseMapper.from(userEntity.getId(), accessToken, refreshToken);
     }
 
-    public UserSimpleResponse joinProcess(UserDto userDto) {
+    public UserSimpleResponse joinProcess(JoinRequest userDto) {
         String encodedPassword = bCryptPasswordEncoder.encode(userDto.getPassword());
         UserEntity user = userRepository.save(AuthEntityMapper.of(userDto, encodedPassword));
 
@@ -105,7 +106,7 @@ public class AuthService {
         UserEntity userEntity =
                 userRepository
                         .findByEmail(email)
-                        .orElseThrow(() -> new ApiExceptionImpl(ErrorTypeCode.NULL_POINT));
+                        .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
 
         return AuthResponseMapper.from(userEntity.getId(), userEntity.getEmail());
     }
@@ -117,27 +118,20 @@ public class AuthService {
         UserEntity userEntity =
                 userRepository
                         .findById(userId)
-                        .orElseThrow(
-                                () ->
-                                        new ApiExceptionImpl(
-                                                ErrorTypeCode.BAD_REQUEST, "유효하지 않은 사용자입니다."));
+                        .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
 
         if (!jwtUtils.validateToken(refreshToken, userEntity)) {
-            throw new ApiExceptionImpl(
-                    ErrorTypeCode.BAD_REQUEST, "Refresh token이 만료되었거나 유효하지 않습니다.");
+            throw new NotFoundException(AuthErrorType.REFRESH_TOKEN_INVALID);
         }
 
         RefreshToken storedToken =
                 refreshTokenRepository
                         .findByRefreshToken(refreshToken)
                         .orElseThrow(
-                                () ->
-                                        new ApiExceptionImpl(
-                                                ErrorTypeCode.BAD_REQUEST,
-                                                "유효하지 않은 Refresh token입니다."));
+                                () -> new NotFoundException(AuthErrorType.REFRESH_TOKEN_INVALID));
 
         if (!storedToken.getRefreshToken().equals(refreshToken)) {
-            throw new ApiExceptionImpl(ErrorTypeCode.BAD_REQUEST, "토큰이 일치하지 않습니다.");
+            throw new InternalServerException(AuthErrorType.TOKEN_NOT_EQUALS);
         }
 
         String newAccessToken = jwtUtils.generateAccessToken(userEntity);
