@@ -110,6 +110,19 @@ public class AuthService {
         return AuthResponseMapper.from(userEntity.getId(), userEntity.getEmail());
     }
 
+    public void verifyEmailCode(String email, String code) {
+        EmailCode emailCode =
+                emailCodeRepository
+                        .findByEmail(email)
+                        .orElseThrow(
+                                () ->
+                                        new ApiExceptionImpl(
+                                                ErrorTypeCode.NULL_POINT, "Code not found"));
+        if (!code.equals(emailCode.getCode())) {
+            throw new ApiExceptionImpl(ErrorTypeCode.NULL_POINT, "Code not equals");
+        }
+    }
+
     public RefreshResponse reissueAccessToken(String authorizationHeader) {
         String refreshToken = jwtUtils.extractTokenFromHeader(authorizationHeader);
 
