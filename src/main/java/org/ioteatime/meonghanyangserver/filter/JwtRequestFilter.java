@@ -8,7 +8,7 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
-import org.ioteatime.meonghanyangserver.common.exception.ApiException;
+import org.ioteatime.meonghanyangserver.common.exception.ApiExceptionImpl;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
 import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
@@ -53,13 +53,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             log.debug("jwt : ", jwtToken);
         } else {
             log.error("Authorization 헤더 누락 또는 토큰 형식 오류");
-            throw new ApiException(ErrorTypeCode.UNAUTHORIZED, "Authorization 헤더 누락 또는 토큰 형식 오류");
+            throw new ApiExceptionImpl(
+                    ErrorTypeCode.UNAUTHORIZED, "Authorization 헤더 누락 또는 토큰 형식 오류");
         }
         if (jwtId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserEntity entity =
                     userRepository
                             .findById(jwtId)
-                            .orElseThrow(() -> new ApiException(ErrorTypeCode.BAD_REQUEST));
+                            .orElseThrow(() -> new ApiExceptionImpl(ErrorTypeCode.BAD_REQUEST));
 
             log.debug(entity.getEmail());
             if (jwtUtils.validateToken(jwtToken, entity)) {
