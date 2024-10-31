@@ -28,11 +28,7 @@ public class JoinRequest {
     private String nickname;
 
     @Builder
-    public JoinRequest(
-            String email,
-            String password,
-            String passwordConfirm,
-            String nickname) {
+    public JoinRequest(String email, String password, String passwordConfirm, String nickname) {
         this.email = email;
         this.password = password;
         this.passwordConfirm = passwordConfirm;

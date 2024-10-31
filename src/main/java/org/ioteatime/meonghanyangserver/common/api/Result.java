@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ioteatime.meonghanyangserver.common.type.CommonSuccessType;
 import org.ioteatime.meonghanyangserver.common.type.ErrorTypeCode;
 import org.ioteatime.meonghanyangserver.common.type.SuccessTypeCode;
 import org.springframework.http.HttpStatus;
