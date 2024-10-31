@@ -85,7 +85,7 @@ public class GoogleMailClient {
             email.addRecipient(
                     javax.mail.Message.RecipientType.TO, new InternetAddress(toEmailAddress));
             email.setSubject(subject);
-            email.setText(message);
+            email.setContent(message, "text/html;charset=utf-8");
 
             // Encode and wrap the MIME message into a gmail message
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
