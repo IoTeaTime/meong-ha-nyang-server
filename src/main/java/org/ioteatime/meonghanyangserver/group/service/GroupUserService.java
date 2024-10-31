@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
 import org.ioteatime.meonghanyangserver.cctv.service.CctvService;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
-import org.ioteatime.meonghanyangserver.common.exception.ApiException;
+import org.ioteatime.meonghanyangserver.common.exception.ApiExceptionImpl;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
 import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
@@ -29,8 +29,7 @@ public class GroupUserService {
     }
 
     public boolean existsGroupUser(UserEntity userEntity) {
-        boolean groupUser = groupUserRepository.existsGroupUser(userEntity);
-        return groupUser;
+        return groupUserRepository.existsGroupUser(userEntity);
     }
 
     public GroupInfoResponse getUserGroupInfo(Long userId) {
@@ -39,7 +38,7 @@ public class GroupUserService {
                         .findByUserId(userId)
                         .orElseThrow(
                                 () ->
-                                        new ApiException(
+                                        new ApiExceptionImpl(
                                                 ErrorTypeCode.BAD_REQUEST, "Group not found"));
 
         return new GroupInfoResponse(groupUserEntity.getGroup().getId());
@@ -51,7 +50,7 @@ public class GroupUserService {
                         .findByUserId(userId)
                         .orElseThrow(
                                 () ->
-                                        new ApiException(
+                                        new ApiExceptionImpl(
                                                 ErrorTypeCode.BAD_REQUEST, "Group not found"));
         String kvsChannelName = cctvService.generateKvsChannelName();
 
