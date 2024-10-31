@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserDto {
+public class JoinRequest {
 
     @NotBlank(message = "이메일을 입력해주세요.")
     @Email(message = "이메일 형식으로 입력해주세요.")
@@ -24,23 +24,18 @@ public class UserDto {
     private String passwordConfirm;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
-    @Schema(description = "사용자의 닉네임")
+    @Schema(description = "사용자의 닉네임", example = "멍하냥01")
     private String nickname;
 
-    @Schema(description = "사용자의 프로필 이미지 URL", example = "http://example.com/example.jpg")
-    private String profileImgUrl;
-
     @Builder
-    public UserDto(
+    public JoinRequest(
             String email,
             String password,
             String passwordConfirm,
-            String nickname,
-            String profileImgUrl) {
+            String nickname) {
         this.email = email;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
         this.nickname = nickname;
-        this.profileImgUrl = profileImgUrl;
     }
 }
