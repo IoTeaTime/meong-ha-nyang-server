@@ -31,5 +31,5 @@ public class GroupEntity {
     private List<CctvEntity> cctvs;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    private List<VideoEntity> videos;
+    private List<GroupUserEntity> groupUserEntities;
 }

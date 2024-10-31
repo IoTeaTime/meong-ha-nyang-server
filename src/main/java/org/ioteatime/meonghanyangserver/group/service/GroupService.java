@@ -4,10 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
 import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
+import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
 import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
+import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
+import org.ioteatime.meonghanyangserver.group.dto.response.GroupUserInfoResponse;
 import org.ioteatime.meonghanyangserver.group.mapper.group.GroupEntityMapper;
 import org.ioteatime.meonghanyangserver.group.mapper.group.GroupResponseMapper;
+import org.ioteatime.meonghanyangserver.group.mapper.groupuser.GroupUserResponseMapper;
 import org.ioteatime.meonghanyangserver.group.repository.group.GroupRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.ioteatime.meonghanyangserver.user.dto.CustomUserDetail;
@@ -43,5 +47,20 @@ public class GroupService {
         CreateGroupResponse createGroupResponse = GroupResponseMapper.toResponse(newGroupEntity);
 
         return createGroupResponse;
+    }
+
+    public GroupTotalResponse getGroupTotalData(Authentication authentication){
+        CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+
+        UserEntity userEntity = userDetails.getUserEntity();
+
+        GroupUserEntity groupUserEntity = groupUserService.getGroupUser(userEntity);
+
+        GroupEntity groupEntity = groupUserEntity.getGroup();
+
+        GroupTotalResponse groupUserInfoResponse = GroupResponseMapper.toGroupTotalResponse(groupEntity);
+
+        return groupUserInfoResponse;
+
     }
 }

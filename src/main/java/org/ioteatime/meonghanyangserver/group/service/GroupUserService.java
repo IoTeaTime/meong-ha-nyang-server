@@ -26,4 +26,9 @@ public class GroupUserService {
         boolean groupUser = groupUserRepository.existsGroupUser(userEntity);
         return groupUser;
     }
+
+    public GroupUserEntity getGroupUser(UserEntity userEntity){
+        GroupUserEntity groupUserEntity = groupUserRepository.findGroupUser(userEntity);
+        return groupUserEntity;
+    }
 }

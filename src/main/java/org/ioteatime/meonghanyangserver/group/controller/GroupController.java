@@ -3,8 +3,10 @@ package org.ioteatime.meonghanyangserver.group.controller;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
+import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.ioteatime.meonghanyangserver.group.service.GroupService;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,5 +21,11 @@ public class GroupController implements GroupApi {
     public Api<CreateGroupResponse> createGroup(Authentication authentication) {
         CreateGroupResponse createGroupResponse = groupService.createGroup(authentication);
         return Api.OK(createGroupResponse);
+    }
+
+    @GetMapping("/info-list")
+    public Api<GroupTotalResponse> getGroupTotalData(Authentication authentication) {
+        GroupTotalResponse groupTotalResponse = groupService.getGroupTotalData(authentication);
+        return Api.OK(groupTotalResponse);
     }
 }
