@@ -68,6 +68,7 @@ public class AuthService {
 
     public UserSimpleResponse joinProcess(JoinRequest userDto) {
         String encodedPassword = bCryptPasswordEncoder.encode(userDto.getPassword());
+        verifyEmail(userDto.getEmail());
         UserEntity user = userRepository.save(AuthEntityMapper.of(userDto, encodedPassword));
 
         return AuthResponseMapper.from(user.getId(), user.getEmail());
@@ -102,13 +103,10 @@ public class AuthService {
         return String.join("", authStr);
     }
 
-    public UserSimpleResponse verifyEmail(String email) {
-        UserEntity userEntity =
-                userRepository
-                        .findByEmail(email)
-                        .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
-
-        return AuthResponseMapper.from(userEntity.getId(), userEntity.getEmail());
+    public void verifyEmail(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new BadRequestException(AuthErrorType.EMAIL_DUPLICATED);
+        }
     }
 
     public void verifyEmailCode(String email, String code) {

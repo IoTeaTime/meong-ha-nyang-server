@@ -10,7 +10,6 @@ import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.VerifyEmailRequest;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.user.dto.request.JoinRequest;
-import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -29,7 +28,7 @@ public interface AuthApi {
     Api<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest);
 
     @Operation(summary = "이메일 중복을 확인 합니다.")
-    Api<UserSimpleResponse> duplicateEmail(@Valid @RequestBody EmailRequest email);
+    Api<?> duplicateEmail(@Valid @RequestBody EmailRequest email);
 
     @Operation(summary = "토큰을 다시 생성합니다.")
     Api<RefreshResponse> refreshToken(@RequestHeader("Authorization") String authorizationHeader);
