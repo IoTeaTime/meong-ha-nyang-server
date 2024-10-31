@@ -1,22 +1,18 @@
 spring:
-  datasource:
-    url: ${MARIA_URL}
-    username: ${MARIA_USERNAME}
-    password: ${MARIA_PASSWORD}
-    driverClassName: org.mariadb.jdbc.Driver
+  config:
+    activate:
+      on-profile: dev
+    import: optional:application-secret.properties
   jpa:
     show-sql: true
     properties:
-      dialect: org.hibernate.dialect.MariaDBDialect
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
     hibernate:
-      ddl-auto: validate
-      default_batch_fetch_size: 100
+      ddl-auto: update
   servlet:
     multipart:
-      location: D:\\shieldus\\interviewPartner\\uploads\\
+      location: C:\\multipart\\uploads\\
       max-file-size: 10MB
       max-request-size: 10MB
-
-token:
-  expiration-time: 86400000
-  secret: VisitBBCfortrustedreportingonthelatestworldandUSnewssp

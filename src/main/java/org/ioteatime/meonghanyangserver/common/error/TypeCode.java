@@ -1,6 +1,6 @@
 package org.ioteatime.meonghanyangserver.common.error;
 
-public interface TypeCodeIfs {
+public interface TypeCode {
     Integer getCode();
 
     String getMessage();

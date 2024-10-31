@@ -1,3 +1,14 @@
 package org.ioteatime.meonghanyangserver.user.repository;
 
-public interface UserRepository {}
+import java.util.Optional;
+import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
+
+public interface UserRepository {
+    Optional<UserEntity> findById(Long userId);
+
+    Optional<UserEntity> findByEmail(String email);
+
+    void deleteById(Long userId);
+
+    UserEntity save(UserEntity UserEntity);
+}

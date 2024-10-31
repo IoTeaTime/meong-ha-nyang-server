@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum SuccessTypeCode implements TypeCodeIfs {
+public enum SuccessTypeCode implements TypeCode {
     // 성공
     OK(200, "OK", "success"),
     // 생성
