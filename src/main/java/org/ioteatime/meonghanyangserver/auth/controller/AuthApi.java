@@ -8,7 +8,7 @@ import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.EmailRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.common.api.Api;
-import org.ioteatime.meonghanyangserver.user.dto.UserDto;
+import org.ioteatime.meonghanyangserver.user.dto.request.JoinRequest;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @Tag(name = "Auth Api", description = "인증 관련 API 목록입니다.")
 public interface AuthApi {
     @Operation(summary = "회원 가입을 합니다.")
-    Api<Object> registerUser(@Valid @RequestBody UserDto userDto);
+    Api<Object> registerUser(@Valid @RequestBody JoinRequest userDto);
 
     @Operation(summary = "인증 메일 전송")
     Api<?> verifyEmail(@Valid @RequestBody EmailRequest email);
