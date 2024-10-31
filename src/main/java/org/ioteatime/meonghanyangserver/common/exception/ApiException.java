@@ -1,9 +1,10 @@
 package org.ioteatime.meonghanyangserver.common.exception;
 
-import org.ioteatime.meonghanyangserver.common.error.TypeCode;
+import org.ioteatime.meonghanyangserver.common.type.ErrorTypeCode;
+import org.springframework.http.HttpStatus;
 
 public interface ApiException {
-    TypeCode getTypeCode();
+    ErrorTypeCode getTypeCode();
 
-    String getErrorDescription();
+    HttpStatus getHttpStatus();
 }

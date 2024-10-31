@@ -1,82 +1,33 @@
 package org.ioteatime.meonghanyangserver.common.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.ioteatime.meonghanyangserver.common.error.TypeCode;
+import org.ioteatime.meonghanyangserver.common.exception.ApiException;
+import org.ioteatime.meonghanyangserver.common.type.ErrorTypeCode;
+import org.ioteatime.meonghanyangserver.common.type.SuccessTypeCode;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"result", "body"})
 // 공통 응답 class
-public class Api<T> {
-    private Result result;
-
-    @Valid private T body;
-
-    // 정상 응답 body 있는 경우
-    public static <T> Api<T> OK(T data) {
-        Api<T> api = new Api<T>();
-        api.result = Result.OK();
-        api.body = data;
-        return api;
+public record Api<T>(Result result, @JsonInclude(JsonInclude.Include.NON_NULL) @Valid T body) {
+    public static <T> Api<T> success(SuccessTypeCode successType) {
+        return new Api<>(new Result(successType), null);
     }
 
-    // 정상 응답 body 없는 경우
-    public static Api<Object> OK() {
-        Api<Object> api = new Api<>();
-        api.result = Result.OK();
-        return api;
+    public static <T> Api<T> success(SuccessTypeCode successType, T body) {
+        return new Api<>(new Result(successType), body);
     }
 
-    // 정상 응답
-    public static <T> Api<T> OK(TypeCode typeCode, T data) {
-        Api<T> api = new Api<T>();
-        api.result = Result.OK(typeCode);
-        api.body = data;
-        return api;
+    public static <T> Api<T> fail(ApiException exception) {
+        ErrorTypeCode errorType = exception.getTypeCode();
+        return new Api<>(new Result(exception.getHttpStatus(), errorType), null);
     }
 
-    // 정상 응답
-    public static <T> Api<T> OK(TypeCode typeCode) {
-        Api<T> api = new Api<T>();
-        api.result = Result.OK(typeCode);
-        return api;
+    public static <T> Api<T> fail(ErrorTypeCode errorType) {
+        return new Api<>(new Result(errorType), null);
     }
 
-    public static Api<Object> CREATE() {
-        Api<Object> api = new Api<>();
-        api.result = Result.CREATE();
-        return api;
-    }
-
-    public static <T> Api<T> CREATE(T data) {
-        Api<T> api = new Api<T>();
-        api.result = Result.CREATE();
-        api.body = data;
-        return api;
-    }
-
-    public static Api<Object> CREATE(TypeCode typeCode) {
-        Api<Object> api = new Api<>();
-        api.result = Result.CREATE(typeCode);
-        return api;
-    }
-
-    public static <T> Api<T> CREATE(TypeCode typeCode, T data) {
-        Api<T> api = new Api<T>();
-        api.result = Result.CREATE(typeCode);
-        api.body = data;
-        return api;
-    }
-
-    // 에러 응답
-    public static Api<Object> ERROR(TypeCode typeCode) {
-        Api<Object> api = new Api<Object>();
-        api.result = Result.ERROR(typeCode);
-        return api;
+    public static <T> Api<T> fail(ErrorTypeCode errorType, T body) {
+        return new Api<>(new Result(errorType), body);
     }
 }
