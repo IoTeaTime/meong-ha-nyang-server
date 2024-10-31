@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "CCTV 초대 응답")
 public record CctvInviteResponse(
-        @Schema(description = "그룹 ID", example = "1") Long groupId,
+        @NotNull @Schema(description = "그룹 ID", example = "1") Long groupId,
         @NotNull
                 @Schema(
                         description = "KVS 채널 이름",
