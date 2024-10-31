@@ -7,8 +7,6 @@ import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 @RequiredArgsConstructor
 public class GroupUserRepositoryImpl implements GroupUserRepository {
@@ -27,8 +25,10 @@ public class GroupUserRepositoryImpl implements GroupUserRepository {
 
     @Override
     public GroupUserEntity findGroupUser(UserEntity userEntity) {
-        GroupUserEntity groupUserEntity = jpaGroupUserRepository.findByUser(userEntity)
-                .orElseThrow(()->new ApiException(ErrorTypeCode.NULL_POINT));
+        GroupUserEntity groupUserEntity =
+                jpaGroupUserRepository
+                        .findByUser(userEntity)
+                        .orElseThrow(() -> new ApiException(ErrorTypeCode.NULL_POINT));
         return groupUserEntity;
     }
 }

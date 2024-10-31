@@ -5,6 +5,7 @@ import org.ioteatime.meonghanyangserver.group.dto.response.GroupUserInfoResponse
 
 public class GroupUserResponseMapper {
     public static GroupUserInfoResponse toResponse(GroupUserEntity groupUserEntity) {
-        return new GroupUserInfoResponse(groupUserEntity.getId().getUserId(), groupUserEntity.getUser().getNickname());
+        return new GroupUserInfoResponse(
+                groupUserEntity.getId().getUserId(), groupUserEntity.getUser().getNickname());
     }
 }

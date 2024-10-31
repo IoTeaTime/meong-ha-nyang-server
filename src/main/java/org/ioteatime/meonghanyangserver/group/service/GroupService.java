@@ -8,10 +8,8 @@ import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
 import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
-import org.ioteatime.meonghanyangserver.group.dto.response.GroupUserInfoResponse;
 import org.ioteatime.meonghanyangserver.group.mapper.group.GroupEntityMapper;
 import org.ioteatime.meonghanyangserver.group.mapper.group.GroupResponseMapper;
-import org.ioteatime.meonghanyangserver.group.mapper.groupuser.GroupUserResponseMapper;
 import org.ioteatime.meonghanyangserver.group.repository.group.GroupRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.ioteatime.meonghanyangserver.user.dto.CustomUserDetail;
@@ -49,7 +47,7 @@ public class GroupService {
         return createGroupResponse;
     }
 
-    public GroupTotalResponse getGroupTotalData(Authentication authentication){
+    public GroupTotalResponse getGroupTotalData(Authentication authentication) {
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
 
         UserEntity userEntity = userDetails.getUserEntity();
@@ -58,9 +56,9 @@ public class GroupService {
 
         GroupEntity groupEntity = groupUserEntity.getGroup();
 
-        GroupTotalResponse groupUserInfoResponse = GroupResponseMapper.toGroupTotalResponse(groupEntity);
+        GroupTotalResponse groupUserInfoResponse =
+                GroupResponseMapper.toGroupTotalResponse(groupEntity);
 
         return groupUserInfoResponse;
-
     }
 }

@@ -27,7 +27,7 @@ public class GroupUserService {
         return groupUser;
     }
 
-    public GroupUserEntity getGroupUser(UserEntity userEntity){
+    public GroupUserEntity getGroupUser(UserEntity userEntity) {
         GroupUserEntity groupUserEntity = groupUserRepository.findGroupUser(userEntity);
         return groupUserEntity;
     }
