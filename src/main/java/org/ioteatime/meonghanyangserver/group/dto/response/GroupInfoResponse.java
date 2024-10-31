@@ -1,3 +1,6 @@
 package org.ioteatime.meonghanyangserver.group.dto.response;
 
-public record GroupInfoResponse(Long groupId) {}
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "그룹 정보 응답")
+public record GroupInfoResponse(@Schema(description = "그룹 ID", example = "1") Long groupId) {}
