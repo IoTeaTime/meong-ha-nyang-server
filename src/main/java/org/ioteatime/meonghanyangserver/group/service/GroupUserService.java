@@ -39,7 +39,7 @@ public class GroupUserService {
                         .orElseThrow(
                                 () ->
                                         new ApiExceptionImpl(
-                                                ErrorTypeCode.BAD_REQUEST, "Group not found"));
+                                                ErrorTypeCode.BAD_REQUEST, "Group User not found"));
 
         return new GroupInfoResponse(groupUserEntity.getGroup().getId());
     }
@@ -53,6 +53,7 @@ public class GroupUserService {
                                         new ApiExceptionImpl(
                                                 ErrorTypeCode.BAD_REQUEST, "Group not found"));
         String kvsChannelName = cctvService.generateKvsChannelName();
+                                                ErrorTypeCode.BAD_REQUEST, "Group User not found"));
 
         return new CctvInviteResponse(groupUserEntity.getGroup().getId(), kvsChannelName);
     }
