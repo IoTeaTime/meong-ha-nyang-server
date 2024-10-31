@@ -1,5 +1,9 @@
 package org.ioteatime.meonghanyangserver.auth.service;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
@@ -11,6 +15,8 @@ import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
 import org.ioteatime.meonghanyangserver.common.exception.ApiExceptionImpl;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
 import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
+import org.ioteatime.meonghanyangserver.redis.EmailCode;
+import org.ioteatime.meonghanyangserver.redis.EmailCodeRepository;
 import org.ioteatime.meonghanyangserver.redis.RefreshToken;
 import org.ioteatime.meonghanyangserver.redis.RefreshTokenRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
@@ -27,6 +33,7 @@ public class AuthService {
     private final GoogleMailClient googleMailClient;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtils jwtUtils;
+    private final EmailCodeRepository emailCodeRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final GroupUserRepository groupUserRepository;
 
@@ -66,8 +73,32 @@ public class AuthService {
     }
 
     public void send(String email) {
-        // TODO. Redis 적용 후 코드 발급 구현 필요
-        googleMailClient.sendMail(email, "hello", "world");
+        String code = getCode();
+        emailCodeRepository.save(EmailCode.builder().email(email).code(code).build());
+        String mailSubject = "[\uD83D\uDC36 멍하냥] 이메일 인증 코드입니다.";
+        String mailContent =
+                """
+                <h3>환영해요!</h3>
+                <b>인증코드를 입력하세요</b>
+                <p>%s</p>
+                """
+                        .formatted(code);
+        googleMailClient.sendMail(email, mailSubject, mailContent);
+    }
+
+    private static String getCode() {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        List<String> authStr = new CopyOnWriteArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            authStr.add(String.valueOf(random.nextInt(10)));
+        }
+        for (int i = 0; i < 3; i++) {
+            authStr.add(String.valueOf((char) (random.nextInt(26) + 65)));
+        }
+
+        Collections.shuffle(authStr);
+        return String.join("", authStr);
     }
 
     public UserSimpleResponse verifyEmail(String email) {
