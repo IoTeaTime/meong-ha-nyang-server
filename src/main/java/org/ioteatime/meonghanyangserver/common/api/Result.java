@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ioteatime.meonghanyangserver.common.error.SuccessTypeCode;
-import org.ioteatime.meonghanyangserver.common.error.TypeCodeIfs;
+import org.ioteatime.meonghanyangserver.common.type.ErrorTypeCode;
+import org.ioteatime.meonghanyangserver.common.type.SuccessTypeCode;
+import org.springframework.http.HttpStatus;
 
 @Builder
 @Data
@@ -16,47 +17,21 @@ public class Result {
     private String message;
     private String description;
 
-    // 성공
-    public static Result OK() {
-        return Result.builder()
-                .code(SuccessTypeCode.OK.getCode())
-                .message(SuccessTypeCode.OK.getMessage())
-                .description("SUCCESS")
-                .build();
+    public Result(SuccessTypeCode successTypeCode) {
+        this.code = successTypeCode.getCode();
+        this.message = successTypeCode.getMessage();
+        this.description = successTypeCode.getDescription();
     }
 
-    // 성공 응답 커스텀
-    public static Result OK(TypeCodeIfs typeCodeIfs) {
-        return Result.builder()
-                .code(typeCodeIfs.getCode())
-                .message(typeCodeIfs.getMessage())
-                .description(typeCodeIfs.getDescription())
-                .build();
+    public Result(ErrorTypeCode errorTypeCode) {
+        this.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
+        this.message = errorTypeCode.getMessage();
+        this.description = errorTypeCode.getDescription();
     }
 
-    // 생성 응답
-    public static Result CREATE() {
-        return Result.builder()
-                .code(SuccessTypeCode.CREATE.getCode())
-                .message(SuccessTypeCode.CREATE.getMessage())
-                .description("SUCCESS")
-                .build();
-    }
-
-    public static Result CREATE(TypeCodeIfs typeCodeIfs) {
-        return Result.builder()
-                .code(typeCodeIfs.getCode())
-                .message(typeCodeIfs.getMessage())
-                .description(typeCodeIfs.getDescription())
-                .build();
-    }
-
-    // 에러 응답
-    public static Result ERROR(TypeCodeIfs typeCodeIfs) {
-        return Result.builder()
-                .code(typeCodeIfs.getCode())
-                .message(typeCodeIfs.getMessage())
-                .description("ERROR")
-                .build();
+    public Result(HttpStatus httpStatus, ErrorTypeCode errorTypeCode) {
+        this.code = httpStatus.value();
+        this.message = errorTypeCode.getMessage();
+        this.description = errorTypeCode.getDescription();
     }
 }

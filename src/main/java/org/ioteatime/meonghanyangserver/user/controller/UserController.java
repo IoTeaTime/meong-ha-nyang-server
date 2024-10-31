@@ -3,6 +3,7 @@ package org.ioteatime.meonghanyangserver.user.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
+import org.ioteatime.meonghanyangserver.common.type.AuthSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.ioteatime.meonghanyangserver.user.dto.request.ChangePasswordRequest;
 import org.ioteatime.meonghanyangserver.user.dto.response.UserDetailResponse;
@@ -18,19 +19,19 @@ public class UserController implements UserApi {
     @GetMapping("/{userId}")
     public Api<UserDetailResponse> getUserDetail(@PathVariable("userId") Long userId) {
         UserDetailResponse userDto = userService.getUserDetail(userId);
-        return Api.OK(userDto);
+        return Api.success(AuthSuccessType.GET_USER_DETAIL, userDto);
     }
 
     @DeleteMapping
     public Api<Object> deleteUser(@LoginMember Long userId) {
         userService.deleteUser(userId);
-        return Api.OK();
+        return Api.success(AuthSuccessType.DELETE_USER);
     }
 
     @PutMapping("/password")
     public Api<Object> changeUserPassword(
             @LoginMember Long userId, @RequestBody @Valid ChangePasswordRequest request) {
         userService.changeUserPassword(userId, request);
-        return Api.OK();
+        return Api.success(AuthSuccessType.UPDATE_PASSWORD);
     }
 }

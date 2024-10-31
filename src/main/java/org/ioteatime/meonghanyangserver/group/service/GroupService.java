@@ -1,8 +1,8 @@
 package org.ioteatime.meonghanyangserver.group.service;
 
 import lombok.RequiredArgsConstructor;
-import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
-import org.ioteatime.meonghanyangserver.common.exception.ApiException;
+import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
+import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
 import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
@@ -31,7 +31,7 @@ public class GroupService {
         boolean groupUserEntity = groupUserService.existsGroupUser(userEntity);
 
         if (groupUserEntity) {
-            throw new ApiException(ErrorTypeCode.BAD_REQUEST);
+            throw new BadRequestException(GroupErrorType.ALREADY_EXISTS);
         }
 
         String roomName = userEntity.getNickname() + " 그룹";
@@ -42,9 +42,7 @@ public class GroupService {
 
         groupUserService.createGroupUser(newGroupEntity, userEntity, GroupUserRole.ROLE_MASTER);
 
-        CreateGroupResponse createGroupResponse = GroupResponseMapper.toResponse(newGroupEntity);
-
-        return createGroupResponse;
+        return GroupResponseMapper.from(newGroupEntity);
     }
 
     public GroupTotalResponse getGroupTotalData(Authentication authentication) {

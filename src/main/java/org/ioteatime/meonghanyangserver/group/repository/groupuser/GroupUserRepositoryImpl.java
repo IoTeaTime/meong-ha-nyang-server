@@ -1,8 +1,7 @@
 package org.ioteatime.meonghanyangserver.group.repository.groupuser;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.ioteatime.meonghanyangserver.common.error.ErrorTypeCode;
-import org.ioteatime.meonghanyangserver.common.exception.ApiException;
 import org.ioteatime.meonghanyangserver.group.domain.GroupUserEntity;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.springframework.stereotype.Repository;
@@ -24,11 +23,15 @@ public class GroupUserRepositoryImpl implements GroupUserRepository {
     }
 
     @Override
-    public GroupUserEntity findGroupUser(UserEntity userEntity) {
-        GroupUserEntity groupUserEntity =
-                jpaGroupUserRepository
-                        .findByUser(userEntity)
-                        .orElseThrow(() -> new ApiException(ErrorTypeCode.NULL_POINT));
+    public Optional<GroupUserEntity> findByUserId(Long userId) {
+        return jpaGroupUserRepository.findByUserId(userId);
+    }
+
+    @Override
+    public Optional<GroupUserEntity> findGroupUser(UserEntity userEntity) {
+        Optional<GroupUserEntity> groupUserEntity =
+                jpaGroupUserRepository.findByUserId(userEntity.getId());
+
         return groupUserEntity;
     }
 }
