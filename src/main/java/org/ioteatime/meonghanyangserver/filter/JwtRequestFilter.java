@@ -11,7 +11,7 @@ import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.exception.UnauthorizedException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
-import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
+import org.ioteatime.meonghanyangserver.device.repository.DeviceRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.ioteatime.meonghanyangserver.user.dto.CustomUserDetail;
 import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
@@ -28,7 +28,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
-    private final GroupUserRepository groupUserRepository;
+    private final DeviceRepository deviceRepository;
 
     @Override
     protected void doFilterInternal(

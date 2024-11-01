@@ -1,4 +1,4 @@
-package org.ioteatime.meonghanyangserver.group.repository.group;
+package org.ioteatime.meonghanyangserver.group.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;

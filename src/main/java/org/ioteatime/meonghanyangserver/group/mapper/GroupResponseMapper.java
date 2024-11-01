@@ -1,13 +1,14 @@
-package org.ioteatime.meonghanyangserver.group.mapper.group;
+package org.ioteatime.meonghanyangserver.group.mapper;
 
 import java.util.List;
+import java.util.Objects;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
 import org.ioteatime.meonghanyangserver.cctv.mapper.CctvResponseMapper;
+import org.ioteatime.meonghanyangserver.device.dto.response.DeviceInfoResponse;
+import org.ioteatime.meonghanyangserver.device.mapper.DeviceResponseMapper;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
-import org.ioteatime.meonghanyangserver.group.dto.response.GroupUserInfoResponse;
-import org.ioteatime.meonghanyangserver.group.mapper.groupuser.GroupUserResponseMapper;
 
 public class GroupResponseMapper {
     public static CreateGroupResponse from(GroupEntity groupEntity) {
@@ -16,21 +17,21 @@ public class GroupResponseMapper {
     }
 
     public static GroupTotalResponse fromGroupTotal(GroupEntity groupEntity) {
-        List<GroupUserInfoResponse> groupUserInfoResponseList =
-                groupEntity.getGroupUserEntities().stream()
-                        .map(GroupUserResponseMapper::toResponse)
-                        .toList();
+        List<DeviceInfoResponse> deviceInfoResponseList =
+                groupEntity.getDeviceEntities().stream().map(DeviceResponseMapper::from).toList();
 
         List<CctvInfoResponse> cctvInfoResponseList =
-                groupEntity.getCctvs().stream()
-                        .map(CctvResponseMapper::toCctvInfoResponse)
+                groupEntity.getDeviceEntities().stream()
+                        .map(it -> it.getCctv())
+                        .filter(Objects::nonNull)
+                        .map(CctvResponseMapper::from)
                         .toList();
 
         return new GroupTotalResponse(
                 groupEntity.getId(),
                 groupEntity.getGroupName(),
                 groupEntity.getCreatedAt(),
-                groupUserInfoResponseList,
+                deviceInfoResponseList,
                 cctvInfoResponseList);
     }
 }

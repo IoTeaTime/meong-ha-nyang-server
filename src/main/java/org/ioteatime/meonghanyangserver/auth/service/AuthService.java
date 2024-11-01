@@ -15,7 +15,7 @@ import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.exception.UnauthorizedException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
-import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
+import org.ioteatime.meonghanyangserver.device.repository.DeviceRepository;
 import org.ioteatime.meonghanyangserver.redis.EmailCode;
 import org.ioteatime.meonghanyangserver.redis.EmailCodeRepository;
 import org.ioteatime.meonghanyangserver.redis.RefreshToken;
@@ -36,7 +36,7 @@ public class AuthService {
     private final JwtUtils jwtUtils;
     private final EmailCodeRepository emailCodeRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final GroupUserRepository groupUserRepository;
+    private final DeviceRepository deviceRepository;
 
     public LoginResponse login(LoginRequest loginRequest) {
         UserEntity userEntity =
