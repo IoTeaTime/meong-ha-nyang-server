@@ -2,6 +2,7 @@ package org.ioteatime.meonghanyangserver.cctv.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.ioteatime.meonghanyangserver.device.doamin.DeviceEntity;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 
 @Data
@@ -12,16 +13,13 @@ public class CctvEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
-    private GroupEntity group;
-
     @Column(nullable = false, length = 20)
     private String cctvNickname;
 
     @Column(nullable = false, length = 100)
     private String kvsChannelName;
 
-    @Column(nullable = false, length = 150)
-    private String device;
+    @OneToOne
+    @JoinColumn(name = "device_id")
+    private DeviceEntity device;
 }

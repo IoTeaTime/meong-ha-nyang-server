@@ -3,7 +3,7 @@ package org.ioteatime.meonghanyangserver.user.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.ioteatime.meonghanyangserver.group.domain.QGroupUserEntity;
+import org.ioteatime.meonghanyangserver.device.doamin.QDeviceEntity;
 import org.ioteatime.meonghanyangserver.user.domain.QUserEntity;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.springframework.stereotype.Repository;
@@ -29,7 +29,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Transactional
     public void deleteById(Long userId) {
 
-        QGroupUserEntity groupUser = QGroupUserEntity.groupUserEntity;
+        QDeviceEntity groupUser = QDeviceEntity.deviceEntity;
         QUserEntity user = QUserEntity.userEntity;
 
         queryFactory.delete(groupUser).where(groupUser.user.id.eq(userId)).execute();

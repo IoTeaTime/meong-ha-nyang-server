@@ -1,36 +1,41 @@
-package org.ioteatime.meonghanyangserver.group.domain;
+package org.ioteatime.meonghanyangserver.device.doamin;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ioteatime.meonghanyangserver.group.domain.enums.GroupUserRole;
+import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
+import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
+import org.ioteatime.meonghanyangserver.device.doamin.enums.DeviceRole;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 
 @Data
 @Entity
-@Table(name = "group_user")
+@Table(name = "device")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GroupUserEntity {
-    @EmbeddedId private GroupUserId id;
+public class DeviceEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, length = 10)
     @Enumerated(value = EnumType.STRING)
-    private GroupUserRole role;
+    private DeviceRole role;
 
     @Column(nullable = false, length = 150)
-    private String device;
+    private String deviceUuid;
 
     @ManyToOne
-    @MapsId("groupId")
     @JoinColumn(name = "group_id")
     private GroupEntity group;
 
     @ManyToOne
-    @MapsId("userId")
     @JoinColumn(name = "user_id", unique = true)
     private UserEntity user;
+
+    @OneToOne(mappedBy = "device")
+    private CctvEntity cctv;
 }

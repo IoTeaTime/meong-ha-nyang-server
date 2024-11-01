@@ -5,14 +5,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
+import org.ioteatime.meonghanyangserver.group.dto.request.CreateGroupRequest;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Group Api", description = "Group 관련 API 목록입니다.")
 public interface GroupApi {
     @Operation(summary = "그룹을 생성합니다.")
-    Api<CreateGroupResponse> createGroup(Long userId);
+    Api<CreateGroupResponse> createGroup(@LoginMember Long userId, @RequestBody CreateGroupRequest createGroupRequest);
 
     @Operation(summary = "그룹 id를 조회합니다")
     Api<GroupInfoResponse> getUserGroupInfo(@LoginMember Long userId);
@@ -22,4 +24,6 @@ public interface GroupApi {
 
     @Operation(summary = "그룹 통합 정보를 조회합니다.")
     Api<GroupTotalResponse> getGroupTotalData(@LoginMember Long userId);
+
+
 }

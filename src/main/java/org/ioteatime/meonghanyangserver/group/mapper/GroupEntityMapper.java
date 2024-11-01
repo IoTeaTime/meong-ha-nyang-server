@@ -1,4 +1,4 @@
-package org.ioteatime.meonghanyangserver.group.mapper.group;
+package org.ioteatime.meonghanyangserver.group.mapper;
 
 import java.time.LocalDateTime;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;

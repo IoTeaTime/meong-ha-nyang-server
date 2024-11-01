@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
+import org.ioteatime.meonghanyangserver.device.doamin.DeviceEntity;
 
 @Data
 @Entity
@@ -27,8 +28,5 @@ public class GroupEntity {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "group")
-    private List<CctvEntity> cctvs;
-
-    @OneToMany(mappedBy = "group")
-    private List<GroupUserEntity> groupUserEntities;
+    private List<DeviceEntity> deviceEntities;
 }
