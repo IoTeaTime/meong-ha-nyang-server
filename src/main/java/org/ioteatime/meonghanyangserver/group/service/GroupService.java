@@ -45,12 +45,9 @@ public class GroupService {
         return GroupResponseMapper.from(newGroupEntity);
     }
 
-    public GroupTotalResponse getGroupTotalData(Authentication authentication) {
-        CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+    public GroupTotalResponse getGroupTotalData(Long userId) {
 
-        UserEntity userEntity = userDetails.getUserEntity();
-
-        GroupUserEntity groupUserEntity = groupUserService.getGroupUser(userEntity);
+        GroupUserEntity groupUserEntity = groupUserService.getGroupUser(userId);
 
         GroupEntity groupEntity = groupUserEntity.getGroup();
 

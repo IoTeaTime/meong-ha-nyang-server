@@ -53,10 +53,10 @@ public class GroupUserService {
         return new CctvInviteResponse(groupUserEntity.getGroup().getId(), kvsChannelName);
     }
 
-    public GroupUserEntity getGroupUser(UserEntity userEntity) {
+    public GroupUserEntity getGroupUser(Long userId) {
         GroupUserEntity groupUserEntity =
                 groupUserRepository
-                        .findGroupUser(userEntity)
+                        .findGroupUser(userId)
                         .orElseThrow(
                                 () -> new NotFoundException(GroupErrorType.GROUP_USER_NOT_FOUND));
         return groupUserEntity;

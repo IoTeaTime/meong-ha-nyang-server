@@ -22,5 +22,5 @@ public interface GroupApi {
     Api<CctvInviteResponse> generateCctvInvite(@LoginMember Long userId);
 
     @Operation(summary = "그룹 통합 정보를 조회합니다.")
-    Api<GroupTotalResponse> getGroupTotalData(Authentication authentication);
+    Api<GroupTotalResponse> getGroupTotalData(@LoginMember Long userId);
 }

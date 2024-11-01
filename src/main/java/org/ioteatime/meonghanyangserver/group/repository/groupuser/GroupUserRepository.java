@@ -11,5 +11,5 @@ public interface GroupUserRepository {
 
     Optional<GroupUserEntity> findByUserId(Long userId);
 
-    Optional<GroupUserEntity> findGroupUser(UserEntity userEntity);
+    Optional<GroupUserEntity> findGroupUser(Long userId);
 }

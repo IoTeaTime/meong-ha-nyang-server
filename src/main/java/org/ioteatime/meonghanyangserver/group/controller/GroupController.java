@@ -42,8 +42,8 @@ public class GroupController implements GroupApi {
     }
 
     @GetMapping("/info-list")
-    public Api<GroupTotalResponse> getGroupTotalData(Authentication authentication) {
-        GroupTotalResponse groupTotalResponse = groupService.getGroupTotalData(authentication);
+    public Api<GroupTotalResponse> getGroupTotalData(@LoginMember Long userId) {
+        GroupTotalResponse groupTotalResponse = groupService.getGroupTotalData(userId);
         return Api.success(GroupSuccessType.GET_GROUP_TOTAL_INFO, groupTotalResponse);
     }
 }

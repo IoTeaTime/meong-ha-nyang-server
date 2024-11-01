@@ -28,9 +28,8 @@ public class GroupUserRepositoryImpl implements GroupUserRepository {
     }
 
     @Override
-    public Optional<GroupUserEntity> findGroupUser(UserEntity userEntity) {
-        Optional<GroupUserEntity> groupUserEntity =
-                jpaGroupUserRepository.findByUserId(userEntity.getId());
+    public Optional<GroupUserEntity> findGroupUser(Long userId) {
+        Optional<GroupUserEntity> groupUserEntity = jpaGroupUserRepository.findByUserId(userId);
 
         return groupUserEntity;
     }
