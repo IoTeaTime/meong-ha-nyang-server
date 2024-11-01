@@ -21,6 +21,9 @@ public class GroupUserEntity {
     @Enumerated(value = EnumType.STRING)
     private GroupUserRole role;
 
+    @Column(nullable = false, length = 150)
+    private String device;
+
     @ManyToOne
     @MapsId("groupId")
     @JoinColumn(name = "group_id")

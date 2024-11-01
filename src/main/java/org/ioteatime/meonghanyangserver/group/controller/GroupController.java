@@ -10,7 +10,6 @@ import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.ioteatime.meonghanyangserver.group.service.GroupService;
 import org.ioteatime.meonghanyangserver.group.service.GroupUserService;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +23,8 @@ public class GroupController implements GroupApi {
     private final GroupUserService groupUserService;
 
     @PostMapping
-    public Api<CreateGroupResponse> createGroup(Authentication authentication) {
-        CreateGroupResponse createGroupResponse = groupService.createGroup(authentication);
+    public Api<CreateGroupResponse> createGroup(@LoginMember Long userId) {
+        CreateGroupResponse createGroupResponse = groupService.createGroup(userId);
         return Api.success(GroupSuccessType.CREATE_GROUP, createGroupResponse);
     }
 

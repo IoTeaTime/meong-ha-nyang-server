@@ -15,7 +15,7 @@ public class GroupResponseMapper {
                 groupEntity.getId(), groupEntity.getGroupName(), groupEntity.getCreatedAt());
     }
 
-    public static GroupTotalResponse toGroupTotalResponse(GroupEntity groupEntity) {
+    public static GroupTotalResponse fromGroupTotal(GroupEntity groupEntity) {
         List<GroupUserInfoResponse> groupUserInfoResponseList =
                 groupEntity.getGroupUserEntities().stream()
                         .map(GroupUserResponseMapper::toResponse)
