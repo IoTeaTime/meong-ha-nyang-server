@@ -21,23 +21,21 @@ public class CctvService {
     @Transactional
     public void deleteById(Long userId, Long cctvId) {
         // Device 테이블에서 userId를 조회하여 role 을 확인
-        if (deviceRepository.isMasterUserId(userId)) {
-            // MASTER 이면 CCTV 삭제 가능
-            CctvWithDeviceId cctv =
-                    cctvRepository
-                            .findByIdWithDeviceId(cctvId)
-                            .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
-            // 1. KVS 시그널링 채널 삭제
-            kvsClient.deleteSignalingChannel(cctv.kvsChannelName());
-            // 2. CCTV 테이블에서 삭제
-            cctvRepository.deleteById(cctvId);
-            System.out.println("HWEHREWR");
-            // 3. Device 테이블에서 삭제
-            deviceRepository.deleteById(cctv.deviceId());
-        } else {
+        if (deviceRepository.isParcitipantUserId(userId)) {
             // PARTICIPANT 이면 CCTV 삭제 실패
             throw new BadRequestException(CctvErrorType.ONLY_MASTER_CAN_DELETE);
         }
-        // CCTV 인 경우는 현재 MASTER 인 경우와 동일하므로 처리하지 않음
+        // MASTER 이거나, CCTV(자기자신)이면 CCTV 퇴출(나가기) 가능
+        CctvWithDeviceId cctv =
+                cctvRepository
+                        .findByIdWithDeviceId(cctvId)
+                        .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
+        // 1. KVS 시그널링 채널 삭제
+        kvsClient.deleteSignalingChannel(cctv.kvsChannelName());
+        // 2. CCTV 테이블에서 삭제
+        cctvRepository.deleteById(cctvId);
+        System.out.println("HWEHREWR");
+        // 3. Device 테이블에서 삭제
+        deviceRepository.deleteById(cctv.deviceId());
     }
 }

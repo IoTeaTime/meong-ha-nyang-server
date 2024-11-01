@@ -42,8 +42,8 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     }
 
     @Override
-    public boolean isMasterUserId(Long userId) {
-        return !jpaQueryFactory
+    public boolean isParcitipantUserId(Long userId) {
+        return jpaQueryFactory
                 .select(deviceEntity.role)
                 .from(deviceEntity)
                 .where(
@@ -51,7 +51,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
                                 .user
                                 .id
                                 .eq(userId)
-                                .and(deviceEntity.role.eq(DeviceRole.ROLE_MASTER)))
+                                .and(deviceEntity.role.eq(DeviceRole.ROLE_PARTICIPANT)))
                 .fetch()
                 .isEmpty();
     }

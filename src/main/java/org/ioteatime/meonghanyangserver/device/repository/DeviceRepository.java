@@ -13,7 +13,7 @@ public interface DeviceRepository {
 
     GroupEntity findDevice(Long userId);
 
-    boolean isMasterUserId(Long userId);
+    boolean isParcitipantUserId(Long userId);
 
     void deleteById(Long id);
 
