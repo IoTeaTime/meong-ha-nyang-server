@@ -21,4 +21,7 @@ public class CctvEntity {
 
     @Column(nullable = false, length = 100)
     private String kvsChannelName;
+
+    @Column(nullable = false, length = 150)
+    private String device;
 }

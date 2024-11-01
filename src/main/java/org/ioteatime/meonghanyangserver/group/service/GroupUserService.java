@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.group.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
@@ -28,8 +29,8 @@ public class GroupUserService {
         groupUserRepository.createGroupUser(groupUserEntity);
     }
 
-    public boolean existsGroupUser(UserEntity userEntity) {
-        return groupUserRepository.existsGroupUser(userEntity);
+    public boolean existsGroupUser(Long userId) {
+        return groupUserRepository.existsGroupUser(userId);
     }
 
     public GroupInfoResponse getUserGroupInfo(Long userId) {
@@ -51,5 +52,10 @@ public class GroupUserService {
         String kvsChannelName = kvsChannelNameGenerator.generateUniqueKvsChannelName();
 
         return new CctvInviteResponse(groupUserEntity.getGroup().getId(), kvsChannelName);
+    }
+
+    public GroupEntity getGroup(Long userId) {
+        return Optional.ofNullable(groupUserRepository.findGroupUser(userId))
+                .orElseThrow(() -> new NotFoundException(GroupErrorType.GROUP_USER_NOT_FOUND));
     }
 }

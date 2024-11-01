@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
-import org.ioteatime.meonghanyangserver.video.entity.VideoEntity;
 
 @Data
 @Entity
@@ -27,9 +26,9 @@ public class GroupEntity {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group")
     private List<CctvEntity> cctvs;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    private List<VideoEntity> videos;
+    @OneToMany(mappedBy = "group")
+    private List<GroupUserEntity> groupUserEntities;
 }
