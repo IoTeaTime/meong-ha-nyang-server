@@ -34,7 +34,6 @@ public class CctvService {
         kvsClient.deleteSignalingChannel(cctv.kvsChannelName());
         // 2. CCTV 테이블에서 삭제
         cctvRepository.deleteById(cctvId);
-        System.out.println("HWEHREWR");
         // 3. Device 테이블에서 삭제
         deviceRepository.deleteById(cctv.deviceId());
     }
