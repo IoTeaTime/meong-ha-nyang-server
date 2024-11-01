@@ -5,12 +5,12 @@ import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.GroupSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
+import org.ioteatime.meonghanyangserver.device.service.DeviceService;
 import org.ioteatime.meonghanyangserver.group.dto.request.CreateGroupRequest;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.ioteatime.meonghanyangserver.group.service.GroupService;
-import org.ioteatime.meonghanyangserver.device.service.DeviceService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,8 +21,10 @@ public class GroupController implements GroupApi {
     private final DeviceService deviceService;
 
     @PostMapping
-    public Api<CreateGroupResponse> createGroup(@LoginMember Long userId, @RequestBody CreateGroupRequest createGroupRequest) {
-        CreateGroupResponse createGroupResponse = groupService.createGroup(userId,createGroupRequest);
+    public Api<CreateGroupResponse> createGroup(
+            @LoginMember Long userId, @RequestBody CreateGroupRequest createGroupRequest) {
+        CreateGroupResponse createGroupResponse =
+                groupService.createGroup(userId, createGroupRequest);
         return Api.success(GroupSuccessType.CREATE_GROUP, createGroupResponse);
     }
 

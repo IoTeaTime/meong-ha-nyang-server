@@ -3,7 +3,6 @@ package org.ioteatime.meonghanyangserver.cctv.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.ioteatime.meonghanyangserver.device.doamin.DeviceEntity;
-import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 
 @Data
 @Entity

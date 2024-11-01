@@ -1,12 +1,8 @@
 package org.ioteatime.meonghanyangserver.device.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
-import org.ioteatime.meonghanyangserver.cctv.domain.QCctvEntity;
 import org.ioteatime.meonghanyangserver.device.doamin.DeviceEntity;
 import org.ioteatime.meonghanyangserver.device.doamin.QDeviceEntity;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
@@ -44,5 +40,4 @@ public class DeviceRepositoryImpl implements DeviceRepository {
                 .from(groupUserEntity)
                 .fetchOne();
     }
-
 }

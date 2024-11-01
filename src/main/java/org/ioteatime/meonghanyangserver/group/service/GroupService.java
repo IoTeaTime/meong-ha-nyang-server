@@ -6,16 +6,16 @@ import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
+import org.ioteatime.meonghanyangserver.device.doamin.enums.DeviceRole;
+import org.ioteatime.meonghanyangserver.device.repository.JpaDeviceRepository;
 import org.ioteatime.meonghanyangserver.device.service.DeviceService;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
-import org.ioteatime.meonghanyangserver.device.doamin.enums.DeviceRole;
 import org.ioteatime.meonghanyangserver.group.dto.request.CreateGroupRequest;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.ioteatime.meonghanyangserver.group.mapper.GroupEntityMapper;
 import org.ioteatime.meonghanyangserver.group.mapper.GroupResponseMapper;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
-import org.ioteatime.meonghanyangserver.device.repository.JpaDeviceRepository;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,11 @@ public class GroupService {
 
         GroupEntity newGroupEntity = groupRepository.createGroup(groupEntity);
 
-        deviceService.createDevice(newGroupEntity, userEntity, DeviceRole.ROLE_MASTER, createGroupRequest.deviceUuid());
+        deviceService.createDevice(
+                newGroupEntity,
+                userEntity,
+                DeviceRole.ROLE_MASTER,
+                createGroupRequest.deviceUuid());
 
         return GroupResponseMapper.from(newGroupEntity);
     }

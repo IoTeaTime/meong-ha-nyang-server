@@ -6,4 +6,5 @@ import jakarta.validation.constraints.NotNull;
 import org.ioteatime.meonghanyangserver.device.doamin.enums.DeviceRole;
 
 @Schema(description = "디바이스 정보 응답")
-public record DeviceInfoResponse(@NotNull Long userId, @NotBlank String nickname, @NotBlank DeviceRole role) {}
+public record DeviceInfoResponse(
+        @NotNull Long userId, @NotBlank String nickname, @NotBlank DeviceRole role) {}

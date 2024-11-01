@@ -9,7 +9,10 @@ public class DeviceEntityMapper {
 
     // master mapper
     public static DeviceEntity from(
-            GroupEntity groupEntity, UserEntity userEntity, DeviceRole deviceRole, String deviceUuid) {
+            GroupEntity groupEntity,
+            UserEntity userEntity,
+            DeviceRole deviceRole,
+            String deviceUuid) {
         return DeviceEntity.builder()
                 .id(groupEntity.getId())
                 .user(userEntity)
