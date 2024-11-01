@@ -4,7 +4,10 @@ import com.amazonaws.services.kinesisvideo.AmazonKinesisVideo;
 import com.amazonaws.services.kinesisvideo.model.DeleteSignalingChannelRequest;
 import com.amazonaws.services.kinesisvideo.model.DescribeSignalingChannelRequest;
 import com.amazonaws.services.kinesisvideo.model.DescribeSignalingChannelResult;
+import com.amazonaws.services.kinesisvideo.model.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
+import org.ioteatime.meonghanyangserver.common.type.AwsErrorType;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,12 +20,18 @@ public class KvsClient {
                 new DescribeSignalingChannelRequest();
         signalingChannelRequest.setChannelName(channelName);
 
-        DescribeSignalingChannelResult signalingChannelResult =
-                amazonKinesisVideo.describeSignalingChannel(signalingChannelRequest);
+        try {
+            DescribeSignalingChannelResult signalingChannelResult =
+                    amazonKinesisVideo.describeSignalingChannel(signalingChannelRequest);
 
-        DeleteSignalingChannelRequest deleteChannelRequest = new DeleteSignalingChannelRequest();
-        deleteChannelRequest.setChannelARN(signalingChannelResult.getChannelInfo().getChannelARN());
+            DeleteSignalingChannelRequest deleteChannelRequest =
+                    new DeleteSignalingChannelRequest();
+            deleteChannelRequest.setChannelARN(
+                    signalingChannelResult.getChannelInfo().getChannelARN());
 
-        amazonKinesisVideo.deleteSignalingChannel(deleteChannelRequest);
+            amazonKinesisVideo.deleteSignalingChannel(deleteChannelRequest);
+        } catch (ResourceNotFoundException err) {
+            throw new NotFoundException(AwsErrorType.KVS_CHANNEL_NAME_NOT_FOUND);
+        }
     }
 }
