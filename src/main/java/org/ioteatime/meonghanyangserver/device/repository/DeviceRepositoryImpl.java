@@ -43,7 +43,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 
     @Override
     public boolean isParcitipantUserId(Long userId) {
-        return jpaQueryFactory
+        return !jpaQueryFactory
                 .select(deviceEntity.role)
                 .from(deviceEntity)
                 .where(
