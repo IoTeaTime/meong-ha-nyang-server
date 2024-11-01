@@ -70,3 +70,6 @@ Temporary Items
 ### macOS Patch ###
 # iCloud generated files
 *.icloud
+
+### QueryDSL ###
+/src/*/generated/

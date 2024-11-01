@@ -1,14 +1,19 @@
 package org.ioteatime.meonghanyangserver.user.repository;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.group.domain.QGroupUserEntity;
+import org.ioteatime.meonghanyangserver.user.domain.QUserEntity;
 import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
     private final JpaUserRepository jpaUserRepository;
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public Optional<UserEntity> findById(Long userId) {
@@ -21,8 +26,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long userId) {
-        jpaUserRepository.deleteById(userId);
+
+        QGroupUserEntity groupUser = QGroupUserEntity.groupUserEntity;
+        QUserEntity user = QUserEntity.userEntity;
+
+        queryFactory.delete(groupUser).where(groupUser.user.id.eq(userId)).execute();
+
+        queryFactory.delete(user).where(user.id.eq(userId)).execute();
     }
 
     @Override
