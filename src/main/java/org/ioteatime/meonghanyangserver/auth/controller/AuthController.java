@@ -1,9 +1,7 @@
 package org.ioteatime.meonghanyangserver.auth.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
-import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.EmailRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.VerifyEmailRequest;
@@ -11,7 +9,6 @@ import org.ioteatime.meonghanyangserver.auth.service.AuthService;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.AuthSuccessType;
 import org.ioteatime.meonghanyangserver.user.dto.request.JoinRequest;
-import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,13 +18,13 @@ public class AuthController implements AuthApi {
     private final AuthService authService;
 
     @PostMapping("/sign-up")
-    public Api<Object> registerUser(@Valid @RequestBody JoinRequest userDto) {
+    public Api<Object> registerUser(@RequestBody JoinRequest userDto) {
         authService.joinProcess(userDto);
         return Api.success(AuthSuccessType.SIGN_UP);
     }
 
     @PostMapping("/email-verification")
-    public Api<?> sendEmailCode(@Valid @RequestBody EmailRequest emailReq) {
+    public Api<?> sendEmailCode(@RequestBody EmailRequest emailReq) {
         authService.send(emailReq.email());
         return Api.success(AuthSuccessType.SEND_EMAIL_CODE);
     }
@@ -40,8 +37,8 @@ public class AuthController implements AuthApi {
 
     // Email 중복 확인
     @PostMapping("/check-email")
-    public Api<UserSimpleResponse> duplicateEmail(@Valid @RequestBody EmailRequest emailReq) {
-        UserSimpleResponse response = authService.verifyEmail(emailReq.email());
+    public Api<?> duplicateEmail(@RequestBody EmailRequest emailReq) {
+        authService.verifyEmail(emailReq.email());
         return Api.success(AuthSuccessType.EMAIL_VERIFIED);
     }
 
@@ -49,12 +46,5 @@ public class AuthController implements AuthApi {
     public Api<LoginResponse> login(LoginRequest loginRequest) {
         LoginResponse loginResponse = authService.login(loginRequest);
         return Api.success(AuthSuccessType.SIGN_IN, loginResponse);
-    }
-
-    @PostMapping("/refresh-token")
-    public Api<RefreshResponse> refreshToken(
-            @RequestHeader("Authorization") String authorizationHeader) {
-        RefreshResponse refreshResponse = authService.reissueAccessToken(authorizationHeader);
-        return Api.success(AuthSuccessType.REISSUE_ACCESS_TOKEN, refreshResponse);
     }
 }

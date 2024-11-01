@@ -6,7 +6,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
-import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthEntityMapper;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
@@ -68,6 +67,7 @@ public class AuthService {
 
     public UserSimpleResponse joinProcess(JoinRequest userDto) {
         String encodedPassword = bCryptPasswordEncoder.encode(userDto.getPassword());
+        verifyEmail(userDto.getEmail());
         UserEntity user = userRepository.save(AuthEntityMapper.of(userDto, encodedPassword));
 
         return AuthResponseMapper.from(user.getId(), user.getEmail());
@@ -102,13 +102,10 @@ public class AuthService {
         return String.join("", authStr);
     }
 
-    public UserSimpleResponse verifyEmail(String email) {
-        UserEntity userEntity =
-                userRepository
-                        .findByEmail(email)
-                        .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
-
-        return AuthResponseMapper.from(userEntity.getId(), userEntity.getEmail());
+    public void verifyEmail(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new BadRequestException(AuthErrorType.EMAIL_DUPLICATED);
+        }
     }
 
     public void verifyEmailCode(String email, String code) {
@@ -119,34 +116,5 @@ public class AuthService {
         if (!code.equals(emailCode.getCode())) {
             throw new UnauthorizedException(AuthErrorType.CODE_NOT_EQUALS);
         }
-    }
-
-    public RefreshResponse reissueAccessToken(String authorizationHeader) {
-        String refreshToken = jwtUtils.extractTokenFromHeader(authorizationHeader);
-
-        Long userId = jwtUtils.getIdFromToken(refreshToken);
-        UserEntity userEntity =
-                userRepository
-                        .findById(userId)
-                        .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
-
-        if (!jwtUtils.validateToken(refreshToken, userEntity)) {
-            throw new NotFoundException(AuthErrorType.REFRESH_TOKEN_INVALID);
-        }
-
-        RefreshToken storedToken =
-                refreshTokenRepository
-                        .findByRefreshToken(refreshToken)
-                        .orElseThrow(
-                                () -> new NotFoundException(AuthErrorType.REFRESH_TOKEN_INVALID));
-
-        if (!storedToken.getRefreshToken().equals(refreshToken)) {
-            throw new BadRequestException(AuthErrorType.TOKEN_NOT_EQUALS);
-        }
-
-        String newAccessToken = jwtUtils.generateAccessToken(userEntity);
-        newAccessToken = jwtUtils.includeBearer(newAccessToken);
-
-        return AuthResponseMapper.from(newAccessToken);
     }
 }

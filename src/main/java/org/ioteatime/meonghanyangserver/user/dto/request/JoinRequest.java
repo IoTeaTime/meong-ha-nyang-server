@@ -17,10 +17,12 @@ public class JoinRequest {
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
     @Schema(description = "사용자의 비밀번호", example = "testpassword")
+    @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하여야 합니다.")
     private String password;
 
     @NotBlank(message = "비밀번호를 확인해주세요.")
     @Schema(description = "비밀번호 확인", example = "testpassword")
+    @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하여야 합니다.")
     private String passwordConfirm;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
