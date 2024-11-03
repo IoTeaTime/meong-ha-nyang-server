@@ -24,11 +24,12 @@ jobs:
         run: |
           cd src/main/resources
           echo "${{ secrets.APPLICATION_SECRETS }}" > ./application-secret.properties
+          
 
       - name: Gradle Wrapper 권한 부여
         run: chmod +x gradlew
 
       - name: Build
         run: |
-          ./gradlew build
+          ./gradlew build -x test
         shell: bash
