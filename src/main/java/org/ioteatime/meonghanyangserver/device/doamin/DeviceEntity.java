@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 import org.ioteatime.meonghanyangserver.device.doamin.enums.DeviceRole;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
-import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 
 @Data
 @Entity
@@ -33,8 +33,8 @@ public class DeviceEntity {
     private GroupEntity group;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", unique = true)
-    private UserEntity user;
+    @JoinColumn(name = "member_id", unique = true)
+    private MemberEntity member;
 
     @OneToOne(mappedBy = "device")
     private CctvEntity cctv;

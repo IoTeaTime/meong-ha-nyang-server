@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Objects;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
-import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -25,14 +25,14 @@ public class JwtUtils {
         this.key = Keys.hmacShaKeyFor(decodedKey);
     }
 
-    public String generateAccessToken(UserEntity userEntity) {
+    public String generateAccessToken(MemberEntity memberEntity) {
         Date nowDate = new Date();
         Date expiration = new Date(nowDate.getTime() + Duration.ofHours(2).toMillis());
         String jwtToken =
                 Jwts.builder()
-                        .claim("name", userEntity.getNickname())
+                        .claim("name", memberEntity.getNickname())
                         .claim("sub", "meong-ha-nyang")
-                        .claim("jti", String.valueOf(userEntity.getId()))
+                        .claim("jti", String.valueOf(memberEntity.getId()))
                         .claim("iat", nowDate)
                         .claim("exp", expiration)
                         .signWith(key)
@@ -41,14 +41,14 @@ public class JwtUtils {
         return jwtToken;
     }
 
-    public String generateRefreshToken(UserEntity userEntity) {
+    public String generateRefreshToken(MemberEntity memberEntity) {
         Date nowDate = new Date();
         Date expiration = new Date(nowDate.getTime() + Duration.ofDays(30).toMillis());
         String jwtToken =
                 Jwts.builder()
-                        .claim("name", userEntity.getNickname())
+                        .claim("name", memberEntity.getNickname())
                         .claim("sub", "meong-ha-nyang")
-                        .claim("jti", String.valueOf(userEntity.getId()))
+                        .claim("jti", String.valueOf(memberEntity.getId()))
                         .claim("iat", nowDate)
                         .claim("exp", expiration)
                         .signWith(key)
@@ -81,13 +81,13 @@ public class JwtUtils {
         return expiration.before(new Date());
     }
 
-    public boolean validateToken(String token, UserEntity userEntity) {
+    public boolean validateToken(String token, MemberEntity memberEntity) {
         if (isTokenExpired(token)) {
             return false;
         }
 
         Long jwtId = getIdFromToken(token);
-        Long id = userEntity.getId();
+        Long id = memberEntity.getId();
 
         return id != null && Objects.equals(jwtId, id);
     }

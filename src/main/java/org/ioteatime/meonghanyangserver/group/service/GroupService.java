@@ -16,8 +16,8 @@ import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.ioteatime.meonghanyangserver.group.mapper.GroupEntityMapper;
 import org.ioteatime.meonghanyangserver.group.mapper.GroupResponseMapper;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
-import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
-import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
+import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,24 +25,24 @@ import org.springframework.stereotype.Service;
 public class GroupService {
     private final GroupRepository groupRepository;
     private final DeviceService deviceService;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final JpaDeviceRepository groupUserRepository;
 
     // create group
-    public CreateGroupResponse createGroup(Long userId, CreateGroupRequest createGroupRequest) {
+    public CreateGroupResponse createGroup(Long memberId, CreateGroupRequest createGroupRequest) {
 
-        boolean groupUserEntity = deviceService.existsDevice(userId);
+        boolean groupUserEntity = deviceService.existsDevice(memberId);
 
         if (groupUserEntity) {
             throw new BadRequestException(GroupErrorType.ALREADY_EXISTS);
         }
 
-        UserEntity userEntity =
-                userRepository
-                        .findById(userId)
+        MemberEntity memberEntity =
+                memberRepository
+                        .findById(memberId)
                         .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
 
-        String roomName = userEntity.getNickname() + " 그룹";
+        String roomName = memberEntity.getNickname() + " 그룹";
 
         GroupEntity groupEntity = GroupEntityMapper.toEntity(roomName);
 
@@ -50,16 +50,16 @@ public class GroupService {
 
         deviceService.createDevice(
                 newGroupEntity,
-                userEntity,
+                memberEntity,
                 DeviceRole.ROLE_MASTER,
                 createGroupRequest.deviceUuid());
 
         return GroupResponseMapper.from(newGroupEntity);
     }
 
-    public GroupTotalResponse getGroupTotalData(Long userId) {
+    public GroupTotalResponse getGroupTotalData(Long memberId) {
         GroupEntity groupEntity =
-                Optional.ofNullable(deviceService.getGroup(userId))
+                Optional.ofNullable(deviceService.getGroup(memberId))
                         .orElseThrow(
                                 () -> new NotFoundException(GroupErrorType.GROUP_USER_NOT_FOUND));
 

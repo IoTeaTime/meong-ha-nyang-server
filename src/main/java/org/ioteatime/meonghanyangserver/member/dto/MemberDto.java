@@ -1,4 +1,4 @@
-package org.ioteatime.meonghanyangserver.user.dto;
+package org.ioteatime.meonghanyangserver.member.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class MemberDto {
     @Email
     @NotBlank
     @Schema(description = "이메일", example = "test@gmail.com")

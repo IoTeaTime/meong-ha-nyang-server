@@ -2,16 +2,16 @@ package org.ioteatime.meonghanyangserver.auth.mapper;
 
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
-import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
+import org.ioteatime.meonghanyangserver.member.dto.response.MemberSimpleResponse;
 
 public class AuthResponseMapper {
-    public static UserSimpleResponse from(Long id, String email) {
-        return new UserSimpleResponse(id, email);
+    public static MemberSimpleResponse from(Long id, String email) {
+        return new MemberSimpleResponse(id, email);
     }
 
     public static LoginResponse from(Long id, String accessToken, String refreshToken) {
         return LoginResponse.builder()
-                .userId(id)
+                .memberId(id)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

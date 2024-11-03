@@ -12,7 +12,7 @@ import org.ioteatime.meonghanyangserver.device.mapper.DeviceEntityMapper;
 import org.ioteatime.meonghanyangserver.device.repository.DeviceRepository;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
-import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,32 +24,32 @@ public class DeviceService {
     // input user
     public void createDevice(
             GroupEntity groupEntity,
-            UserEntity userEntity,
+            MemberEntity memberEntity,
             DeviceRole deviceRole,
             String deviceUuid) {
         DeviceEntity deviceEntity =
-                DeviceEntityMapper.from(groupEntity, userEntity, deviceRole, deviceUuid);
+                DeviceEntityMapper.from(groupEntity, memberEntity, deviceRole, deviceUuid);
         deviceRepository.createDevice(deviceEntity);
     }
 
-    public boolean existsDevice(Long userId) {
-        return deviceRepository.existsDevice(userId);
+    public boolean existsDevice(Long memberId) {
+        return deviceRepository.existsDevice(memberId);
     }
 
-    public GroupInfoResponse getUserGroupInfo(Long userId) {
+    public GroupInfoResponse getUserGroupInfo(Long memberId) {
         DeviceEntity deviceEntity =
                 deviceRepository
-                        .findByDeviceId(userId)
+                        .findByDeviceId(memberId)
                         .orElseThrow(
                                 () -> new NotFoundException(GroupErrorType.GROUP_USER_NOT_FOUND));
 
         return new GroupInfoResponse(deviceEntity.getGroup().getId());
     }
 
-    public CctvInviteResponse generateCctvInvite(Long userId) {
+    public CctvInviteResponse generateCctvInvite(Long memberId) {
         DeviceEntity deviceEntity =
                 deviceRepository
-                        .findByDeviceId(userId)
+                        .findByDeviceId(memberId)
                         .orElseThrow(
                                 () -> new NotFoundException(GroupErrorType.GROUP_USER_NOT_FOUND));
         String kvsChannelName = kvsChannelNameGenerator.generateUniqueKvsChannelName();
@@ -57,8 +57,8 @@ public class DeviceService {
         return new CctvInviteResponse(deviceEntity.getGroup().getId(), kvsChannelName);
     }
 
-    public GroupEntity getGroup(Long userId) {
-        return Optional.ofNullable(deviceRepository.findDevice(userId))
+    public GroupEntity getGroup(Long memberId) {
+        return Optional.ofNullable(deviceRepository.findDevice(memberId))
                 .orElseThrow(() -> new NotFoundException(GroupErrorType.GROUP_USER_NOT_FOUND));
     }
 }

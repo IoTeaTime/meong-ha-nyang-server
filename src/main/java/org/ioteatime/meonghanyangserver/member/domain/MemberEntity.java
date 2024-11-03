@@ -1,4 +1,4 @@
-package org.ioteatime.meonghanyangserver.user.domain;
+package org.ioteatime.meonghanyangserver.member.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -10,8 +10,8 @@ import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "user")
-public class UserEntity {
+@Table(name = "member")
+public class MemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +28,7 @@ public class UserEntity {
     @Column private String profileImgUrl;
 
     @Builder
-    public UserEntity(
+    public MemberEntity(
             Long id, String email, String password, String nickname, String profileImgUrl) {
         this.id = id;
         this.email = email;

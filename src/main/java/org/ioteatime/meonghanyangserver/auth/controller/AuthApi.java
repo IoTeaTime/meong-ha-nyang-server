@@ -8,7 +8,7 @@ import org.ioteatime.meonghanyangserver.auth.dto.request.EmailRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.VerifyEmailRequest;
 import org.ioteatime.meonghanyangserver.common.api.Api;
-import org.ioteatime.meonghanyangserver.user.dto.request.JoinRequest;
+import org.ioteatime.meonghanyangserver.member.dto.request.JoinRequest;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Auth Api", description = "인증 관련 API 목록입니다.")

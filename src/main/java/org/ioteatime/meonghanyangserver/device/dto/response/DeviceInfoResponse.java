@@ -7,4 +7,4 @@ import org.ioteatime.meonghanyangserver.device.doamin.enums.DeviceRole;
 
 @Schema(description = "디바이스 정보 응답")
 public record DeviceInfoResponse(
-        @NotNull Long userId, @NotBlank String nickname, @NotBlank DeviceRole role) {}
+        @NotNull Long memberId, @NotBlank String nickname, @NotBlank DeviceRole role) {}
