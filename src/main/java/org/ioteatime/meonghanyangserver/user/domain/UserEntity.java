@@ -10,7 +10,7 @@ import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "member")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
