@@ -12,4 +12,10 @@ public interface DeviceRepository {
     Optional<DeviceEntity> findByDeviceId(Long memberId);
 
     GroupEntity findDevice(Long memberId);
+
+    boolean isParcitipantUserId(Long userId);
+
+    void deleteById(Long id);
+
+    DeviceEntity save(DeviceEntity device);
 }

@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: meong-ha-nyang-server
+  profiles:
+    active: test
+    group:
+      test: db, key

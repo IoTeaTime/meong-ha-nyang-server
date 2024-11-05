@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @Tag(name = "User Api", description = "유저 관련 API 목록입니다.")
 public interface MemberApi {
 
-    @Operation(summary = "회원 상세 정보를 조회합니다.")
+    @Operation(summary = "회원 상세 정보를 조회합니다.", description = "담당자: 임지인")
     Api<MemberDetailResponse> getMemberDetail(@PathVariable("memberId") Long memberId);
 
-    @Operation(summary = "회원 정보를 삭제합니다.")
+    @Operation(summary = "회원 정보를 삭제합니다.", description = "담당자: 임지인")
     Api<Object> deleteMember(@LoginMember Long memberId);
 
-    @Operation(summary = "회원의 비밀번호를 변경합니다.")
+    @Operation(summary = "회원의 비밀번호를 변경합니다.", description = "담당자: 임지인")
     Api<Object> changeMemberPassword(
             @LoginMember Long memberId, @RequestBody @Valid ChangePasswordRequest request);
 
-    @Operation(summary = "Access 토큰을 다시 생성합니다.")
+    @Operation(summary = "Access 토큰을 다시 생성합니다.", description = "담당자: 서유진")
     Api<RefreshResponse> refreshToken(@RequestHeader("Authorization") String authorizationHeader);
 }
