@@ -15,8 +15,8 @@ import org.ioteatime.meonghanyangserver.device.doamin.enums.DeviceRole;
 import org.ioteatime.meonghanyangserver.device.repository.DeviceRepository;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
-import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
-import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
+import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,24 +26,24 @@ import org.springframework.http.MediaType;
 @SpringBootTest
 class CctvControllerTest extends ControllerTestConfig {
     @Autowired private JwtUtils jwtUtils;
-    @Autowired private UserRepository userRepository;
+    @Autowired private MemberRepository memberRepository;
     @Autowired private CctvRepository cctvRepository;
     @Autowired private GroupRepository groupRepository;
     @Autowired private DeviceRepository deviceRepository;
 
     private String accessToken;
-    private UserEntity user;
+    private MemberEntity member;
 
     @BeforeEach
     public void beforeEach() {
-        user =
-                UserEntity.builder()
+        member =
+                MemberEntity.builder()
                         .email("test@gmail.com")
                         .nickname("test")
                         .password("testpassword")
                         .build();
-        userRepository.save(user);
-        accessToken = jwtUtils.includeBearer(jwtUtils.generateAccessToken(user));
+        memberRepository.save(member);
+        accessToken = jwtUtils.includeBearer(jwtUtils.generateAccessToken(member));
     }
 
     @Test
@@ -53,7 +53,7 @@ class CctvControllerTest extends ControllerTestConfig {
 
         DeviceEntity device2 =
                 DeviceEntity.builder()
-                        .user(user)
+                        .member(member)
                         .group(group)
                         .deviceUuid("test2")
                         .role(DeviceRole.ROLE_CCTV)

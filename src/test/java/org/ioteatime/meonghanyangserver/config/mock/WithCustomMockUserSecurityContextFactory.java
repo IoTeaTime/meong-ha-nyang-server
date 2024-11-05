@@ -1,7 +1,7 @@
 package org.ioteatime.meonghanyangserver.config.mock;
 
-import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
-import org.ioteatime.meonghanyangserver.user.dto.CustomUserDetail;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
+import org.ioteatime.meonghanyangserver.member.dto.CustomUserDetail;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,8 +13,8 @@ public class WithCustomMockUserSecurityContextFactory
     public SecurityContext createSecurityContext(WithCustomMockUser annotation) {
         String userId = annotation.userId();
 
-        UserEntity user = UserEntity.builder().id(Long.parseLong(userId)).build();
-        CustomUserDetail customUserDetail = new CustomUserDetail(user);
+        MemberEntity member = MemberEntity.builder().id(Long.parseLong(userId)).build();
+        CustomUserDetail customUserDetail = new CustomUserDetail(member);
 
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(
