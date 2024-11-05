@@ -22,12 +22,3 @@ certificatesResolvers:
       httpChallenge:
         # used during the challenge
         entryPoint: web
-
-http:
-  routers:
-    server:
-      service: server-ubuntu
-      tls:
-        certResolver: myresolver
-        domains:
-          main: "api.test-wonchae.p-e.kr"
