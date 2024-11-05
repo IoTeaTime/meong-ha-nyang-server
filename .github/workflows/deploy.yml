@@ -96,4 +96,5 @@ jobs:
           envs: IMAGE_FULL_URL, DOCKERHUB_IMAGE_NAME # docker-compose.yml 에서 사용할 환경 변수
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
+            docker compose down -d
             docker compose up --build -d
