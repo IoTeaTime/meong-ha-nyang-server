@@ -3,7 +3,7 @@
 # Docker configuration backend
 providers:
   docker:
-    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)"
+    defaultRule: "Host(`api.test-wonchae.p-e.kr`)"
 
 # API and dashboard configuration
 api:
