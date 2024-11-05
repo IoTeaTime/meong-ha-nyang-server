@@ -23,3 +23,12 @@ certificatesResolvers:
       httpChallenge:
         # used during the challenge
         entryPoint: web
+
+http:
+  routers:
+    server:
+      rule: "Host(`api.test-wonchae.p-e.kr`)"
+      tls:
+        certResolver: myresolver
+        domains:
+          - main: "api.test-wonchae.p-e.kr"
