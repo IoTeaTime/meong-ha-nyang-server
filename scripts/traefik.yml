@@ -26,7 +26,8 @@ certificatesResolvers:
 http:
   routers:
     server:
-      rule: "Host(`api.test-wonchae.p-e.kr`)"
       service: server
       tls:
         certResolver: myresolver
+        domains:
+          main: "api.test-wonchae.p-e.kr"
