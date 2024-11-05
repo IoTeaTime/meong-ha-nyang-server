@@ -10,7 +10,7 @@ public class GroupRepositoryImpl implements GroupRepository {
     private final JpaGroupRepository jpaGroupRepository;
 
     @Override
-    public GroupEntity createGroup(GroupEntity groupEntity) {
+    public GroupEntity save(GroupEntity groupEntity) {
         return jpaGroupRepository.save(groupEntity);
     }
 }
