@@ -7,11 +7,11 @@ import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 public interface DeviceRepository {
     DeviceEntity createDevice(DeviceEntity deviceEntity);
 
-    boolean existsDevice(Long userId);
+    boolean existsDevice(Long memberId);
 
-    Optional<DeviceEntity> findByDeviceId(Long userId);
+    Optional<DeviceEntity> findByDeviceId(Long memberId);
 
-    GroupEntity findDevice(Long userId);
+    GroupEntity findDevice(Long memberId);
 
     boolean isParcitipantUserId(Long userId);
 

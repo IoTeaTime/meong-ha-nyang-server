@@ -23,21 +23,21 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     }
 
     @Override
-    public boolean existsDevice(Long userId) {
-        return jpaDeviceRepository.existsByUserId(userId);
+    public boolean existsDevice(Long memberId) {
+        return jpaDeviceRepository.existsByMemberId(memberId);
     }
 
     @Override
-    public Optional<DeviceEntity> findByDeviceId(Long userId) {
-        return jpaDeviceRepository.findByUserId(userId);
+    public Optional<DeviceEntity> findByDeviceId(Long memberId) {
+        return jpaDeviceRepository.findByMemberId(memberId);
     }
 
     @Override
-    public GroupEntity findDevice(Long userId) {
+    public GroupEntity findDevice(Long memberId) {
         return jpaQueryFactory
                 .select(deviceEntity.group)
                 .from(deviceEntity)
-                .where(deviceEntity.user.id.eq(userId))
+                .where(deviceEntity.member.id.eq(memberId))
                 .fetchOne();
     }
 
@@ -48,7 +48,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
                 .from(deviceEntity)
                 .where(
                         deviceEntity
-                                .user
+                                .member
                                 .id
                                 .eq(userId)
                                 .and(deviceEntity.role.eq(DeviceRole.ROLE_PARTICIPANT)))

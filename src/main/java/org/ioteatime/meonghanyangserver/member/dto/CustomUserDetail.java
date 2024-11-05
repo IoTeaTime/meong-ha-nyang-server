@@ -1,10 +1,10 @@
-package org.ioteatime.meonghanyangserver.user.dto;
+package org.ioteatime.meonghanyangserver.member.dto;
 
 import java.util.Collection;
 import java.util.Collections;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @RequiredArgsConstructor
 public class CustomUserDetail implements UserDetails {
-    private UserEntity userEntity;
+    private MemberEntity memberEntity;
 
-    public CustomUserDetail(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public CustomUserDetail(MemberEntity memberEntity) {
+        this.memberEntity = memberEntity;
     }
 
     @Override
@@ -25,15 +25,15 @@ public class CustomUserDetail implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userEntity.getPassword();
+        return memberEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userEntity.getEmail();
+        return memberEntity.getEmail();
     }
 
     public Long getId() {
-        return userEntity.getId();
+        return memberEntity.getId();
     }
 }

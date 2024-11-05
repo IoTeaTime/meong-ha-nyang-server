@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface GroupApi {
     @Operation(summary = "그룹을 생성합니다.", description = "담당자: 최민석")
     Api<CreateGroupResponse> createGroup(
-            @LoginMember Long userId, @RequestBody CreateGroupRequest createGroupRequest);
+            @LoginMember Long memberId, @RequestBody CreateGroupRequest createGroupRequest);
 
     @Operation(summary = "그룹 id를 조회합니다", description = "담당자: 임지인")
-    Api<GroupInfoResponse> getUserGroupInfo(@LoginMember Long userId);
+    Api<GroupInfoResponse> getUserGroupInfo(@LoginMember Long memberId);
 
     @Operation(summary = "그룹 id와 신호 채널 이름을 전달합니다.", description = "담당자: 임지인")
-    Api<CctvInviteResponse> generateCctvInvite(@LoginMember Long userId);
+    Api<CctvInviteResponse> generateCctvInvite(@LoginMember Long memberId);
 
     @Operation(summary = "그룹 통합 정보를 조회합니다.", description = "담당자: 최민석")
-    Api<GroupTotalResponse> getGroupTotalData(@LoginMember Long userId);
+    Api<GroupTotalResponse> getGroupTotalData(@LoginMember Long memberId);
 }

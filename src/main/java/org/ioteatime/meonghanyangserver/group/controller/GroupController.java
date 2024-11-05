@@ -22,27 +22,27 @@ public class GroupController implements GroupApi {
 
     @PostMapping
     public Api<CreateGroupResponse> createGroup(
-            @LoginMember Long userId, @RequestBody CreateGroupRequest createGroupRequest) {
+            @LoginMember Long memberId, @RequestBody CreateGroupRequest createGroupRequest) {
         CreateGroupResponse createGroupResponse =
-                groupService.createGroup(userId, createGroupRequest);
+                groupService.createGroup(memberId, createGroupRequest);
         return Api.success(GroupSuccessType.CREATE_GROUP, createGroupResponse);
     }
 
     @GetMapping("/viewer")
-    public Api<GroupInfoResponse> getUserGroupInfo(@LoginMember Long userId) {
-        GroupInfoResponse groupInfoResponse = deviceService.getUserGroupInfo(userId);
+    public Api<GroupInfoResponse> getUserGroupInfo(@LoginMember Long memberId) {
+        GroupInfoResponse groupInfoResponse = deviceService.getUserGroupInfo(memberId);
         return Api.success(GroupSuccessType.GET_GROUP_ID, groupInfoResponse);
     }
 
     @GetMapping("/cctv")
-    public Api<CctvInviteResponse> generateCctvInvite(@LoginMember Long userId) {
-        CctvInviteResponse cctvInviteResponse = deviceService.generateCctvInvite(userId);
+    public Api<CctvInviteResponse> generateCctvInvite(@LoginMember Long memberId) {
+        CctvInviteResponse cctvInviteResponse = deviceService.generateCctvInvite(memberId);
         return Api.success(GroupSuccessType.GET_CHANNEL_INFO, cctvInviteResponse);
     }
 
     @GetMapping("/info-list")
-    public Api<GroupTotalResponse> getGroupTotalData(@LoginMember Long userId) {
-        GroupTotalResponse groupTotalResponse = groupService.getGroupTotalData(userId);
+    public Api<GroupTotalResponse> getGroupTotalData(@LoginMember Long memberId) {
+        GroupTotalResponse groupTotalResponse = groupService.getGroupTotalData(memberId);
         return Api.success(GroupSuccessType.GET_GROUP_TOTAL_INFO, groupTotalResponse);
     }
 }
