@@ -1,5 +1,9 @@
 ## traefik.yml
 
+# Docker configuration backend
+providers:
+  docker: {}
+
 # API and dashboard configuration
 api:
   insecure: true
