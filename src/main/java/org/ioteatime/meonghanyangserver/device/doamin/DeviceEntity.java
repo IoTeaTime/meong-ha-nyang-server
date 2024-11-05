@@ -33,7 +33,7 @@ public class DeviceEntity {
     private GroupEntity group;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @OneToOne(mappedBy = "device")

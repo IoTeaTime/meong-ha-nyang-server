@@ -46,7 +46,7 @@ public class GroupService {
 
         GroupEntity groupEntity = GroupEntityMapper.toEntity(roomName);
 
-        GroupEntity newGroupEntity = groupRepository.createGroup(groupEntity);
+        GroupEntity newGroupEntity = groupRepository.save(groupEntity);
 
         deviceService.createDevice(
                 newGroupEntity,

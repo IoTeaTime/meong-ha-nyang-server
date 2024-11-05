@@ -1,11 +1,14 @@
 package org.ioteatime.meonghanyangserver.cctv.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.ioteatime.meonghanyangserver.device.doamin.DeviceEntity;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "cctv")
 public class CctvEntity {
     @Id
@@ -21,4 +24,12 @@ public class CctvEntity {
     @OneToOne
     @JoinColumn(name = "device_id")
     private DeviceEntity device;
+
+    @Builder
+    public CctvEntity(Long id, String cctvNickname, String kvsChannelName, DeviceEntity device) {
+        this.id = id;
+        this.cctvNickname = cctvNickname;
+        this.kvsChannelName = kvsChannelName;
+        this.device = device;
+    }
 }
