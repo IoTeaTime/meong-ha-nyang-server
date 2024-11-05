@@ -2,8 +2,8 @@
 
 # Docker configuration backend
 providers:
-  docker:
-    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)"
+  docker: {}
+#    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)"
 
 # API and dashboard configuration
 api:
@@ -28,6 +28,7 @@ http:
   routers:
     server:
       rule: "Host(`api.test-wonchae.p-e.kr`)"
+      entrypoints: websecure
       tls:
         certResolver: myresolver
         domains:
