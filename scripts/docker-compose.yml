@@ -13,5 +13,8 @@ services:
     volumes:
       - "./client_secret.json:/client_secret.json"
     labels:
-      - "traefik.http.routers.server.rule=Host(`api.test-wonchae.p-e.kr`)"
-      - "traefik.http.services.server.loadbalancer.server.port=8080"
+      - "traefik.http.routers.myrouter.rule=Host(`api.test-wonchae.p-e.kr`)"
+      - "traefik.http.routers.myrouter.tls=true"
+      - "traefik.http.routers.myrouter.tls.certresolver=myresolver"
+      - "traefik.http.routers.myrouter.service=myservice"
+      - "traefik.http.services.myservice.loadbalancer.server.port=8080"
