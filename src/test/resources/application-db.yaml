@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: db
+  datasource:
+    url: ${H2_URL}
+    username: ${H2_USERNAME}
+    password: ${H2_PASSWORD}
+    driver-class-name: org.h2.Driver
+  data:
+    redis:
+      host: ${REDIS_TEST_HOST}
+      port: ${REDIS_TEST_PORT}
+      password: ${REDIS_TEST_PASSWORD}
+
+logging:
+  level:
+    org.springframework.orm.jpa: INFO

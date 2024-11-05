@@ -61,6 +61,9 @@ dependencies {
 
     // KVS
     implementation 'com.amazonaws:aws-java-sdk-kinesisvideo:1.12.777'
+
+    // Test
+    runtimeOnly 'com.h2database:h2'
 }
 
 spotless {
