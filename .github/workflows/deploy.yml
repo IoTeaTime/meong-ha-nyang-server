@@ -97,4 +97,5 @@ jobs:
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
             docker compose down -d
+            docker compose rm -f
             docker compose up --build -d
