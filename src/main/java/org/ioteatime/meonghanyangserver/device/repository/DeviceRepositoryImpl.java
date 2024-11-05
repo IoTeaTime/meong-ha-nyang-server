@@ -48,7 +48,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
                 .from(deviceEntity)
                 .where(
                         deviceEntity
-                                .user
+                                .member
                                 .id
                                 .eq(userId)
                                 .and(deviceEntity.role.eq(DeviceRole.ROLE_PARTICIPANT)))
