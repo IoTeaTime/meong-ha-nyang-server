@@ -12,23 +12,23 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class GroupMemberRepositoryImpl implements GroupMemberRepository {
-    private final JpaGroupMemberRepository jpaDeviceRepository;
+    private final JpaGroupMemberRepository jpaGroupMemberRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public GroupMemberEntity createDevice(GroupMemberEntity deviceEntity) {
-        return jpaDeviceRepository.save(deviceEntity);
+    public GroupMemberEntity createGroupMember(GroupMemberEntity groupMemberEntity) {
+        return jpaGroupMemberRepository.save(groupMemberEntity);
     }
 
     @Override
-    public boolean existsDevice(Long memberId) {
-        return jpaDeviceRepository.existsByMemberId(memberId);
+    public boolean existsGroupMember(Long memberId) {
+        return jpaGroupMemberRepository.existsByMemberId(memberId);
     }
 
     @Override
     public Optional<GroupMemberEntity> findByDeviceId(Long memberId) {
-        return jpaDeviceRepository.findByMemberId(memberId);
+        return jpaGroupMemberRepository.findByMemberId(memberId);
     }
 
     @Override
@@ -59,11 +59,11 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
 
     @Override
     public void deleteById(Long id) {
-        jpaDeviceRepository.deleteById(id);
+        jpaGroupMemberRepository.deleteById(id);
     }
 
     @Override
     public GroupMemberEntity save(GroupMemberEntity device) {
-        return jpaDeviceRepository.save(device);
+        return jpaGroupMemberRepository.save(device);
     }
 }

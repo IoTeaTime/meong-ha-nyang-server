@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
-import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.DeviceRole;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 
 @Data
@@ -22,7 +22,7 @@ public class GroupMemberEntity {
 
     @Column(nullable = false, length = 10)
     @Enumerated(value = EnumType.STRING)
-    private DeviceRole role;
+    private GroupMemberRole role;
 
     @Column(nullable = false, length = 200)
     private String thingId;
