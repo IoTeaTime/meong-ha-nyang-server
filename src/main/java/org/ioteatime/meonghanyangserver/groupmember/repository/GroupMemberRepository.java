@@ -5,9 +5,9 @@ import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 
 public interface GroupMemberRepository {
-    GroupMemberEntity createDevice(GroupMemberEntity deviceEntity);
+    GroupMemberEntity createGroupMember(GroupMemberEntity deviceEntity);
 
-    boolean existsDevice(Long memberId);
+    boolean existsGroupMember(Long memberId);
 
     Optional<GroupMemberEntity> findByDeviceId(Long memberId);
 

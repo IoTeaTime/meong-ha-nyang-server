@@ -5,7 +5,6 @@ import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.GroupSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
-import org.ioteatime.meonghanyangserver.group.dto.request.CreateGroupRequest;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
@@ -18,25 +17,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/group")
 public class GroupController implements GroupApi {
     private final GroupService groupService;
-    private final GroupMemberService deviceService;
+    private final GroupMemberService groupMemberService;
 
     @PostMapping
-    public Api<CreateGroupResponse> createGroup(
-            @LoginMember Long memberId, @RequestBody CreateGroupRequest createGroupRequest) {
-        CreateGroupResponse createGroupResponse =
-                groupService.createGroup(memberId, createGroupRequest);
+    public Api<CreateGroupResponse> createGroup(@LoginMember Long memberId) {
+        CreateGroupResponse createGroupResponse = groupService.createGroup(memberId);
         return Api.success(GroupSuccessType.CREATE_GROUP, createGroupResponse);
     }
 
     @GetMapping("/viewer")
     public Api<GroupInfoResponse> getUserGroupInfo(@LoginMember Long memberId) {
-        GroupInfoResponse groupInfoResponse = deviceService.getUserGroupInfo(memberId);
+        GroupInfoResponse groupInfoResponse = groupMemberService.getUserGroupInfo(memberId);
         return Api.success(GroupSuccessType.GET_GROUP_ID, groupInfoResponse);
     }
 
     @GetMapping("/cctv")
     public Api<CctvInviteResponse> generateCctvInvite(@LoginMember Long memberId) {
-        CctvInviteResponse cctvInviteResponse = deviceService.generateCctvInvite(memberId);
+        CctvInviteResponse cctvInviteResponse = groupMemberService.generateCctvInvite(memberId);
         return Api.success(GroupSuccessType.GET_CHANNEL_INFO, cctvInviteResponse);
     }
 
