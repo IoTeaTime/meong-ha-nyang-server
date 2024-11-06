@@ -13,8 +13,14 @@ services:
     volumes:
       - "./client_secret.json:/client_secret.json"
     labels:
-      - "traefik.http.routers.server.rule=Host(`api.test-wonchae.p-e.kr`)"
-      - "traefik.http.routers.server.tls=true"
-      - "traefik.http.routers.server.tls.certresolver=myresolver"
-      - "traefik.http.routers.server.service=server"
-      - "traefik.http.services.server.loadbalancer.server.port=8080"
+      - "traefik.http.routers.Router-1.rule=Host(`api.test-wonchae.p-e.kr`)"
+      - "traefik.http.routers.Router-1.tls=true"
+      - "traefik.http.routers.Router-1.tls.certresolver=myresolver"
+      - "traefik.http.routers.Router-1.service=server"
+#      - "traefik.http.services.server.loadbalancer.server.port=8080"
+    networks:
+      - mhn-net
+
+networks:
+  mhn-net:
+    name: mhn-net
