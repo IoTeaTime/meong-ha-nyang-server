@@ -14,10 +14,6 @@ public class MemberDto {
     private String email;
 
     @NotBlank
-    @Schema(description = "Cognito 사용자 id", example = "341234dc-2421-1235-943b-343a27cf923")
-    private String cognitoId;
-
-    @NotBlank
     @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하여야 합니다.")
     private String password;
 
