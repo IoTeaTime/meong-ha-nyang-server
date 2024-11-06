@@ -29,7 +29,7 @@ public class GroupMemberService {
             String thingId) {
         GroupMemberEntity groupMember =
                 GroupMemberEntityMapper.from(groupEntity, memberEntity, groupMemberRole, thingId);
-        groupMemberRepository.createGroupMember(groupMember);
+        groupMemberRepository.save(groupMember);
     }
 
     public boolean existsGroupMember(Long memberId) {
