@@ -69,7 +69,6 @@ dependencies {
 spotless {
     java {
         target('**/*.java')
-        targetExclude('modules/*/generated/**/*.*')
         targetExclude('src/main/generated/**/*.java')
 
         importOrder()
