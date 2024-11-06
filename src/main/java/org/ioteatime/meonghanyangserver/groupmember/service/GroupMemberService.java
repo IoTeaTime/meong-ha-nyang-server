@@ -78,10 +78,9 @@ public class GroupMemberService {
                                         new BadRequestException(
                                                 GroupErrorType.ONLY_MASTER_REMOVE_GROUP_MEMBER));
 
-        if (Objects.equals(groupMasterEntity.getId(), groupMemberId)) {
+        if (groupMasterEntity.getId().equals(groupMemberId)) {
             throw new BadRequestException(GroupErrorType.ONLY_MASTER_REMOVE_GROUP_MASTER);
         }
-
         // TODO group member iot core 제외
 
         groupMemberRepository.deleteById(groupMemberId);

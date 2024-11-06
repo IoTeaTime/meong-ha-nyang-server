@@ -64,8 +64,7 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     @Override
     public GroupMemberEntity findByGroupIdAndMemberIdAndRole(Long memberId, Long groupId) {
         return jpaQueryFactory
-                .select(groupMemberEntity)
-                .from(groupMemberEntity)
+                .selectFrom(groupMemberEntity)
                 .where(
                         groupMemberEntity
                                 .group
