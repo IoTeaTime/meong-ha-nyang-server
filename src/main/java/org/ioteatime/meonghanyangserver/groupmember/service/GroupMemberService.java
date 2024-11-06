@@ -33,7 +33,7 @@ public class GroupMemberService {
             String thingId) {
         GroupMemberEntity groupMember =
                 GroupMemberEntityMapper.from(groupEntity, memberEntity, groupMemberRole, thingId);
-        groupMemberRepository.createGroupMember(groupMember);
+        groupMemberRepository.save(groupMember);
     }
 
     public boolean existsGroupMember(Long memberId) {
@@ -82,7 +82,7 @@ public class GroupMemberService {
             throw new BadRequestException(GroupErrorType.ONLY_MASTER_REMOVE_GROUP_MASTER);
         }
 
-        //TODO group member iot core 제외
+        // TODO group member iot core 제외
 
         groupMemberRepository.deleteById(groupMemberId);
     }

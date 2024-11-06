@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class CctvController implements CctvApi {
     private final CctvService cctvService;
 
-    @DeleteMapping("/{cctvId}")
-    public Api<?> delete(@LoginMember Long userId, @PathVariable("cctvId") Long cctvId) {
-        cctvService.deleteById(userId, cctvId);
+    @DeleteMapping("/{cctvId}/out")
+    public Api<?> out(@LoginMember Long userId, @PathVariable("cctvId") Long cctvId) {
+        cctvService.outById(userId, cctvId);
         return Api.success(CctvSuccessType.DELETE_CCTV);
     }
 }

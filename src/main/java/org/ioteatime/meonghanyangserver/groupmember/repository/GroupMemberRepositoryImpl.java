@@ -18,7 +18,7 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public GroupMemberEntity createGroupMember(GroupMemberEntity groupMemberEntity) {
+    public GroupMemberEntity save(GroupMemberEntity groupMemberEntity) {
         return jpaGroupMemberRepository.save(groupMemberEntity);
     }
 
@@ -42,29 +42,23 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     }
 
     @Override
-    public boolean isParcitipantUserId(Long userId) {
-        //        return !jpaQueryFactory
-        //                .select(deviceEntity.role)
-        //                .from(deviceEntity)
-        //                .where(
-        //                        deviceEntity
-        //                                .member
-        //                                .id
-        //                                .eq(userId)
-        //                                .and(deviceEntity.role.eq(DeviceRole.ROLE_PARTICIPANT)))
-        //                .fetch()
-        //                .isEmpty();
-        return true;
-    }
-
-    @Override
     public void deleteById(Long id) {
         jpaGroupMemberRepository.deleteById(id);
     }
 
     @Override
-    public GroupMemberEntity save(GroupMemberEntity device) {
-        return jpaGroupMemberRepository.save(device);
+    public boolean isMasterMember(Long memberId) {
+        return !jpaQueryFactory
+                .select(groupMemberEntity.role)
+                .from(groupMemberEntity)
+                .where(
+                        groupMemberEntity
+                                .member
+                                .id
+                                .eq(memberId)
+                                .and(groupMemberEntity.role.eq(GroupMemberRole.ROLE_MASTER)))
+                .fetch()
+                .isEmpty();
     }
 
     @Override

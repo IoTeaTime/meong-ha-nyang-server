@@ -4,7 +4,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
-import org.ioteatime.meonghanyangserver.cctv.dto.db.CctvWithDeviceId;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -23,24 +22,12 @@ public class CctvRepositoryImpl implements CctvRepository {
     }
 
     @Override
-    public Optional<CctvWithDeviceId> findByIdWithDeviceId(Long cctvId) {
-        //        return Optional.ofNullable(
-        //                jpaQueryFactory
-        //                        .select(
-        //                                Projections.constructor(
-        //                                        CctvWithDeviceId.class,
-        //                                        cctvEntity.id.as("cctvId"),
-        //                                        cctvEntity.kvsChannelName.as("kvsChannelName"),
-        //                                        cctvEntity.device.id.as("deviceId")))
-        //                        .from(cctvEntity)
-        //                        .join(cctvEntity.device, deviceEntity)
-        //                        .where(cctvEntity.id.eq(cctvId))
-        //                        .fetchOne());
-        return null;
+    public CctvEntity save(CctvEntity cctv) {
+        return jpaCctvRepository.save(cctv);
     }
 
     @Override
-    public CctvEntity save(CctvEntity cctv) {
-        return jpaCctvRepository.save(cctv);
+    public Optional<CctvEntity> findById(Long cctvId) {
+        return jpaCctvRepository.findById(cctvId);
     }
 }
