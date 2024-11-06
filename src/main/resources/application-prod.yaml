@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: prod
     import: optional:application-secret.properties
   jpa:
     show-sql: true
