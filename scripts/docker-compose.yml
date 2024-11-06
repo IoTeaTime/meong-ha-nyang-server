@@ -37,7 +37,7 @@ services:
         mode: host
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./acme.json:/letsencrypt/acme.json"
+      - "/home/ubuntu/acme.json:/letsencrypt/acme.json"
     labels:
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.middlewares=auth"
