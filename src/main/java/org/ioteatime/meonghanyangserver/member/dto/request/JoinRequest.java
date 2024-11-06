@@ -29,10 +29,6 @@ public class JoinRequest {
     @Schema(description = "사용자의 닉네임", example = "멍하냥01")
     private String nickname;
 
-    @NotBlank
-    @Schema(description = "Cognito 사용자 Id", example = "341234dc-2421-1235-943b-343a27cf923")
-    private String cognitoId;
-
     @Builder
     public JoinRequest(String email, String password, String passwordConfirm, String nickname) {
         this.email = email;
