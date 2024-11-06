@@ -10,7 +10,7 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   servlet:
     multipart:
       location: C:\\multipart\\uploads\\
