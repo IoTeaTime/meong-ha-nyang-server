@@ -61,7 +61,7 @@ public class GroupService {
         GroupEntity groupEntity =
                 Optional.ofNullable(deviceService.getGroup(memberId))
                         .orElseThrow(
-                                () -> new NotFoundException(GroupErrorType.GROUP_USER_NOT_FOUND));
+                                () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
 
         return GroupResponseMapper.fromGroupTotal(groupEntity);
     }

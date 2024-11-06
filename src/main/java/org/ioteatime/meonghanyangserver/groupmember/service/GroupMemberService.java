@@ -41,7 +41,7 @@ public class GroupMemberService {
                 deviceRepository
                         .findByDeviceId(memberId)
                         .orElseThrow(
-                                () -> new NotFoundException(GroupErrorType.GROUP_USER_NOT_FOUND));
+                                () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
 
         return new GroupInfoResponse(deviceEntity.getGroup().getId());
     }
@@ -51,7 +51,7 @@ public class GroupMemberService {
                 deviceRepository
                         .findByDeviceId(memberId)
                         .orElseThrow(
-                                () -> new NotFoundException(GroupErrorType.GROUP_USER_NOT_FOUND));
+                                () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
         String kvsChannelName = kvsChannelNameGenerator.generateUniqueKvsChannelName();
 
         return new CctvInviteResponse(deviceEntity.getGroup().getId(), kvsChannelName);
@@ -59,6 +59,6 @@ public class GroupMemberService {
 
     public GroupEntity getGroup(Long memberId) {
         return Optional.ofNullable(deviceRepository.findDevice(memberId))
-                .orElseThrow(() -> new NotFoundException(GroupErrorType.GROUP_USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
     }
 }
