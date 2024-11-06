@@ -62,7 +62,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.services.server.loadbalancer.server.port=8080"
       - "traefik.http.routers.server.entrypoints=websecure"
-      - "traefik.http.routers.server.rule=Host(`api.test-wonchae.p-e.kr`)"
+      - "traefik.http.routers.server.rule=Host(`api.test-wonchae.p-e.kr`) && !PathPrefix(`/dashboard`)"
       - "traefik.http.routers.server.tls.certresolver=letsencrypt"
       - "traefik.docker.network=mhn-net"
     networks:
