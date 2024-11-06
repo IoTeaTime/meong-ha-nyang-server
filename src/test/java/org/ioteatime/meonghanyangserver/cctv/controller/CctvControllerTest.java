@@ -7,6 +7,8 @@ import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
 import org.ioteatime.meonghanyangserver.config.ControllerTestConfig;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
+import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,25 +17,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class CctvControllerTest extends ControllerTestConfig {
     @Autowired private JwtUtils jwtUtils;
-    //    @Autowired private UserRepository userRepository;
+    @Autowired private MemberRepository memberRepository;
     @Autowired private CctvRepository cctvRepository;
     @Autowired private GroupRepository groupRepository;
     @Autowired private GroupMemberRepository deviceRepository;
 
     private String accessToken;
-
-    //    private UserEntity user;
+    private MemberEntity member;
 
     @BeforeEach
     public void beforeEach() {
-        //        user =
-        //                UserEntity.builder()
-        //                        .email("test@gmail.com")
-        //                        .nickname("test")
-        //                        .password("testpassword")
-        //                        .build();
-        //        userRepository.save(user);
-        //        accessToken = jwtUtils.includeBearer(jwtUtils.generateAccessToken(user));
+        member =
+                MemberEntity.builder()
+                        .email("test@gmail.com")
+                        .nickname("test")
+                        .password("testpassword")
+                        .build();
+        memberRepository.save(member);
+        accessToken = jwtUtils.includeBearer(jwtUtils.generateAccessToken(member));
     }
 
     @Test
@@ -41,9 +42,9 @@ class CctvControllerTest extends ControllerTestConfig {
         //        GroupEntity group = GroupEntity.builder().groupName("testgroup").build();
         //        groupRepository.save(group);
         //
-        //        GroupMemberEntity device2 =
-        //                GroupMemberEntity.builder()
-        //                        .user(user)
+        //        DeviceEntity device2 =
+        //                DeviceEntity.builder()
+        //                        .member(member)
         //                        .group(group)
         //                        .deviceUuid("test2")
         //                        .role(DeviceRole.ROLE_CCTV)
