@@ -20,7 +20,7 @@ public class WithCustomMockUserSecurityContextFactory
                 new UsernamePasswordAuthenticationToken(
                         customUserDetail, null, customUserDetail.getAuthorities());
         SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(token);
+        //        context.setAuthentication(token);
         return context;
     }
 }

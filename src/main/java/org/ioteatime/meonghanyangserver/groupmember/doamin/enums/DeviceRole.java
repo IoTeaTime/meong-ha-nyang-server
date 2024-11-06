@@ -1,4 +1,4 @@
-package org.ioteatime.meonghanyangserver.device.doamin.enums;
+package org.ioteatime.meonghanyangserver.groupmember.doamin.enums;
 
 import lombok.AllArgsConstructor;
 

@@ -2,6 +2,7 @@ package org.ioteatime.meonghanyangserver.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.kinesisvideo.AmazonKinesisVideo;
 import com.amazonaws.services.kinesisvideo.AmazonKinesisVideoClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ public class AwsConfig {
                 };
 
         return AmazonKinesisVideoClient.builder()
+                .withRegion(Regions.AP_NORTHEAST_2)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }

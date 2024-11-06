@@ -7,7 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ioteatime.meonghanyangserver.device.doamin.DeviceEntity;
+import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -29,5 +30,8 @@ public class GroupEntity {
     @Column @CreatedDate private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "group")
-    private List<DeviceEntity> deviceEntities;
+    private List<GroupMemberEntity> groupMemberEntities;
+
+    @OneToMany(mappedBy = "group")
+    private List<CctvEntity> cctvEntities;
 }

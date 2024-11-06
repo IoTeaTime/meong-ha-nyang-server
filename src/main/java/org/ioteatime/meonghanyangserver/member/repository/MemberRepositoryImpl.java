@@ -1,6 +1,6 @@
 package org.ioteatime.meonghanyangserver.member.repository;
 
-import static org.ioteatime.meonghanyangserver.device.doamin.QDeviceEntity.deviceEntity;
+// import static org.ioteatime.meonghanyangserver.groupmember.doamin.QDeviceEntity.deviceEntity;
 import static org.ioteatime.meonghanyangserver.member.domain.QMemberEntity.memberEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -29,7 +29,8 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     @Transactional
     public void deleteById(Long memberId) {
-        queryFactory.delete(deviceEntity).where(deviceEntity.member.id.eq(memberId)).execute();
+        //
+        // queryFactory.delete(deviceEntity).where(deviceEntity.member.id.eq(memberId)).execute();
 
         queryFactory.delete(memberEntity).where(memberEntity.id.eq(memberId)).execute();
     }
