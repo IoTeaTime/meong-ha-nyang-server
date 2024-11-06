@@ -13,8 +13,6 @@ entryPoints:
     address: ":80"
   websecure:
     address: ":443"
-  other:
-    address: ":8080"
 
 certificatesResolvers:
   myresolver:
@@ -32,6 +30,5 @@ http:
       # won't listen to entry point web
       entryPoints:
         - "websecure"
-        - "other"
       rule: "Host(`api.test-wonchae.p-e.kr`)"
       service: "server"
