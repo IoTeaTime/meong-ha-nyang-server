@@ -39,7 +39,7 @@ public class GroupMemberService {
     public GroupInfoResponse getUserGroupInfo(Long memberId) {
         GroupMemberEntity groupMember =
                 groupMemberRepository
-                        .findByDeviceId(memberId)
+                        .findByMemberId(memberId)
                         .orElseThrow(
                                 () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
 
@@ -49,7 +49,7 @@ public class GroupMemberService {
     public CctvInviteResponse generateCctvInvite(Long memberId) {
         GroupMemberEntity groupMember =
                 groupMemberRepository
-                        .findByDeviceId(memberId)
+                        .findByMemberId(memberId)
                         .orElseThrow(
                                 () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
         String kvsChannelName = kvsChannelNameGenerator.generateUniqueKvsChannelName();
@@ -58,7 +58,7 @@ public class GroupMemberService {
     }
 
     public GroupEntity getGroup(Long memberId) {
-        return Optional.ofNullable(groupMemberRepository.findDevice(memberId))
+        return Optional.ofNullable(groupMemberRepository.findGroupMember(memberId))
                 .orElseThrow(() -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
     }
 }
