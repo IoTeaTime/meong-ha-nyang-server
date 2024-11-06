@@ -5,7 +5,7 @@ import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 
 public interface GroupMemberRepository {
-    GroupMemberEntity createGroupMember(GroupMemberEntity groupMemberEntity);
+    GroupMemberEntity save(GroupMemberEntity groupMemberEntity);
 
     boolean existsGroupMember(Long memberId);
 
@@ -13,9 +13,7 @@ public interface GroupMemberRepository {
 
     GroupEntity findGroupMember(Long memberId);
 
-    boolean isParcitipantUserId(Long userId);
-
     void deleteById(Long id);
 
-    GroupMemberEntity save(GroupMemberEntity device);
+    boolean isMasterMember(Long memberId);
 }
