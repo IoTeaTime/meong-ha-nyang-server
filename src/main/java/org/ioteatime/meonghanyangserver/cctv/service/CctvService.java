@@ -8,7 +8,7 @@ import org.ioteatime.meonghanyangserver.clients.kvs.KvsClient;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.type.CctvErrorType;
-import org.ioteatime.meonghanyangserver.device.repository.DeviceRepository;
+import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class CctvService {
     private final KvsClient kvsClient;
     private final CctvRepository cctvRepository;
-    private final DeviceRepository deviceRepository;
+    private final GroupMemberRepository deviceRepository;
 
     @Transactional
     public void deleteById(Long userId, Long cctvId) {

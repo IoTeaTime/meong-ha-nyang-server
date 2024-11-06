@@ -1,9 +1,9 @@
-package org.ioteatime.meonghanyangserver.device.doamin.enums;
+package org.ioteatime.meonghanyangserver.groupmember.doamin.enums;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum DeviceRole {
+public enum GroupMemberRole {
     ROLE_USER("USER"),
     ROLE_MASTER("MASTER"),
     ROLE_PARTICIPANT("PARTICIPANT"),

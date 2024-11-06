@@ -1,41 +1,37 @@
-package org.ioteatime.meonghanyangserver.device.doamin;
+package org.ioteatime.meonghanyangserver.groupmember.doamin;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
-import org.ioteatime.meonghanyangserver.device.doamin.enums.DeviceRole;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 
 @Data
 @Entity
-@Table(name = "device")
+@Table(name = "group_member")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DeviceEntity {
+public class GroupMemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 10)
     @Enumerated(value = EnumType.STRING)
-    private DeviceRole role;
+    private GroupMemberRole role;
 
-    @Column(nullable = false, length = 150)
-    private String deviceUuid;
+    @Column(nullable = false, length = 200)
+    private String thingId;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
+    @JoinColumn(nullable = false)
     private GroupEntity group;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", unique = true)
+    @JoinColumn(nullable = false)
     private MemberEntity member;
-
-    @OneToOne(mappedBy = "device")
-    private CctvEntity cctv;
 }

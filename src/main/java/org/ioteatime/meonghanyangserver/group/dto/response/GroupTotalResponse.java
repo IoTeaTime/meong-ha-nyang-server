@@ -6,12 +6,12 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
-import org.ioteatime.meonghanyangserver.device.dto.response.DeviceInfoResponse;
+import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberInfoResponse;
 
 @Schema(description = "그룹 통합 정보 응답")
 public record GroupTotalResponse(
         @NotNull Long groupId,
         @NotBlank String groupName,
         @NotNull LocalDateTime createdAt,
-        List<DeviceInfoResponse> groupUser,
+        List<GroupMemberInfoResponse> groupUser,
         List<CctvInfoResponse> cctv) {}
