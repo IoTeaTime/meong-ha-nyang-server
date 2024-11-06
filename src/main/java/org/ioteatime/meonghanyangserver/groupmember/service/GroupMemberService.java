@@ -1,6 +1,5 @@
 package org.ioteatime.meonghanyangserver.groupmember.service;
 
-import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
