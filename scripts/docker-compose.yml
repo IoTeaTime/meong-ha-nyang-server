@@ -1,50 +1,25 @@
-version: "3.8"
+version: "3.3"
 
 services:
   traefik:
-    image: traefik:v3.1.4
+    image: "traefik:v3.2"
+    container_name: "traefik"
     command:
-      - --api.insecure=true
-      - --api.dashboard=true
-      - --log.level=INFO
-      #- --log.filepath=/var/log/traefik.log
-      - --accesslog=true
-      #- --accesslog.filepath=/var/log/traefik-access.log
-      - --providers.docker.network=mhn-net
-      - --providers.docker.exposedByDefault=false
-      - --entrypoints.web.address=:80
-      - --entrypoints.web.http.redirections.entrypoint.to=websecure
-      - --entryPoints.web.http.redirections.entrypoint.scheme=https
-      - --entrypoints.websecure.address=:443
-      # remove next line when using Traefik v2
-      - --entrypoints.websecure.asDefault=true
-      - --entrypoints.websecure.http.tls.certresolver=letsencrypt
-      - --certificatesresolvers.letsencrypt.acme.email=meonghanyang@gmail.com
-      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
-      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=meonghanyang@example.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
-      - target: 443
-        published: 443
-        protocol: tcp
-        mode: host
-      - target: 80
-        published: 80
-        protocol: tcp
-        mode: host
-      - target: 8080
-        published: 8000
-        protocol: tcp
-        mode: host
+      - "443:443"
+      - "8000:8080"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./config/acme.json:/letsencrypt/acme.json"
-    labels:
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/,test2:$$apr1$$d9hr9HBB$$4HxwgUir3HP4EsggP/QNo0"
-      - "traefik.docker.network=mhn-net"
-    networks:
-      - mhn-net
+      - "./config:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
   server:
     image: ${IMAGE_FULL_URL}
@@ -59,12 +34,9 @@ services:
       - "./client_secret.json:/client_secret.json"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.server.loadbalancer.server.port=8080"
-      - "traefik.http.routers.server.entrypoints=websecure"
-      - "traefik.http.routers.server.rule=Host(`api.test-wonchae.p-e.kr`)"
-      - "traefik.http.routers.server.tls=true"
-      - "traefik.http.routers.server.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=mhn-net"
+      - "traefik.http.routers.whoami.rule=Host(`api.test-wonchae.p-e.kr`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
     networks:
       - mhn-net
 
