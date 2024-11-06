@@ -2,7 +2,7 @@ name: Production 배포
 on:
   push:
     branches:
-      - feature/76-kan-131-cicd
+      - main
 env:
   DOCKERHUB_USERNAME: meonghanyang
   DOCKERHUB_IMAGE_NAME: server
