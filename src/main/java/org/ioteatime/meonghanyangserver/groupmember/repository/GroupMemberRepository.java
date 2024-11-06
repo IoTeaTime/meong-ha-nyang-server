@@ -18,4 +18,6 @@ public interface GroupMemberRepository {
     void deleteById(Long id);
 
     GroupMemberEntity save(GroupMemberEntity device);
+
+    GroupMemberEntity findByGroupIdAndMemberIdAndRole(Long memberId, Long groupId);
 }

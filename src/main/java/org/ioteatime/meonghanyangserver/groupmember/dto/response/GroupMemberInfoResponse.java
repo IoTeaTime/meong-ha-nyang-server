@@ -7,6 +7,7 @@ import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole
 
 @Schema(description = "디바이스 정보 응답")
 public record GroupMemberInfoResponse(
+        @NotNull Long groupMemberId,
         @NotNull Long memberId,
         @NotBlank String nickname,
         @NotBlank String thingId,

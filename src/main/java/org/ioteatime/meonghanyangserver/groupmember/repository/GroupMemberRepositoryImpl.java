@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -64,5 +65,26 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     @Override
     public GroupMemberEntity save(GroupMemberEntity device) {
         return jpaGroupMemberRepository.save(device);
+    }
+
+    @Override
+    public GroupMemberEntity findByGroupIdAndMemberIdAndRole(Long memberId, Long groupId) {
+        return jpaQueryFactory
+                .select(groupMemberEntity)
+                .from(groupMemberEntity)
+                .where(
+                        groupMemberEntity
+                                .group
+                                .id
+                                .eq(groupId)
+                                .and(
+                                        groupMemberEntity
+                                                .member
+                                                .id
+                                                .eq(memberId)
+                                                .and(
+                                                        groupMemberEntity.role.eq(
+                                                                GroupMemberRole.ROLE_MASTER))))
+                .fetchOne();
     }
 }
