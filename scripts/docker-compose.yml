@@ -20,6 +20,8 @@ services:
     volumes:
       - "./config:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - mhn-net
 
   server:
     image: ${IMAGE_FULL_URL}
