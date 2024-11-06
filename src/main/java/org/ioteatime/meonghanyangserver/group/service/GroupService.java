@@ -6,9 +6,6 @@ import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
-import org.ioteatime.meonghanyangserver.device.doamin.enums.DeviceRole;
-import org.ioteatime.meonghanyangserver.device.repository.JpaDeviceRepository;
-import org.ioteatime.meonghanyangserver.device.service.DeviceService;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.dto.request.CreateGroupRequest;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
@@ -16,6 +13,9 @@ import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.ioteatime.meonghanyangserver.group.mapper.GroupEntityMapper;
 import org.ioteatime.meonghanyangserver.group.mapper.GroupResponseMapper;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.DeviceRole;
+import org.ioteatime.meonghanyangserver.groupmember.repository.JpaGroupMemberRepository;
+import org.ioteatime.meonghanyangserver.groupmember.service.GroupMemberService;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -24,9 +24,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GroupService {
     private final GroupRepository groupRepository;
-    private final DeviceService deviceService;
+    private final GroupMemberService deviceService;
     private final MemberRepository memberRepository;
-    private final JpaDeviceRepository groupUserRepository;
+    private final JpaGroupMemberRepository groupUserRepository;
 
     // create group
     public CreateGroupResponse createGroup(Long memberId, CreateGroupRequest createGroupRequest) {

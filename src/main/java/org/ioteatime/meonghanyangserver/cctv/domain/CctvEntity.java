@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ioteatime.meonghanyangserver.device.doamin.DeviceEntity;
+import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 
 @Data
 @Entity
@@ -21,15 +21,24 @@ public class CctvEntity {
     @Column(nullable = false, length = 100)
     private String kvsChannelName;
 
-    @OneToOne
-    @JoinColumn(name = "device_id")
-    private DeviceEntity device;
+    @Column(nullable = false, length = 200)
+    private String thingId;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private GroupEntity group;
 
     @Builder
-    public CctvEntity(Long id, String cctvNickname, String kvsChannelName, DeviceEntity device) {
+    public CctvEntity(
+            Long id,
+            String cctvNickname,
+            String kvsChannelName,
+            String thingId,
+            GroupEntity group) {
         this.id = id;
         this.cctvNickname = cctvNickname;
         this.kvsChannelName = kvsChannelName;
-        this.device = device;
+        this.thingId = thingId;
+        this.group = group;
     }
 }
