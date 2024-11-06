@@ -99,4 +99,3 @@ jobs:
             docker compose down --remove-orphans
             docker system prune -f
             docker compose up --build -d
-            docker rmi $(docker images -q)
