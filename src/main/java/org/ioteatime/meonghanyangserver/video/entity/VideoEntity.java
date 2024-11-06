@@ -17,7 +17,7 @@ public class VideoEntity {
     private String videoName;
 
     @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
+    @JoinColumn(nullable = false)
     private GroupEntity group;
 
     @Column(nullable = false, length = 100)
