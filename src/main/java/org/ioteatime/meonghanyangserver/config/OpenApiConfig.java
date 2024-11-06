@@ -33,7 +33,7 @@ public class OpenApiConfig {
 
         Server productionServer = new Server();
         productionServer.setDescription("Production Server");
-        productionServer.setUrl("https://api.meonghanyang.kro.kr");
+        productionServer.setUrl("https://my-server-name.com");
 
         Server localServer = new Server();
         localServer.setDescription("Local Server");
