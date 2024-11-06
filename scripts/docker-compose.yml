@@ -37,6 +37,7 @@ services:
       - "traefik.http.routers.server.rule=Host(`api.test-wonchae.p-e.kr`)"
       - "traefik.http.routers.server.entrypoints=websecure"
       - "traefik.http.routers.server.tls.certresolver=myresolver"
+      - "traefik.http.services.server.loadbalancer.server.port=8080"
     networks:
       - mhn-net
 
