@@ -69,7 +69,8 @@ dependencies {
 spotless {
     java {
         target('**/*.java')
-        targetExclude('src/*/generated/**/*.*')
+        targetExclude('src/main/generated/**/*.java')
+
         importOrder()
         removeUnusedImports()
         googleJavaFormat().aosp().formatJavadoc(false)
@@ -80,12 +81,12 @@ spotless {
 
 def generated = file("src/main/generated")
 
-clean {
-    delete generated
-}
-
 tasks.withType(JavaCompile) {
     options.generatedSourceOutputDirectory = file(generated)
+}
+
+clean {
+    delete generated
 }
 
 // Add generated sources to the main source set
