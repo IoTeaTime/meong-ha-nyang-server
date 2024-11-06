@@ -25,7 +25,7 @@ public class CctvEntity {
     private String thingId;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
+    @JoinColumn(nullable = false)
     private GroupEntity group;
 
     @Builder

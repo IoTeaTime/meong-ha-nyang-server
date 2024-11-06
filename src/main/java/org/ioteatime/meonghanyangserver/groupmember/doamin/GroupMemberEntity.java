@@ -28,10 +28,10 @@ public class GroupMemberEntity {
     private String thingId;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
+    @JoinColumn(nullable = false)
     private GroupEntity group;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", unique = true)
+    @JoinColumn(nullable = false)
     private MemberEntity member;
 }
