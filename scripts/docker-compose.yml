@@ -34,9 +34,9 @@ services:
       - "./client_secret.json:/client_secret.json"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`api.test-wonchae.p-e.kr`)"
-      - "traefik.http.routers.whoami.entrypoints=websecure"
-      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
+      - "traefik.http.routers.server.rule=Host(`api.test-wonchae.p-e.kr`)"
+      - "traefik.http.routers.server.entrypoints=websecure"
+      - "traefik.http.routers.server.tls.certresolver=myresolver"
     networks:
       - mhn-net
 
