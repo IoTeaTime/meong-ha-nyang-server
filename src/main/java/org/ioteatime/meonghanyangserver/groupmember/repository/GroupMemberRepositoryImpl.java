@@ -1,6 +1,6 @@
 package org.ioteatime.meonghanyangserver.groupmember.repository;
 
-// import static org.ioteatime.meonghanyangserver.groupmember.doamin.QDeviceEntity.deviceEntity;
+import static org.ioteatime.meonghanyangserver.groupmember.doamin.QGroupMemberEntity.groupMemberEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
@@ -27,18 +27,17 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     }
 
     @Override
-    public Optional<GroupMemberEntity> findByDeviceId(Long memberId) {
+    public Optional<GroupMemberEntity> findByMemberId(Long memberId) {
         return jpaGroupMemberRepository.findByMemberId(memberId);
     }
 
     @Override
-    public GroupEntity findDevice(Long memberId) {
-        //        return jpaQueryFactory
-        //                .select(deviceEntity.group)
-        //                .from(deviceEntity)
-        //                .where(deviceEntity.member.id.eq(memberId))
-        //                .fetchOne();
-        return null;
+    public GroupEntity findGroupMember(Long memberId) {
+        return jpaQueryFactory
+                .select(groupMemberEntity.group)
+                .from(groupMemberEntity)
+                .where(groupMemberEntity.member.id.eq(memberId))
+                .fetchOne();
     }
 
     @Override
