@@ -11,10 +11,10 @@ import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.exception.UnauthorizedException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
-import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
-import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
-import org.ioteatime.meonghanyangserver.user.dto.CustomUserDetail;
-import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
+import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
+import org.ioteatime.meonghanyangserver.member.dto.CustomUserDetail;
+import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,8 +27,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
-    private final UserRepository userRepository;
-    private final GroupUserRepository groupUserRepository;
+    private final MemberRepository memberRepository;
+    private final GroupMemberRepository deviceRepository;
 
     @Override
     protected void doFilterInternal(
@@ -57,8 +57,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throw new UnauthorizedException(AuthErrorType.HEADER_INVALID);
         }
         if (jwtId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserEntity entity =
-                    userRepository
+            MemberEntity entity =
+                    memberRepository
                             .findById(jwtId)
                             .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
 

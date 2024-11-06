@@ -8,7 +8,7 @@ import org.ioteatime.meonghanyangserver.auth.dto.request.VerifyEmailRequest;
 import org.ioteatime.meonghanyangserver.auth.service.AuthService;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.AuthSuccessType;
-import org.ioteatime.meonghanyangserver.user.dto.request.JoinRequest;
+import org.ioteatime.meonghanyangserver.member.dto.request.JoinRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

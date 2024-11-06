@@ -15,43 +15,43 @@ import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.exception.UnauthorizedException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
-import org.ioteatime.meonghanyangserver.group.repository.groupuser.GroupUserRepository;
+import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
+import org.ioteatime.meonghanyangserver.member.dto.request.JoinRequest;
+import org.ioteatime.meonghanyangserver.member.dto.response.MemberSimpleResponse;
+import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.ioteatime.meonghanyangserver.redis.EmailCode;
 import org.ioteatime.meonghanyangserver.redis.EmailCodeRepository;
 import org.ioteatime.meonghanyangserver.redis.RefreshToken;
 import org.ioteatime.meonghanyangserver.redis.RefreshTokenRepository;
-import org.ioteatime.meonghanyangserver.user.domain.UserEntity;
-import org.ioteatime.meonghanyangserver.user.dto.request.JoinRequest;
-import org.ioteatime.meonghanyangserver.user.dto.response.UserSimpleResponse;
-import org.ioteatime.meonghanyangserver.user.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final GoogleMailClient googleMailClient;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtils jwtUtils;
     private final EmailCodeRepository emailCodeRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final GroupUserRepository groupUserRepository;
+    private final GroupMemberRepository deviceRepository;
 
     public LoginResponse login(LoginRequest loginRequest) {
-        UserEntity userEntity =
-                userRepository
+        MemberEntity memberEntity =
+                memberRepository
                         .findByEmail(loginRequest.email())
                         .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
 
         boolean passwordMatch =
-                bCryptPasswordEncoder.matches(loginRequest.password(), userEntity.getPassword());
+                bCryptPasswordEncoder.matches(loginRequest.password(), memberEntity.getPassword());
         if (!passwordMatch) {
             throw new BadRequestException(AuthErrorType.PASSWORD_NOT_MATCH);
         }
 
-        String accessToken = jwtUtils.generateAccessToken(userEntity);
-        String refreshToken = jwtUtils.generateRefreshToken(userEntity);
+        String accessToken = jwtUtils.generateAccessToken(memberEntity);
+        String refreshToken = jwtUtils.generateRefreshToken(memberEntity);
 
         if (accessToken.isEmpty() || refreshToken.isEmpty()) {
             throw new NotFoundException(AuthErrorType.TOKEN_NOT_FOUND);
@@ -62,15 +62,15 @@ public class AuthService {
         accessToken = jwtUtils.includeBearer(accessToken);
         refreshToken = jwtUtils.includeBearer(refreshToken);
 
-        return AuthResponseMapper.from(userEntity.getId(), accessToken, refreshToken);
+        return AuthResponseMapper.from(memberEntity.getId(), accessToken, refreshToken);
     }
 
-    public UserSimpleResponse joinProcess(JoinRequest userDto) {
+    public MemberSimpleResponse joinProcess(JoinRequest userDto) {
         String encodedPassword = bCryptPasswordEncoder.encode(userDto.getPassword());
         verifyEmail(userDto.getEmail());
-        UserEntity user = userRepository.save(AuthEntityMapper.of(userDto, encodedPassword));
+        MemberEntity member = memberRepository.save(AuthEntityMapper.of(userDto, encodedPassword));
 
-        return AuthResponseMapper.from(user.getId(), user.getEmail());
+        return AuthResponseMapper.from(member.getId(), member.getEmail());
     }
 
     public void send(String email) {
@@ -103,7 +103,7 @@ public class AuthService {
     }
 
     public void verifyEmail(String email) {
-        if (userRepository.findByEmail(email).isPresent()) {
+        if (memberRepository.findByEmail(email).isPresent()) {
             throw new BadRequestException(AuthErrorType.EMAIL_DUPLICATED);
         }
     }
