@@ -4,12 +4,13 @@ services:
   traefik:
     image: traefik:v3.1.4
     command:
+      - --api.insecure=true
       - --api.dashboard=true
       - --log.level=INFO
       #- --log.filepath=/var/log/traefik.log
       - --accesslog=true
       #- --accesslog.filepath=/var/log/traefik-access.log
-      - --providers.docker.network=proxy
+      - --providers.docker.network=mhn-net
       - --providers.docker.exposedByDefault=false
       - --entrypoints.web.address=:80
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
@@ -21,7 +22,6 @@ services:
       - --certificatesresolvers.letsencrypt.acme.email=meonghanyang@gmail.com
       - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-      - --providers.docker.network=mhn-net
     ports:
       - target: 443
         published: 443
