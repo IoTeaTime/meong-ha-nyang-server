@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GroupMemberController implements GroupMemberApi {
     private final GroupMemberService groupMemberService;
 
-    @DeleteMapping("/user-edit/{groupId}/{groupMemberId}")
+    @DeleteMapping("/{groupId}/member/{groupMemberId}")
     public Api<?> deleteMasterGroupMember(
             @LoginMember Long memberId,
             @PathVariable Long groupId,
