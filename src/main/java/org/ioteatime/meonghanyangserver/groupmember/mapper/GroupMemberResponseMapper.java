@@ -6,6 +6,7 @@ import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberInfo
 public class GroupMemberResponseMapper {
     public static GroupMemberInfoResponse from(GroupMemberEntity groupMemberEntity) {
         return new GroupMemberInfoResponse(
+                groupMemberEntity.getId(),
                 groupMemberEntity.getMember().getId(),
                 groupMemberEntity.getMember().getNickname(),
                 groupMemberEntity.getThingId(),
