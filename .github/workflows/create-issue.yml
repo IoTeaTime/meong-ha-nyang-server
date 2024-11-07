@@ -214,7 +214,4 @@ jobs:
                   id
                 }
               }
-            }' -f project=$PROJECT_ID -f item=$ITEM_ID \
-          -f team_field=$TEAM_FIELD_ID -f team_value=$SERVER_OPTION_ID \
-          -f status_field=$STATUS_FIELD_ID -f status_value=$IN_PROGRESS_OPTION_ID \
-          -f start_date_field=$START_DATE_FIELD_ID -f start_date_value=$DATE --silent
+            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f team_field=$TEAM_FIELD_ID -f team_value=$SERVER_OPTION_ID -f status_field=$STATUS_FIELD_ID -f status_value=$IN_PROGRESS_OPTION_ID -f start_date_field=$START_DATE_FIELD_ID -f start_date_value=$DATE --silent
