@@ -14,3 +14,92 @@ jobs:
       - uses: pozil/auto-assign-issue@v2
         with:
           assignees: ${{ github.actor }}
+
+      # https://docs.github.com/en/issues/trying-out-the-new-projects-experience/automating-projects
+      # https://docs.github.com/en/issues/trying-out-the-new-projects-experience/using-the-api-to-manage-projects#finding-the-node-id-of-a-user-project
+      - name: 프로젝트 정보 최근 5개 가져오기
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORGANIZATION: IoTeaTime
+          PROJECT_NUMBER: 2
+        run: |
+          gh api graphql -f query='
+            query($org: String!, $number: Int!) {
+              organization(login: $org){
+                projectNext(number: $number) {
+                  id
+                  fields(first:5) {
+                    nodes {
+                      id
+                      name
+                      settings
+                    }
+                  }
+                }
+              }
+            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+
+          echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
+          echo 'COMPONENT_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Component") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'PRIORITY_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Priority") | .id' project_data.json) >> $GITHUB_ENV
+
+          echo 'BACKENDPORTAL_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Component") |.settings | fromjson.options[] | select(.name=="Backend") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'PULLREQUEST_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Priority") |.settings | fromjson.options[] | select(.name=="High") |.id' project_data.json) >> $GITHUB_ENV
+
+      - name: 프로젝트에 이슈 추가
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_ID: ${{ github.event.issue.node_id }}
+        run: |
+          item_id="$( gh api graphql -f query='
+            mutation($project:ID!, $issueid:ID!) {
+              addProjectNextItem(input: {projectId: $project, contentId: $issueid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f issueid=$ISSUE_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
+          
+          echo 'ITEM_ID='$item_id >> $GITHUB_ENV    
+
+      - name: 오늘 날짜 가져오기
+        run: echo "DATE=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
+
+      - name: 커스텀 필드 업데이트
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api graphql -f query='
+            mutation (
+              $project: ID!
+              $item: ID!
+              $status_field: ID!
+              $status_value: String!
+              $date_field: ID!
+              $date_value: Date!
+            ) {
+              set_status: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $status_field
+                value: {
+                  singleSelectOptionId: $status_value
+                  }
+              }) {
+                projectV2Item {
+                  id
+                  }
+              }
+              set_date_posted: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $date_field
+                value: {
+                  date: $date_value
+                }
+              }) {
+                projectV2Item {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value=${{ env.TODO_OPTION_ID }} -f date_field=$DATE_FIELD_ID -f date_value=$DATE --silent
