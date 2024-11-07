@@ -16,4 +16,6 @@ public interface GroupMemberRepository {
     void deleteById(Long id);
 
     boolean isMasterMember(Long memberId);
+
+    GroupMemberEntity findByGroupIdAndMemberIdAndRole(Long memberId, Long groupId);
 }

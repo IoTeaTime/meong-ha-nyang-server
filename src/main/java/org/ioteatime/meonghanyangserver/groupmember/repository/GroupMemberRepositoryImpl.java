@@ -60,4 +60,24 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
                 .fetch()
                 .isEmpty();
     }
+
+    @Override
+    public GroupMemberEntity findByGroupIdAndMemberIdAndRole(Long memberId, Long groupId) {
+        return jpaQueryFactory
+                .selectFrom(groupMemberEntity)
+                .where(
+                        groupMemberEntity
+                                .group
+                                .id
+                                .eq(groupId)
+                                .and(
+                                        groupMemberEntity
+                                                .member
+                                                .id
+                                                .eq(memberId)
+                                                .and(
+                                                        groupMemberEntity.role.eq(
+                                                                GroupMemberRole.ROLE_MASTER))))
+                .fetchOne();
+    }
 }
