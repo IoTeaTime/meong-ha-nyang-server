@@ -5,15 +5,6 @@ title: '🍎 이슈 제목'
 assignees:
   - octocat
 body:
-  - type: input
-    id: parentKey
-    attributes:
-      label: '🎫 Parent Ticket Number'
-      description: '상위 작업의 Ticket Number를 기입해주세요'
-      placeholder: 'KAN-27'
-    validations:
-      required: true
-
   - type: textarea
     id: description
     attributes:
