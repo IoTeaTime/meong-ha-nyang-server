@@ -1,0 +1,16 @@
+name: 이슈 설정 자동화
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  create-jira-issue:
+    permissions: write-all
+
+    name: 이슈 담당자 자동 할당
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pozil/auto-assign-issue@v2
+        with:
+          assignees: ${{ github.actor }}
