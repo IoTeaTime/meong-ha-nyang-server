@@ -1,0 +1,100 @@
+name: Jira 이슈 생성 연결 자동화
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  create-jira-issue:
+    permissions: write-all
+
+    name: Jira 이슈 생성
+    runs-on: ubuntu-latest
+    steps:
+      - name: 이슈 담당자 자동 할당
+        uses: pozil/auto-assign-issue@v2
+        with:
+          assignees: ${{ github.actor }}
+
+      - name: 원채 Jira 로그인
+        uses: atlassian/gajira-login@v3
+        if: github.actor == 'ywonchae1'
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_WONCHAE_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_WONCHAE_USER_EMAIL }}
+
+      - name: 유진 Jira 로그인
+        uses: atlassian/gajira-login@v3
+        if: github.actor == 'sseoU'
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_YOUJIN_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_YOUJIN_USER_EMAIL }}
+
+      - name: 민석 Jira 로그인
+        uses: atlassian/gajira-login@v3
+        if: github.actor == 'seok019283501'
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_MINSEOK_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_MINSEOK_USER_EMAIL }}
+
+      - name: 경재 Jira 로그인
+        uses: atlassian/gajira-login@v3
+        if: github.actor == 'bestKUFO'
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_KYONGJAE_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_KYONGJAE_USER_EMAIL }}
+
+      - name: 지인 Jira 로그인
+        uses: atlassian/gajira-login@v3
+        if: github.actor == 'OziinG'
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_JIIN_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_JIIN_USER_EMAIL }}
+
+      - name: Main 브랜치 체크아웃
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Issue Parser
+        uses: stefanbuck/github-issue-praser@v3
+        id: issue-parser
+        with:
+          template-path: '.github/ISSUE_TEMPLATE/2-feature-issue-form.yml'
+
+      - name: 이슈 Markdown 문법을 Jira 문법으로 변환
+        uses: peter-evans/jira2md@v1
+        id: md2jira
+        with:
+          input-text: |
+            ### Github Issue Link
+            - ${{ github.event.issue.html_url }}
+
+            ${{ github.event.issue.body }}
+          mode: md2jira
+
+      - name: Jira에 이슈 생성
+        id: create
+        uses: atlassian/gajira-create@v3
+        with:
+          project: KAN
+          issuetype: Task
+          summary: "${{ github.event.issue.title }}"
+          description: "${{ steps.md2jira.outputs.output-text }}"
+          fields: |
+            {
+              "parent": {
+                "key": "${{ steps.issue-parser.outputs.issueparser_parentKey }}"
+              }
+            }
+
+      - name: 이슈 제목 수정
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: "update-issue"
+          title: "${{ steps.create.outputs.issue }} ${{ github.event.issue.title }}"
