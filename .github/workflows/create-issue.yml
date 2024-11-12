@@ -1,4 +1,4 @@
-name: 이슈 생성 연결 자동화
+name: 프로젝트 이슈 생성 연결 자동화
 on:
   issues:
     types:
