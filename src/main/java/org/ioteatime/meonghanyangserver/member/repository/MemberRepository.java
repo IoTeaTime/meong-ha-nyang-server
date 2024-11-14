@@ -11,4 +11,6 @@ public interface MemberRepository {
     void deleteById(Long memberId);
 
     MemberEntity save(MemberEntity MemberEntity);
+
+    Optional<MemberEntity> updateFcmTokenById(Long memberId, String token);
 }
