@@ -7,6 +7,7 @@ token:
 google:
   service-account: ${GCP_SERVICE_ACCOUNT}
   official-gmail: ${OFFICIAL_GMAIL}
+  application-credentials: ${GOOGLE_APPLICATION_CREDENTIALS}
 
 aws:
   kvs:
