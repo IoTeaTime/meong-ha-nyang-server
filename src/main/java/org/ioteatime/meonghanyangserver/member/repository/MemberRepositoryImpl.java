@@ -1,6 +1,5 @@
 package org.ioteatime.meonghanyangserver.member.repository;
 
-// import static org.ioteatime.meonghanyangserver.groupmember.doamin.QDeviceEntity.deviceEntity;
 import static org.ioteatime.meonghanyangserver.member.domain.QMemberEntity.memberEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -8,7 +7,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,16 +25,17 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    @Transactional
     public void deleteById(Long memberId) {
-        //
-        // queryFactory.delete(deviceEntity).where(deviceEntity.member.id.eq(memberId)).execute();
-
-        queryFactory.delete(memberEntity).where(memberEntity.id.eq(memberId)).execute();
+        jpaMemberRepository.deleteById(memberId);
     }
 
     @Override
     public MemberEntity save(MemberEntity memberEntity) {
         return jpaMemberRepository.save(memberEntity);
+    }
+
+    @Override
+    public Optional<MemberEntity> updateFcmTokenById(Long memberId, String token) {
+        return jpaMemberRepository.findById(memberId).map(entity -> entity.updateFcmToken(token));
     }
 }
