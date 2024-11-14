@@ -11,6 +11,11 @@ jobs:
     name: 이슈 생성 - 프로젝트 연결 자동화
     runs-on: ubuntu-latest
     steps:
+      - name: 이슈 담당자 자동 할당
+        uses: pozil/auto-assign-issue@v2
+        with:
+          assignees: ${{ github.actor }}
+
       - name: 프로젝트 정보 가져오기
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
