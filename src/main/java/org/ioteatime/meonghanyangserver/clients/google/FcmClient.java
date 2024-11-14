@@ -4,13 +4,13 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import org.ioteatime.meonghanyangserver.common.exception.InternalServerException;
 import org.ioteatime.meonghanyangserver.common.type.FcmErrorType;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,8 +20,7 @@ public class FcmClient {
 
     public void init() {
         try {
-            InputStream refreshToken =
-                    new ClassPathResource(applicationCredentials).getInputStream();
+            InputStream refreshToken = new FileInputStream(applicationCredentials);
 
             FirebaseOptions options =
                     FirebaseOptions.builder()
