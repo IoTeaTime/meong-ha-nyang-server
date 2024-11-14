@@ -1,13 +1,10 @@
-name: 이슈 생성 연결 자동화
+name: 프로젝트 이슈 생성 연결 자동화
 on:
   issues:
     types:
       - opened
 
 jobs:
-  create-jira-issue:
-    permissions: write-all
-
   create-project-issue:
     permissions: write-all
 
@@ -49,10 +46,10 @@ jobs:
           echo 'START_DATE_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Start date") | .id' project_data.json) >> $GITHUB_ENV
           
           echo 'TEAM_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Team") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'SERVER_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Team") | .options[] | select(.name=="Server") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'SERVER_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Team") | .options[] | select(.name=="Server") | .id' project_data.json) >> $GITHUB_ENV
           
           echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'IN_PROGRESS_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name== "In progress") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'IN_PROGRESS_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name== "In progress") | .id' project_data.json) >> $GITHUB_ENV
 
       - name: 이슈를 프로젝트에 추가
         env:
@@ -124,6 +121,6 @@ jobs:
                 }
               }
             }' -f project=$PROJECT_ID -f item=$ITEM_ID \
-          -f team_field=$TEAM_FIELD_ID -f team_value=$SERVER_OPTION_ID \
-          -f status_field=$STATUS_FIELD_ID -f status_value=$IN_PROGRESS_OPTION_ID \
+          -f team_field=$TEAM_FIELD_ID -f team_value=${{ env.SERVER_OPTION_ID }} \
+          -f status_field=$STATUS_FIELD_ID -f status_value=${{ env.IN_PROGRESS_OPTION_ID }} \
           -f start_date_field=$START_DATE_FIELD_ID -f start_date_value=$DATE --silent
