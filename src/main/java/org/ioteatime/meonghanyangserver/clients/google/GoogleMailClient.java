@@ -40,10 +40,7 @@ public class GoogleMailClient {
             final NetHttpTransport HTTP_TRANSPORT, GsonFactory jsonFactory) {
         try {
             // Load client secrets.
-            InputStream in = GoogleMailClient.class.getResourceAsStream(gcpServiceAccount);
-            if (in == null) {
-                throw new FileNotFoundException("Resource not found: " + gcpServiceAccount);
-            }
+            InputStream in = new FileInputStream(gcpServiceAccount);
             GoogleClientSecrets clientSecrets =
                     GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
 
