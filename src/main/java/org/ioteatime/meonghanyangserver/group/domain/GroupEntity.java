@@ -27,6 +27,9 @@ public class GroupEntity {
     @Column(nullable = false, length = 100)
     private String groupName;
 
+    @Column(nullable = false, length = 100)
+    private String fcmTopic;
+
     @Column @CreatedDate private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "group")
