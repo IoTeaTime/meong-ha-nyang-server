@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.QGroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.springframework.stereotype.Repository;
 
@@ -106,5 +107,23 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     @Override
     public void deleteByGroupId(Long groupId) {
         jpaGroupMemberRepository.deleteByGroupId(groupId);
+    }
+
+    @Override
+    public Optional<GroupMemberEntity> findByMemberIdAndGroupId(Long memberId, Long groupId) {
+        QGroupMemberEntity groupMember = QGroupMemberEntity.groupMemberEntity;
+
+        GroupMemberEntity result =
+                jpaQueryFactory
+                        .selectFrom(groupMember)
+                        .where(
+                                groupMember
+                                        .member
+                                        .id
+                                        .eq(memberId)
+                                        .and(groupMember.group.id.eq(groupId)))
+                        .fetchOne();
+
+        return Optional.ofNullable(result);
     }
 }
