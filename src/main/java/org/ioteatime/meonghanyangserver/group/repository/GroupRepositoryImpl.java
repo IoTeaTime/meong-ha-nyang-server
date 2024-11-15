@@ -13,4 +13,9 @@ public class GroupRepositoryImpl implements GroupRepository {
     public GroupEntity save(GroupEntity groupEntity) {
         return jpaGroupRepository.save(groupEntity);
     }
+
+    @Override
+    public void deleteById(Long groupId) {
+        jpaGroupRepository.deleteById(groupId);
+    }
 }
