@@ -20,5 +20,4 @@ public interface GroupMemberApi {
             @LoginMember Long memberId,
             @PathVariable Long groupId,
             @PathVariable Long groupMemberId);
-
 }
