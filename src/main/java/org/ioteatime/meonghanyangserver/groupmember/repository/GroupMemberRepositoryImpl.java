@@ -1,6 +1,6 @@
 package org.ioteatime.meonghanyangserver.groupmember.repository;
 
-// import static org.ioteatime.meonghanyangserver.groupmember.doamin.QDeviceEntity.deviceEntity;
+import static org.ioteatime.meonghanyangserver.groupmember.doamin.QGroupMemberEntity.groupMemberEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.QGroupMemberEntity;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,7 +19,7 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public GroupMemberEntity createGroupMember(GroupMemberEntity groupMemberEntity) {
+    public GroupMemberEntity save(GroupMemberEntity groupMemberEntity) {
         return jpaGroupMemberRepository.save(groupMemberEntity);
     }
 
@@ -28,34 +29,17 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     }
 
     @Override
-    public Optional<GroupMemberEntity> findByDeviceId(Long memberId) {
+    public Optional<GroupMemberEntity> findByMemberId(Long memberId) {
         return jpaGroupMemberRepository.findByMemberId(memberId);
     }
 
     @Override
-    public GroupEntity findDevice(Long memberId) {
-        //        return jpaQueryFactory
-        //                .select(deviceEntity.group)
-        //                .from(deviceEntity)
-        //                .where(deviceEntity.member.id.eq(memberId))
-        //                .fetchOne();
-        return null;
-    }
-
-    @Override
-    public boolean isParcitipantUserId(Long userId) {
-        //        return !jpaQueryFactory
-        //                .select(deviceEntity.role)
-        //                .from(deviceEntity)
-        //                .where(
-        //                        deviceEntity
-        //                                .member
-        //                                .id
-        //                                .eq(userId)
-        //                                .and(deviceEntity.role.eq(DeviceRole.ROLE_PARTICIPANT)))
-        //                .fetch()
-        //                .isEmpty();
-        return true;
+    public GroupEntity findGroupMember(Long memberId) {
+        return jpaQueryFactory
+                .select(groupMemberEntity.group)
+                .from(groupMemberEntity)
+                .where(groupMemberEntity.member.id.eq(memberId))
+                .fetchOne();
     }
 
     @Override
@@ -64,8 +48,38 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     }
 
     @Override
-    public GroupMemberEntity save(GroupMemberEntity device) {
-        return jpaGroupMemberRepository.save(device);
+    public boolean isMasterMember(Long memberId) {
+        return !jpaQueryFactory
+                .select(groupMemberEntity.role)
+                .from(groupMemberEntity)
+                .where(
+                        groupMemberEntity
+                                .member
+                                .id
+                                .eq(memberId)
+                                .and(groupMemberEntity.role.eq(GroupMemberRole.ROLE_MASTER)))
+                .fetch()
+                .isEmpty();
+    }
+
+    @Override
+    public GroupMemberEntity findByGroupIdAndMemberIdAndRole(Long memberId, Long groupId) {
+        return jpaQueryFactory
+                .selectFrom(groupMemberEntity)
+                .where(
+                        groupMemberEntity
+                                .group
+                                .id
+                                .eq(groupId)
+                                .and(
+                                        groupMemberEntity
+                                                .member
+                                                .id
+                                                .eq(memberId)
+                                                .and(
+                                                        groupMemberEntity.role.eq(
+                                                                GroupMemberRole.ROLE_MASTER))))
+                .fetchOne();
     }
 
     @Override

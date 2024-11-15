@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 **/application-secret.properties
 /tokens/**
-**/client_secret.json
+**/**.json
 
 ### STS ###
 .apt_generated

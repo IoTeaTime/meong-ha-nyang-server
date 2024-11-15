@@ -6,6 +6,9 @@ import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
 public class CctvResponseMapper {
     public static CctvInfoResponse from(CctvEntity cctvEntity) {
         return new CctvInfoResponse(
-                cctvEntity.getId(), cctvEntity.getCctvNickname(), cctvEntity.getKvsChannelName());
+                cctvEntity.getId(),
+                cctvEntity.getCctvNickname(),
+                cctvEntity.getThingId(),
+                cctvEntity.getKvsChannelName());
     }
 }

@@ -1,9 +1,9 @@
-name: Jira 이슈 닫기
+name: Jira 이슈 닫기 연결 자동화
 on:
   issues:
     types:
       - closed
-      
+
 jobs:
   close-jira-issue:
     permissions: write-all
@@ -56,7 +56,7 @@ jobs:
         uses: atlassian/gajira-find-issue-key@master
         with:
           string: ${{ github.event.issue.title }}
-        
+
       - name: Jira 이슈 완료로 이동
         uses: atlassian/gajira-transition@v3
         with:

@@ -1,0 +1,131 @@
+name: 프로젝트 이슈 생성 연결 자동화
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  create-project-issue:
+    permissions: write-all
+
+    name: 이슈 생성 - 프로젝트 연결 자동화
+    runs-on: ubuntu-latest
+    steps:
+      - name: 이슈 담당자 자동 할당
+        uses: pozil/auto-assign-issue@v2
+        with:
+          assignees: ${{ github.actor }}
+
+      - name: 프로젝트 정보 가져오기
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          ORGANIZATION: IoTeaTime
+          PROJECT_NUMBER: 4
+        run: |
+          gh api graphql -f query='
+            query($org: String!, $number: Int!) {
+              organization(login: $org){
+                projectV2(number: $number) {
+                  id
+                  fields(first:20) {
+                    nodes {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                      }
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                        options {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+          echo 'PROJECT_ID='$(jq '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
+          
+          echo 'START_DATE_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Start date") | .id' project_data.json) >> $GITHUB_ENV
+          
+          echo 'TEAM_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Team") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'SERVER_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Team") | .options[] | select(.name=="Server") | .id' project_data.json) >> $GITHUB_ENV
+          
+          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'IN_PROGRESS_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name== "In progress") | .id' project_data.json) >> $GITHUB_ENV
+
+      - name: 이슈를 프로젝트에 추가
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          ISSUE_ID: ${{ github.event.issue.node_id }}
+        run: |
+          item_id="$( gh api graphql -f query='
+            mutation($project:ID!, $issue:ID!) {
+              addProjectV2ItemById(input: {projectId: $project, contentId: $issue}) {
+                item {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f issue=$ISSUE_ID --jq '.data.addProjectV2ItemById.item.id')"
+          echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+
+      - name: 오늘 날짜 가져오기
+        run: echo "DATE=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
+
+      - name: 커스텀 필드 업데이트 (생성 일자 추가)
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+        run: |
+          gh api graphql -f query='
+            mutation (
+              $project: ID!
+              $item: ID!
+              $team_field: ID!
+              $team_value: String!
+              $status_field: ID!
+              $status_value: String!
+              $start_date_field: ID!
+              $start_date_value: Date!
+            ) {
+              set_team_server: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $team_field
+                value: {
+                  singleSelectOptionId: $team_value
+                }
+              }) {
+                projectV2Item {
+                  id
+                }
+              }
+              set_status_in_progress: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $status_field
+                value: {
+                  singleSelectOptionId: $status_value
+                }
+              }) {
+                projectV2Item {
+                  id
+                }
+              }
+              set_start_date: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $start_date_field
+                value: {
+                  date: $start_date_value
+                }
+              }) {
+                projectV2Item {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f item=$ITEM_ID \
+          -f team_field=$TEAM_FIELD_ID -f team_value=${{ env.SERVER_OPTION_ID }} \
+          -f status_field=$STATUS_FIELD_ID -f status_value=${{ env.IN_PROGRESS_OPTION_ID }} \
+          -f start_date_field=$START_DATE_FIELD_ID -f start_date_value=$DATE --silent

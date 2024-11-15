@@ -5,19 +5,18 @@ import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 
 public interface GroupMemberRepository {
-    GroupMemberEntity createGroupMember(GroupMemberEntity deviceEntity);
+    GroupMemberEntity save(GroupMemberEntity groupMemberEntity);
 
     boolean existsGroupMember(Long memberId);
 
-    Optional<GroupMemberEntity> findByDeviceId(Long memberId);
+    Optional<GroupMemberEntity> findByMemberId(Long memberId);
 
-    GroupEntity findDevice(Long memberId);
-
-    boolean isParcitipantUserId(Long userId);
+    GroupEntity findGroupMember(Long memberId);
 
     void deleteById(Long id);
 
-    GroupMemberEntity save(GroupMemberEntity device);
-
     Optional<GroupMemberEntity> findByMemberIdAndGroupId(Long memberId, Long groupId);
+    boolean isMasterMember(Long memberId);
+
+    GroupMemberEntity findByGroupIdAndMemberIdAndRole(Long memberId, Long groupId);
 }

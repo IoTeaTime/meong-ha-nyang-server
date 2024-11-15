@@ -4,10 +4,12 @@ import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberInfoResponse;
 
 public class GroupMemberResponseMapper {
-    public static GroupMemberInfoResponse from(GroupMemberEntity deviceEntity) {
+    public static GroupMemberInfoResponse from(GroupMemberEntity groupMemberEntity) {
         return new GroupMemberInfoResponse(
-                deviceEntity.getMember().getId(),
-                deviceEntity.getMember().getNickname(),
-                deviceEntity.getRole());
+                groupMemberEntity.getId(),
+                groupMemberEntity.getMember().getId(),
+                groupMemberEntity.getMember().getNickname(),
+                groupMemberEntity.getThingId(),
+                groupMemberEntity.getRole());
     }
 }
