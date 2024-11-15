@@ -10,6 +10,7 @@ import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.RandomStringGenerator;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
+import org.ioteatime.meonghanyangserver.group.dto.request.CreateGroupRequest;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.ioteatime.meonghanyangserver.group.mapper.GroupEntityMapper;
@@ -34,10 +35,10 @@ public class GroupService {
 
     // create group
     @Transactional
-    public CreateGroupResponse createGroup(Long memberId) {
+    public CreateGroupResponse createGroup(Long memberId, CreateGroupRequest createGroupRequest) {
 
         boolean groupUserEntity = groupMemberService.existsGroupMember(memberId);
-
+        String thingId = createGroupRequest.thingId();
         if (groupUserEntity) {
             throw new BadRequestException(GroupErrorType.ALREADY_EXISTS);
         }
@@ -54,9 +55,8 @@ public class GroupService {
         GroupEntity groupEntity = GroupEntityMapper.toEntity(roomName, fcmTopic);
 
         GroupEntity newGroupEntity = groupRepository.save(groupEntity);
-        // TODO iot core 연결 완료시 thing id 추가
         groupMemberService.createGroupMember(
-                newGroupEntity, memberEntity, GroupMemberRole.ROLE_MASTER, "thing id");
+                newGroupEntity, memberEntity, GroupMemberRole.ROLE_MASTER, thingId);
 
         // FCM 토픽 구독
         fcmClient.subTopic(memberEntity.getFcmToken(), fcmTopic);
