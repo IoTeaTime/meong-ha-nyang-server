@@ -59,7 +59,7 @@ public class GroupService {
                 newGroupEntity, memberEntity, GroupMemberRole.ROLE_MASTER, "thing id");
 
         // FCM 토픽 구독
-        // fcmClient.subTopic(memberEntity.getFcmToken(), fcmTopic);
+        fcmClient.subTopic(memberEntity.getFcmToken(), fcmTopic);
 
         return GroupResponseMapper.from(newGroupEntity);
     }
