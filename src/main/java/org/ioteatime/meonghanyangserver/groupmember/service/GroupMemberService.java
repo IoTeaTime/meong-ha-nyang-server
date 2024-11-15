@@ -15,7 +15,6 @@ import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole
 import org.ioteatime.meonghanyangserver.groupmember.mapper.GroupMemberEntityMapper;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
-import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,6 +87,18 @@ public class GroupMemberService {
 
     @Transactional
     public void deleteGroupMember(Long memberId, Long groupId) {
-        groupMemberRepository.deleteByGroupIdAndMemberId(groupId, memberId);
+        GroupMemberEntity groupMember =
+                Optional.ofNullable(
+                                groupMemberRepository.findByGroupIdAndMemberId(groupId, memberId))
+                        .orElseThrow(
+                                () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
+
+        if (groupMember.getRole().equals(GroupMemberRole.ROLE_MASTER)) {
+            // 방장 퇴장
+            groupRepository.deleteById(groupId);
+        } else {
+            // 참여자 퇴장
+            groupMemberRepository.deleteByGroupIdAndMemberId(groupId, memberId);
+        }
     }
 }
