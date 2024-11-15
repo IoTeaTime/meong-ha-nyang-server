@@ -80,4 +80,14 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
                                                                 GroupMemberRole.ROLE_MASTER))))
                 .fetchOne();
     }
+
+    @Override
+    public void deleteByGroupIdAndMemberId(Long groupId, Long memberId) {
+        jpaGroupMemberRepository.deleteByGroupIdAndMemberId(groupId, memberId);
+    }
+
+    @Override
+    public GroupMemberEntity findByGroupIdAndMemberId(Long groupId, Long memberId) {
+        return null;
+    }
 }

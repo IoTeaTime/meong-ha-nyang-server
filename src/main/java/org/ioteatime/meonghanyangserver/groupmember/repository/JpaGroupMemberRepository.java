@@ -8,4 +8,6 @@ public interface JpaGroupMemberRepository extends JpaRepository<GroupMemberEntit
     boolean existsByMemberId(Long memberId);
 
     Optional<GroupMemberEntity> findByMemberId(Long memberId);
+
+    void deleteByGroupIdAndMemberId(Long groupId, Long memberId);
 }

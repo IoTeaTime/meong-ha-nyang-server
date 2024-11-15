@@ -9,6 +9,7 @@ import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.KvsChannelNameGenerator;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
+import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.ioteatime.meonghanyangserver.groupmember.mapper.GroupMemberEntityMapper;
@@ -16,13 +17,14 @@ import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberReposi
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class GroupMemberService {
     private final GroupMemberRepository groupMemberRepository;
     private final KvsChannelNameGenerator kvsChannelNameGenerator;
-    private final MemberRepository memberRepository;
+    private final GroupRepository groupRepository;
 
     // input user
     public void createGroupMember(
@@ -80,8 +82,12 @@ public class GroupMemberService {
         if (groupMasterEntity.getId().equals(groupMemberId)) {
             throw new BadRequestException(GroupErrorType.ONLY_MASTER_REMOVE_GROUP_MASTER);
         }
-        // TODO group member iot core 제외
 
         groupMemberRepository.deleteById(groupMemberId);
+    }
+
+    @Transactional
+    public void deleteGroupMember(Long memberId, Long groupId) {
+        groupMemberRepository.deleteByGroupIdAndMemberId(groupId, memberId);
     }
 }

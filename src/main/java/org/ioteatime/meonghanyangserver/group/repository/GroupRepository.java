@@ -4,4 +4,6 @@ import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 
 public interface GroupRepository {
     GroupEntity save(GroupEntity groupEntity);
+
+    void deleteById(Long groupId);
 }
