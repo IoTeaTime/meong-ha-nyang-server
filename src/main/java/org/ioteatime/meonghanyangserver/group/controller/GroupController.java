@@ -1,16 +1,19 @@
 package org.ioteatime.meonghanyangserver.group.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.GroupSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
+import org.ioteatime.meonghanyangserver.group.dto.request.CreateGroupRequest;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.ioteatime.meonghanyangserver.group.service.GroupService;
 import org.ioteatime.meonghanyangserver.groupmember.service.GroupMemberService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,8 +23,10 @@ public class GroupController implements GroupApi {
     private final GroupMemberService groupMemberService;
 
     @PostMapping
-    public Api<CreateGroupResponse> createGroup(@LoginMember Long memberId) {
-        CreateGroupResponse createGroupResponse = groupService.createGroup(memberId);
+    public Api<CreateGroupResponse> createGroup(
+            @LoginMember Long memberId, @Valid @RequestBody CreateGroupRequest createGroupRequest) {
+        CreateGroupResponse createGroupResponse =
+                groupService.createGroup(memberId, createGroupRequest);
         return Api.success(GroupSuccessType.CREATE_GROUP, createGroupResponse);
     }
 
