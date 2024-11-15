@@ -6,6 +6,7 @@ import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
+import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.KvsChannelNameGenerator;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
@@ -13,9 +14,11 @@ import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
+import org.ioteatime.meonghanyangserver.groupmember.dto.request.JoinGroupMemberRequest;
 import org.ioteatime.meonghanyangserver.groupmember.mapper.GroupMemberEntityMapper;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
+import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class GroupMemberService {
     private final GroupMemberRepository groupMemberRepository;
-    private final KvsChannelNameGenerator kvsChannelNameGenerator;
+    private final MemberRepository memberRepository;
     private final GroupRepository groupRepository;
+    private final KvsChannelNameGenerator kvsChannelNameGenerator;
     private final CctvRepository cctvRepository;
 
     // input user
@@ -36,6 +40,26 @@ public class GroupMemberService {
         GroupMemberEntity groupMember =
                 GroupMemberEntityMapper.from(groupEntity, memberEntity, groupMemberRole, thingId);
         groupMemberRepository.save(groupMember);
+    }
+
+    @Transactional
+    public void joinGroupMember(Long memberId, JoinGroupMemberRequest joinGroupMemberRequest) {
+        Long groupId = joinGroupMemberRequest.groupId();
+        String thingId = joinGroupMemberRequest.thingId();
+
+        if (groupMemberRepository.findByMemberIdAndGroupId(memberId, groupId).isPresent()) {
+            throw new BadRequestException(GroupErrorType.GROUP_MEMBER_ALREADY_EXISTS);
+        }
+        GroupEntity groupEntity =
+                groupRepository
+                        .findById(groupId)
+                        .orElseThrow(() -> new BadRequestException(GroupErrorType.NOT_FOUND));
+        MemberEntity memberEntity =
+                memberRepository
+                        .findById(memberId)
+                        .orElseThrow(() -> new BadRequestException(AuthErrorType.NOT_FOUND));
+
+        createGroupMember(groupEntity, memberEntity, GroupMemberRole.ROLE_PARTICIPANT, thingId);
     }
 
     public boolean existsGroupMember(Long memberId) {
