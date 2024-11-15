@@ -6,6 +6,8 @@ import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 public interface CctvRepository {
     boolean existsByKvsChannelName(String kvsChannelName);
 
+    boolean existsByThingId(String thingId);
+
     void deleteById(Long cctvId);
 
     CctvEntity save(CctvEntity cctv);

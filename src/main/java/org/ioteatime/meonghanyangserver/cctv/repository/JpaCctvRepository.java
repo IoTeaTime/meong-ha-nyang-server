@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaCctvRepository extends JpaRepository<CctvEntity, Long> {
     boolean existsByKvsChannelName(String kvsChannelName);
+
+    boolean existsByThingId(String thingId);
 }

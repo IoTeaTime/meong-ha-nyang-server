@@ -17,6 +17,11 @@ public class CctvRepositoryImpl implements CctvRepository {
     }
 
     @Override
+    public boolean existsByThingId(String thingId) {
+        return jpaCctvRepository.existsByThingId(thingId);
+    }
+
+    @Override
     public void deleteById(Long cctvId) {
         jpaCctvRepository.deleteById(cctvId);
     }
