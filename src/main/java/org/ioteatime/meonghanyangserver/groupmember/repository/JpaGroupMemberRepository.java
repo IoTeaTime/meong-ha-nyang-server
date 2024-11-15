@@ -10,4 +10,6 @@ public interface JpaGroupMemberRepository extends JpaRepository<GroupMemberEntit
     Optional<GroupMemberEntity> findByMemberId(Long memberId);
 
     void deleteByGroupIdAndMemberId(Long groupId, Long memberId);
+
+    void deleteByGroupId(Long groupId);
 }

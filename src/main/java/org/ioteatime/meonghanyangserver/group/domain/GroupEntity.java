@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.springframework.data.annotation.CreatedDate;
@@ -35,10 +33,8 @@ public class GroupEntity {
     @Column @CreatedDate private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "group")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<GroupMemberEntity> groupMemberEntities;
 
     @OneToMany(mappedBy = "group")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<CctvEntity> cctvEntities;
 }

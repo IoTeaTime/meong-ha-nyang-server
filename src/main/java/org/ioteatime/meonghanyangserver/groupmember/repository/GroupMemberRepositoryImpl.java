@@ -62,23 +62,26 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     }
 
     @Override
-    public GroupMemberEntity findByGroupIdAndMemberIdAndRole(Long memberId, Long groupId) {
-        return jpaQueryFactory
-                .selectFrom(groupMemberEntity)
-                .where(
-                        groupMemberEntity
-                                .group
-                                .id
-                                .eq(groupId)
-                                .and(
-                                        groupMemberEntity
-                                                .member
-                                                .id
-                                                .eq(memberId)
-                                                .and(
-                                                        groupMemberEntity.role.eq(
-                                                                GroupMemberRole.ROLE_MASTER))))
-                .fetchOne();
+    public Optional<GroupMemberEntity> findByGroupIdAndMemberIdAndRole(
+            Long memberId, Long groupId) {
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .selectFrom(groupMemberEntity)
+                        .where(
+                                groupMemberEntity
+                                        .group
+                                        .id
+                                        .eq(groupId)
+                                        .and(
+                                                groupMemberEntity
+                                                        .member
+                                                        .id
+                                                        .eq(memberId)
+                                                        .and(
+                                                                groupMemberEntity.role.eq(
+                                                                        GroupMemberRole
+                                                                                .ROLE_MASTER))))
+                        .fetchOne());
     }
 
     @Override
@@ -87,15 +90,21 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     }
 
     @Override
-    public GroupMemberEntity findByGroupIdAndMemberId(Long groupId, Long memberId) {
-        return jpaQueryFactory
-                .selectFrom(groupMemberEntity)
-                .where(
-                        groupMemberEntity
-                                .group
-                                .id
-                                .eq(groupId)
-                                .and(groupMemberEntity.member.id.eq(memberId)))
-                .fetchOne();
+    public Optional<GroupMemberEntity> findByGroupIdAndMemberId(Long groupId, Long memberId) {
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .selectFrom(groupMemberEntity)
+                        .where(
+                                groupMemberEntity
+                                        .group
+                                        .id
+                                        .eq(groupId)
+                                        .and(groupMemberEntity.member.id.eq(memberId)))
+                        .fetchOne());
+    }
+
+    @Override
+    public void deleteByGroupId(Long groupId) {
+        jpaGroupMemberRepository.deleteByGroupId(groupId);
     }
 }

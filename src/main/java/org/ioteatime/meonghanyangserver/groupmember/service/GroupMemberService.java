@@ -3,6 +3,7 @@ package org.ioteatime.meonghanyangserver.groupmember.service;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
+import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
@@ -24,6 +25,7 @@ public class GroupMemberService {
     private final GroupMemberRepository groupMemberRepository;
     private final KvsChannelNameGenerator kvsChannelNameGenerator;
     private final GroupRepository groupRepository;
+    private final CctvRepository cctvRepository;
 
     // input user
     public void createGroupMember(
@@ -70,9 +72,8 @@ public class GroupMemberService {
 
         // 그룹 내 방장 확인 권한 확인
         GroupMemberEntity groupMasterEntity =
-                Optional.ofNullable(
-                                groupMemberRepository.findByGroupIdAndMemberIdAndRole(
-                                        memberId, groupId))
+                groupMemberRepository
+                        .findByGroupIdAndMemberIdAndRole(memberId, groupId)
                         .orElseThrow(
                                 () ->
                                         new BadRequestException(
@@ -88,13 +89,15 @@ public class GroupMemberService {
     @Transactional
     public void deleteGroupMember(Long memberId, Long groupId) {
         GroupMemberEntity groupMember =
-                Optional.ofNullable(
-                                groupMemberRepository.findByGroupIdAndMemberId(groupId, memberId))
+                groupMemberRepository
+                        .findByGroupIdAndMemberId(groupId, memberId)
                         .orElseThrow(
                                 () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
 
         if (groupMember.getRole().equals(GroupMemberRole.ROLE_MASTER)) {
             // 방장 퇴장
+            groupMemberRepository.deleteByGroupId(groupId);
+            cctvRepository.deleteByCctvId(groupId);
             groupRepository.deleteById(groupId);
         } else {
             // 참여자 퇴장
