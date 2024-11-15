@@ -13,4 +13,6 @@ public interface CctvRepository {
     CctvEntity save(CctvEntity cctv);
 
     Optional<CctvEntity> findById(Long cctvId);
+
+    void deleteByCctvId(Long groupId);
 }

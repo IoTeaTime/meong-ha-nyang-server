@@ -7,4 +7,6 @@ public interface GroupRepository {
     GroupEntity save(GroupEntity groupEntity);
 
     Optional<GroupEntity> findById(Long groupId);
+
+    void deleteById(Long groupId);
 }

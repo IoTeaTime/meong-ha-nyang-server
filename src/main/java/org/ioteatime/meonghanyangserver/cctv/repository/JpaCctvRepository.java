@@ -7,4 +7,6 @@ public interface JpaCctvRepository extends JpaRepository<CctvEntity, Long> {
     boolean existsByKvsChannelName(String kvsChannelName);
 
     boolean existsByThingId(String thingId);
+
+    void deleteByGroupId(Long groupId);
 }

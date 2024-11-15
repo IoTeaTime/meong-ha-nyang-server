@@ -35,4 +35,9 @@ public class CctvRepositoryImpl implements CctvRepository {
     public Optional<CctvEntity> findById(Long cctvId) {
         return jpaCctvRepository.findById(cctvId);
     }
+
+    @Override
+    public void deleteByCctvId(Long groupId) {
+        jpaCctvRepository.deleteByGroupId(groupId);
+    }
 }

@@ -35,4 +35,10 @@ public class GroupMemberController implements GroupMemberApi {
         groupMemberService.joinGroupMember(memberId, joinGroupMemberRequest);
         return Api.success(GroupSuccessType.JOIN_GROUP_MEMBER);
     }
+
+    @DeleteMapping("/{groupId}/member")
+    public Api<?> deleteGroupMember(@LoginMember Long memberId, @PathVariable Long groupId) {
+        groupMemberService.deleteGroupMember(memberId, groupId);
+        return Api.success(GroupSuccessType.DELETE_GROUP_MEMBER);
+    }
 }
