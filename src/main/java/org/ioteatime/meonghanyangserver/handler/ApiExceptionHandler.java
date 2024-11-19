@@ -3,7 +3,6 @@ package org.ioteatime.meonghanyangserver.handler;
 import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.exception.ApiExceptionImpl;
-import org.ioteatime.meonghanyangserver.common.type.ErrorTypeCode;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
