@@ -18,8 +18,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(value = ApiExceptionImpl.class)
     public ResponseEntity<Api<Object>> apiResponseEntity(ApiExceptionImpl apiExceptionImpl) {
         log.debug("", apiExceptionImpl);
-        ErrorTypeCode errorTypeCode = apiExceptionImpl.getErrorTypeCode();
         return ResponseEntity.status(apiExceptionImpl.getHttpStatus())
-                .body(Api.fail(errorTypeCode));
+                .body(Api.fail(apiExceptionImpl));
     }
 }
