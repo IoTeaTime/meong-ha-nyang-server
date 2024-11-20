@@ -10,7 +10,7 @@ import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.KvsChannelNameGenerator;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
-import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
+import org.ioteatime.meonghanyangserver.group.dto.response.GroupResponse;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
@@ -66,14 +66,14 @@ public class GroupMemberService {
         return groupMemberRepository.existsGroupMember(memberId);
     }
 
-    public GroupInfoResponse getUserGroupInfo(Long memberId) {
+    public GroupResponse getGroupInfo(Long memberId) {
         GroupMemberEntity groupMember =
                 groupMemberRepository
                         .findByMemberId(memberId)
                         .orElseThrow(
                                 () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
 
-        return new GroupInfoResponse(groupMember.getGroup().getId());
+        return new GroupResponse(groupMember.getGroup().getId());
     }
 
     public CctvInviteResponse generateCctvInvite(Long memberId) {
