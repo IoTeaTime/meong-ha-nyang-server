@@ -46,7 +46,7 @@ public class CctvRepositoryImpl implements CctvRepository {
     }
 
     @Override
-    public Optional<CctvEntity> findByThingId(String thingId) {
+    public Optional<CctvEntity> findByCctvId(Long cctvId) {
         CctvEntity result =
                 jpaQueryFactory
                         .select(
@@ -57,7 +57,7 @@ public class CctvRepositoryImpl implements CctvRepository {
                                         cctvEntity.thingId,
                                         cctvEntity.kvsChannelName))
                         .from(cctvEntity)
-                        .where(cctvEntity.thingId.eq(thingId))
+                        .where(cctvEntity.id.eq(cctvId))
                         .fetchOne();
         return Optional.ofNullable(result);
     }

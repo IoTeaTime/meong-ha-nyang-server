@@ -14,5 +14,5 @@ public interface CctvDeviceApi {
     Api<?> createCctv(@RequestBody CreateCctvRequest createCctvRequest);
 
     @Operation(summary = "CCTV 정보", description = "담당자: 최민석")
-    Api<CctvInfoResponse> cctvInfo(@PathVariable String thingId);
+    Api<CctvInfoResponse> cctvInfo(@PathVariable Long cctvId);
 }

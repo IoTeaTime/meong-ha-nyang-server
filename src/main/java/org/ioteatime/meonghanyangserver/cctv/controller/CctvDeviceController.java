@@ -20,9 +20,9 @@ public class CctvDeviceController implements CctvDeviceApi {
         return Api.success(CctvSuccessType.CREATE_CCTV);
     }
 
-    @GetMapping("/{thingId}")
-    public Api<CctvInfoResponse> cctvInfo(@PathVariable String thingId) {
-        CctvInfoResponse cctvInfoResponse = cctvService.cctvInfo(thingId);
+    @GetMapping("/{cctvId}")
+    public Api<CctvInfoResponse> cctvInfo(@PathVariable Long cctvId) {
+        CctvInfoResponse cctvInfoResponse = cctvService.cctvInfo(cctvId);
         return Api.success(CctvSuccessType.GET_CCTV_DETAIL, cctvInfoResponse);
     }
 }

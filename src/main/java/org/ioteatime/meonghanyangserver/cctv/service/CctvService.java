@@ -68,10 +68,10 @@ public class CctvService {
         cctvRepository.deleteById(cctvId);
     }
 
-    public CctvInfoResponse cctvInfo(String thingId) {
+    public CctvInfoResponse cctvInfo(Long cctvId) {
         CctvEntity cctvEntity =
                 cctvRepository
-                        .findByThingId(thingId)
+                        .findByCctvId(cctvId)
                         .orElseThrow(() -> new BadRequestException(CctvErrorType.NOT_FOUND));
         return CctvResponseMapper.from(cctvEntity);
     }
