@@ -68,6 +68,14 @@ public class CctvService {
         cctvRepository.deleteById(cctvId);
     }
 
+    public CctvInfoResponse cctvInfo(Long cctvId) {
+        CctvEntity cctvEntity =
+                cctvRepository
+                        .findByCctvId(cctvId)
+                        .orElseThrow(() -> new BadRequestException(CctvErrorType.NOT_FOUND));
+        return CctvResponseMapper.from(cctvEntity);
+    }
+
     public CctvInfoListResponse cctvInfoList(Long memberId, Long groupId) {
         if (!groupMemberRepository.existsByMemberIdAndGroupId(memberId, groupId)) {
             throw new BadRequestException(GroupErrorType.GROUP_MEMBER_NOT_FOUND);
