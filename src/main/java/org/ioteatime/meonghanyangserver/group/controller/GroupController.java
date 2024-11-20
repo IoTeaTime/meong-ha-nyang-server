@@ -8,7 +8,7 @@ import org.ioteatime.meonghanyangserver.common.type.GroupSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.ioteatime.meonghanyangserver.group.dto.request.CreateGroupRequest;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
-import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
+import org.ioteatime.meonghanyangserver.group.dto.response.GroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.ioteatime.meonghanyangserver.group.service.GroupService;
 import org.ioteatime.meonghanyangserver.groupmember.service.GroupMemberService;
@@ -31,8 +31,8 @@ public class GroupController implements GroupApi {
     }
 
     @GetMapping("/viewer")
-    public Api<GroupInfoResponse> getUserGroupInfo(@LoginMember Long memberId) {
-        GroupInfoResponse groupInfoResponse = groupMemberService.getUserGroupInfo(memberId);
+    public Api<GroupResponse> getGroupInfo(@LoginMember Long memberId) {
+        GroupResponse groupInfoResponse = groupMemberService.getGroupInfo(memberId);
         return Api.success(GroupSuccessType.GET_GROUP_ID, groupInfoResponse);
     }
 

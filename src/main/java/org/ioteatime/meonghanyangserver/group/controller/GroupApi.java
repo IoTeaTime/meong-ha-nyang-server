@@ -8,7 +8,7 @@ import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.ioteatime.meonghanyangserver.group.dto.request.CreateGroupRequest;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
-import org.ioteatime.meonghanyangserver.group.dto.response.GroupInfoResponse;
+import org.ioteatime.meonghanyangserver.group.dto.response.GroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,8 +18,8 @@ public interface GroupApi {
     Api<CreateGroupResponse> createGroup(
             @LoginMember Long memberId, @Valid @RequestBody CreateGroupRequest createGroupRequest);
 
-    @Operation(summary = "그룹 id를 조회합니다", description = "담당자: 임지인")
-    Api<GroupInfoResponse> getUserGroupInfo(@LoginMember Long memberId);
+    @Operation(summary = "그룹 초대를 위해 그룹 id를 조회합니다", description = "담당자: 임지인")
+    Api<GroupResponse> getGroupInfo(@LoginMember Long memberId);
 
     @Operation(summary = "그룹 id와 신호 채널 이름을 전달합니다.", description = "담당자: 임지인")
     Api<CctvInviteResponse> generateCctvInvite(@LoginMember Long memberId);
