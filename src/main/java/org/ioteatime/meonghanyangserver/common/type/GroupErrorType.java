@@ -6,7 +6,8 @@ public enum GroupErrorType implements ErrorTypeCode {
     NOT_FOUND("NOT FOUND", "그룹이 존재하지 않습니다."),
     ONLY_MASTER_REMOVE_GROUP_MEMBER("BAD REQUEST", "방장만 그룹에서 참여자를 제외시킬 수 있습니다."),
     ONLY_MASTER_REMOVE_GROUP_MASTER("BAD REQUEST", "방장은 자신을 제외시킬 수 있습니다."),
-    GROUP_MEMBER_NOT_FOUND("GROUP MEMBER NOT FOUND", "그룹 회원 정보를 찾을 수 없습니다.");
+    GROUP_MEMBER_NOT_FOUND("GROUP MEMBER NOT FOUND", "그룹 회원 정보를 찾을 수 없습니다."),
+    ONLY_MASTER_GET_GROUP_MEMBER_INFO("BAD REQUEST", "방장만 그룹 참여자 정보를 받을 수 있습니다.");
 
     private final String message;
     private final String description;

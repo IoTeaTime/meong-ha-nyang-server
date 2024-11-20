@@ -5,6 +5,7 @@ import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.GroupSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.ioteatime.meonghanyangserver.groupmember.dto.request.JoinGroupMemberRequest;
+import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberInfoListResponse;
 import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberResponse;
 import org.ioteatime.meonghanyangserver.groupmember.service.GroupMemberService;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +43,13 @@ public class GroupMemberController implements GroupMemberApi {
     public Api<?> deleteGroupMember(@LoginMember Long memberId, @PathVariable Long groupId) {
         groupMemberService.deleteGroupMember(memberId, groupId);
         return Api.success(GroupSuccessType.DELETE_GROUP_MEMBER);
+    }
+
+    @GetMapping("/{groupId}/member/list")
+    public Api<?> getGroupMemberInfoList(@LoginMember Long memberId, @PathVariable Long groupId) {
+        GroupMemberInfoListResponse groupMemberInfoListResponse =
+                groupMemberService.getGroupMemberInfoList(memberId, groupId);
+        return Api.success(
+                GroupSuccessType.GET_GROUP_MEMBER_INFO_LIST, groupMemberInfoListResponse);
     }
 }

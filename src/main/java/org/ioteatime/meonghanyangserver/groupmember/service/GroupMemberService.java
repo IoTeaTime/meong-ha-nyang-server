@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.groupmember.service;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
@@ -15,8 +16,11 @@ import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.ioteatime.meonghanyangserver.groupmember.dto.request.JoinGroupMemberRequest;
+import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberInfoListResponse;
+import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberInfoResponse;
 import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberResponse;
 import org.ioteatime.meonghanyangserver.groupmember.mapper.GroupMemberEntityMapper;
+import org.ioteatime.meonghanyangserver.groupmember.mapper.GroupMemberResponseMapper;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
@@ -138,5 +142,18 @@ public class GroupMemberService {
             // 참여자 퇴장
             groupMemberRepository.deleteByGroupIdAndMemberId(groupId, memberId);
         }
+    }
+
+    public GroupMemberInfoListResponse getGroupMemberInfoList(Long memberId, Long groupId) {
+        if (!groupMemberRepository.existsByMemberIdAndGroupIdAndRole(
+                memberId, groupId, GroupMemberRole.ROLE_MASTER)) {
+            throw new BadRequestException(GroupErrorType.ONLY_MASTER_GET_GROUP_MEMBER_INFO);
+        }
+        List<GroupMemberEntity> groupMemberEntity =
+                groupMemberRepository.findByGroupIdAndRole(
+                        groupId, GroupMemberRole.ROLE_PARTICIPANT);
+        List<GroupMemberInfoResponse> groupMemberResponseList =
+                groupMemberEntity.stream().map(GroupMemberResponseMapper::from).toList();
+        return new GroupMemberInfoListResponse(groupMemberResponseList);
     }
 }
