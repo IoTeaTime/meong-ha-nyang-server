@@ -15,6 +15,7 @@ import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.ioteatime.meonghanyangserver.groupmember.dto.request.JoinGroupMemberRequest;
+import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberResponse;
 import org.ioteatime.meonghanyangserver.groupmember.mapper.GroupMemberEntityMapper;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
@@ -64,6 +65,16 @@ public class GroupMemberService {
 
     public boolean existsGroupMember(Long memberId) {
         return groupMemberRepository.existsGroupMember(memberId);
+    }
+
+    public GroupMemberResponse getGroupMemberInfo(Long memberId) {
+        GroupMemberEntity groupMember =
+                groupMemberRepository
+                        .findByMemberId(memberId)
+                        .orElseThrow(
+                                () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
+
+        return new GroupMemberResponse(groupMember.getGroup().getId(), groupMember.getRole());
     }
 
     public GroupResponse getGroupInfo(Long memberId) {

@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Tag(name = "Group Member Api", description = "Group Member 관련 API 목록입니다.")
 public interface GroupMemberApi {
 
+    @Operation(summary = "참여자가 그룹과 역할을 조회합니다.", description = "담당자: 임지인")
+    public Api<?> getGroupMemberInfo(@LoginMember Long memberId);
+
     @Operation(summary = "참여자가 그룹에 입장을 요청합니다.", description = "담당자: 임지인")
     public Api<Void> joinGroupAsMember(
             @LoginMember Long memberId, @RequestBody JoinGroupMemberRequest joinGroupMemberRequest);
