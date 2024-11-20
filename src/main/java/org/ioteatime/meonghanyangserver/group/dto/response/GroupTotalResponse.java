@@ -13,5 +13,5 @@ public record GroupTotalResponse(
         @NotNull Long groupId,
         @NotBlank String groupName,
         @NotNull LocalDateTime createdAt,
-        List<GroupMemberInfoResponse> groupUser,
+        List<GroupMemberInfoResponse> member,
         List<CctvInfoResponse> cctv) {}

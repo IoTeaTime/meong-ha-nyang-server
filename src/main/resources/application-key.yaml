@@ -6,6 +6,7 @@ token:
 
 google:
   service-account: ${GCP_SERVICE_ACCOUNT}
+  gmail-service-account: ${GMAIL_SERVICE_ACCOUNT}
   official-gmail: ${OFFICIAL_GMAIL}
   application-credentials: ${GOOGLE_APPLICATION_CREDENTIALS}
 
@@ -13,3 +14,6 @@ aws:
   kvs:
     access-key: ${AWS_KVS_ACCESS_KEY}
     secret-key: ${AWS_KVS_SECRET_KEY}
+  ses:
+    access-key: ${AWS_SES_ACCESS_KEY}
+    secret-key: ${AWS_SES_SECRET_KEY}

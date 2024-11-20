@@ -7,5 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface JpaGroupMemberRepository extends JpaRepository<GroupMemberEntity, Long> {
     boolean existsByMemberId(Long memberId);
 
+    boolean existsByMemberIdAndGroupId(Long memberId, Long groupId);
+
     Optional<GroupMemberEntity> findByMemberId(Long memberId);
+
+    void deleteByGroupIdAndMemberId(Long groupId, Long memberId);
+
+    void deleteByGroupId(Long groupId);
 }
