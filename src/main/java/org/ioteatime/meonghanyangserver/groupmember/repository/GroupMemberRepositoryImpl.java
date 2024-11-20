@@ -110,6 +110,11 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     }
 
     @Override
+    public boolean existsByMemberIdAndGroupId(Long memberId, Long groupId) {
+        return jpaGroupMemberRepository.existsByMemberIdAndGroupId(memberId, groupId);
+    }
+
+    @Override
     public Optional<GroupMemberEntity> findByMemberIdAndGroupId(Long memberId, Long groupId) {
         QGroupMemberEntity groupMember = QGroupMemberEntity.groupMemberEntity;
 

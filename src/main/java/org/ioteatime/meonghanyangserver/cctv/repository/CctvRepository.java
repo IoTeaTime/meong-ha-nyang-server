@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.cctv.repository;
 
+import java.util.List;
 import java.util.Optional;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 
@@ -17,4 +18,6 @@ public interface CctvRepository {
     void deleteByCctvId(Long groupId);
 
     Optional<CctvEntity> findByThingId(String thingId);
+
+    List<CctvEntity> findByGroupId(Long groupId);
 }
