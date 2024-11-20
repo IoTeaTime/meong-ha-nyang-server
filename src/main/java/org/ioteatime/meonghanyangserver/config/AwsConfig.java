@@ -5,6 +5,8 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.kinesisvideo.AmazonKinesisVideo;
 import com.amazonaws.services.kinesisvideo.AmazonKinesisVideoClient;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,12 @@ public class AwsConfig {
 
     @Value("${aws.kvs.secret-key}")
     private String kvsSecretKey;
+
+    @Value("${aws.ses.access-key}")
+    private String sesAccessKey;
+
+    @Value("${aws.ses.secret-key}")
+    private String sesSecretKey;
 
     @Bean
     public AmazonKinesisVideo amazonKinesisVideo() {
@@ -33,6 +41,27 @@ public class AwsConfig {
                 };
 
         return AmazonKinesisVideoClient.builder()
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .build();
+    }
+
+    @Bean
+    public AmazonSimpleEmailService amazonSimpleEmailService() {
+        AWSCredentials awsCredentials =
+                new AWSCredentials() {
+                    @Override
+                    public String getAWSAccessKeyId() {
+                        return sesAccessKey;
+                    }
+
+                    @Override
+                    public String getAWSSecretKey() {
+                        return sesSecretKey;
+                    }
+                };
+
+        return AmazonSimpleEmailServiceClient.builder()
                 .withRegion(Regions.AP_NORTHEAST_2)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
