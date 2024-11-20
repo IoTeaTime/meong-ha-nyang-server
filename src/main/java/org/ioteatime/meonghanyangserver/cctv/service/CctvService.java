@@ -1,9 +1,13 @@
 package org.ioteatime.meonghanyangserver.cctv.service;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.CreateCctvRequest;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
+import org.ioteatime.meonghanyangserver.cctv.mapper.CctvResponseMapper;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
 import org.ioteatime.meonghanyangserver.clients.kvs.KvsClient;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
@@ -62,5 +66,16 @@ public class CctvService {
         kvsClient.deleteSignalingChannel(cctv.getKvsChannelName());
         // 2. CCTV 테이블에서 삭제
         cctvRepository.deleteById(cctvId);
+    }
+
+    public CctvInfoListResponse cctvInfoList(Long memberId, Long groupId) {
+        if (!groupMemberRepository.existsByMemberIdAndGroupId(memberId, groupId)) {
+            throw new BadRequestException(GroupErrorType.GROUP_MEMBER_NOT_FOUND);
+        }
+        List<CctvEntity> cctvEntityList = cctvRepository.findByGroupId(groupId);
+        List<CctvInfoResponse> cctvInfoResponseList =
+                cctvEntityList.stream().map(CctvResponseMapper::from).toList();
+        CctvInfoListResponse cctvInfoListResponse = new CctvInfoListResponse(cctvInfoResponseList);
+        return cctvInfoListResponse;
     }
 }

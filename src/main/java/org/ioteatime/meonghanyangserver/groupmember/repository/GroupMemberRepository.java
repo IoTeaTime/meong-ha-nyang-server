@@ -26,4 +26,6 @@ public interface GroupMemberRepository {
     Optional<GroupMemberEntity> findByGroupIdAndMemberId(Long groupId, Long memberId);
 
     void deleteByGroupId(Long groupId);
+
+    boolean existsByMemberIdAndGroupId(Long memberId, Long groupId);
 }
