@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.CreateCctvRequest;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
+import org.ioteatime.meonghanyangserver.cctv.mapper.CctvResponseMapper;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
 import org.ioteatime.meonghanyangserver.clients.kvs.KvsClient;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
@@ -62,5 +64,13 @@ public class CctvService {
         kvsClient.deleteSignalingChannel(cctv.getKvsChannelName());
         // 2. CCTV 테이블에서 삭제
         cctvRepository.deleteById(cctvId);
+    }
+
+    public CctvInfoResponse cctvInfo(String thingId) {
+        CctvEntity cctvEntity =
+                cctvRepository
+                        .findByThingId(thingId)
+                        .orElseThrow(() -> new BadRequestException(CctvErrorType.NOT_FOUND));
+        return CctvResponseMapper.from(cctvEntity);
     }
 }

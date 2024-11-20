@@ -1,5 +1,8 @@
 package org.ioteatime.meonghanyangserver.cctv.repository;
 
+import static org.ioteatime.meonghanyangserver.cctv.domain.QCctvEntity.cctvEntity;
+
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +42,22 @@ public class CctvRepositoryImpl implements CctvRepository {
     @Override
     public void deleteByCctvId(Long groupId) {
         jpaCctvRepository.deleteByGroupId(groupId);
+    }
+
+    @Override
+    public Optional<CctvEntity> findByThingId(String thingId) {
+        CctvEntity result =
+                jpaQueryFactory
+                        .select(
+                                Projections.constructor(
+                                        CctvEntity.class,
+                                        cctvEntity.id,
+                                        cctvEntity.cctvNickname,
+                                        cctvEntity.thingId,
+                                        cctvEntity.kvsChannelName))
+                        .from(cctvEntity)
+                        .where(cctvEntity.thingId.eq(thingId))
+                        .fetchOne();
+        return Optional.ofNullable(result);
     }
 }
