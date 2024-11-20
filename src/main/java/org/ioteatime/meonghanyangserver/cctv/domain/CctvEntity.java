@@ -41,4 +41,12 @@ public class CctvEntity {
         this.thingId = thingId;
         this.group = group;
     }
+
+    @Builder
+    public CctvEntity(Long id, String cctvNickname, String kvsChannelName, String thingId) {
+        this.id = id;
+        this.cctvNickname = cctvNickname;
+        this.kvsChannelName = kvsChannelName;
+        this.thingId = thingId;
+    }
 }
