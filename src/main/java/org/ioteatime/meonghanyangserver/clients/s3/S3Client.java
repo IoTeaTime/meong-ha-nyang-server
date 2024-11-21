@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class S3Client {
     private final AmazonS3 amazonS3;
 
-    @Value("${aws.s3.bucket}")
+    @Value("${aws.s3-bucket}")
     private String bucket;
 
     public String generatePreSignUrl(String filename, HttpMethod httpMethod) {
