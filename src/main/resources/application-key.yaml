@@ -11,9 +11,11 @@ google:
   application-credentials: ${GOOGLE_APPLICATION_CREDENTIALS}
 
 aws:
-  kvs:
-    access-key: ${AWS_KVS_ACCESS_KEY}
-    secret-key: ${AWS_KVS_SECRET_KEY}
-  ses:
-    access-key: ${AWS_SES_ACCESS_KEY}
-    secret-key: ${AWS_SES_SECRET_KEY}
+  kvs-access-key: ${AWS_KVS_ACCESS_KEY}
+  kvs-secret-key: ${AWS_KVS_SECRET_KEY}
+  ses-access-key: ${AWS_SES_ACCESS_KEY}
+  ses-secret-key: ${AWS_SES_SECRET_KEY}
+  iot-access-key: ${AWS_IOT_ACCESS_KEY}
+  iot-secret-key: ${AWS_IOT_SECRET_KEY}
+  iot-endpoint: ${AWS_IOT_ENDPOINT}
+  iot-client-id: ${AWS_IOT_CLIENT_ID}
