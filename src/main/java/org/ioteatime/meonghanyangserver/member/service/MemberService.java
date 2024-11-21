@@ -85,4 +85,6 @@ public class MemberService {
 
         return AuthResponseMapper.from(newAccessToken);
     }
+
+    public void logout(Long memberId) {}
 }

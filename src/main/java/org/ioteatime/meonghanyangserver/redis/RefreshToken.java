@@ -15,4 +15,6 @@ public class RefreshToken {
     @Id private Long id;
 
     @Indexed private String refreshToken;
+
+    @Indexed private Long memberId;
 }

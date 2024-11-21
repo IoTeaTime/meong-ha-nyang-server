@@ -42,4 +42,10 @@ public class MemberController implements MemberApi {
         RefreshResponse refreshResponse = memberService.reissueAccessToken(authorizationHeader);
         return Api.success(AuthSuccessType.REISSUE_ACCESS_TOKEN, refreshResponse);
     }
+
+    @DeleteMapping("/logout")
+    public Api<?> logout(@LoginMember Long memberId) {
+        memberService.logout(memberId);
+        return null;
+    }
 }
