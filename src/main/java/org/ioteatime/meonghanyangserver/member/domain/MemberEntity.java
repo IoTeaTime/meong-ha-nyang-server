@@ -64,6 +64,7 @@ public class MemberEntity {
 
     public MemberEntity updateFcmToken(String token) {
         this.fcmToken = token;
+        this.updatedAt = LocalDateTime.now();
         return this;
     }
 }
