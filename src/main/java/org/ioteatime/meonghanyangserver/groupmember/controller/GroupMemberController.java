@@ -45,7 +45,7 @@ public class GroupMemberController implements GroupMemberApi {
         return Api.success(GroupSuccessType.DELETE_GROUP_MEMBER);
     }
 
-    @GetMapping("/{groupId}/member/list")
+    @GetMapping("/{groupId}/member")
     public Api<?> getGroupMemberInfoList(@LoginMember Long memberId, @PathVariable Long groupId) {
         GroupMemberInfoListResponse groupMemberInfoListResponse =
                 groupMemberService.getGroupMemberInfoList(memberId, groupId);
