@@ -11,4 +11,6 @@ public record AwsProperties(
         String iotAccessKey,
         String iotSecretKey,
         String iotEndpoint,
-        String iotClientId) {}
+        String iotClientId,
+        String s3SecretKey,
+        String s3AccessKey) {}

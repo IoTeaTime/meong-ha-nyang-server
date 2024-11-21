@@ -8,6 +8,8 @@ import com.amazonaws.services.iot.AWSIotClient;
 import com.amazonaws.services.iot.model.*;
 import com.amazonaws.services.kinesisvideo.AmazonKinesisVideo;
 import com.amazonaws.services.kinesisvideo.AmazonKinesisVideoClient;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,26 @@ import software.amazon.awssdk.iot.AwsIotMqttConnectionBuilder;
 @RequiredArgsConstructor
 public class AwsConfig {
     private final AwsProperties awsProperties;
+
+    @Bean
+    public AmazonS3 amazonS3() {
+        AWSCredentials awsCredentials =
+                new AWSCredentials() {
+                    @Override
+                    public String getAWSAccessKeyId() {
+                        return awsProperties.s3AccessKey();
+                    }
+
+                    @Override
+                    public String getAWSSecretKey() {
+                        return awsProperties.s3SecretKey();
+                    }
+                };
+        return AmazonS3Client.builder()
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .build();
+    }
 
     @Bean
     public AmazonKinesisVideo amazonKinesisVideo() {
