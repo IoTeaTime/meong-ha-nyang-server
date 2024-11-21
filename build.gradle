@@ -67,6 +67,10 @@ dependencies {
 
     //S3
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.777'
+
+    // IOT
+    implementation 'com.amazonaws:aws-java-sdk-iot:1.12.778'
+    implementation 'software.amazon.awssdk.iotdevicesdk:aws-iot-device-sdk:1.21.0'
 }
 
 spotless {
