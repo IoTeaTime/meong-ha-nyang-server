@@ -2,7 +2,9 @@ package org.ioteatime.meonghanyangserver.groupmember.repository;
 
 import static org.ioteatime.meonghanyangserver.groupmember.doamin.QGroupMemberEntity.groupMemberEntity;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
@@ -112,6 +114,34 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     @Override
     public boolean existsByMemberIdAndGroupId(Long memberId, Long groupId) {
         return jpaGroupMemberRepository.existsByMemberIdAndGroupId(memberId, groupId);
+    }
+
+    @Override
+    public boolean existsByMemberIdAndGroupIdAndRole(
+            Long memberId, Long groupId, GroupMemberRole groupMemberRole) {
+        return jpaGroupMemberRepository.existsByMemberIdAndGroupIdAndRole(
+                memberId, groupId, groupMemberRole);
+    }
+
+    @Override
+    public List<GroupMemberEntity> findByGroupIdAndRole(
+            Long groupId, GroupMemberRole groupMemberRole) {
+        return jpaQueryFactory
+                .select(
+                        Projections.constructor(
+                                GroupMemberEntity.class,
+                                groupMemberEntity.id,
+                                groupMemberEntity.role,
+                                groupMemberEntity.thingId,
+                                groupMemberEntity.member))
+                .from(groupMemberEntity)
+                .where(
+                        groupMemberEntity
+                                .group
+                                .id
+                                .eq(groupId)
+                                .and(groupMemberEntity.role.eq(groupMemberRole)))
+                .fetch();
     }
 
     @Override

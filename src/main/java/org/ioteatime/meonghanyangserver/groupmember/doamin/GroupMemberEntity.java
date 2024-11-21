@@ -1,7 +1,6 @@
 package org.ioteatime.meonghanyangserver.groupmember.doamin;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,6 @@ import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 @Data
 @Entity
 @Table(name = "group_member")
-@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class GroupMemberEntity {
@@ -34,4 +32,22 @@ public class GroupMemberEntity {
     @ManyToOne
     @JoinColumn(nullable = false)
     private MemberEntity member;
+
+    @Builder
+    public GroupMemberEntity(
+            Long id, GroupMemberRole role, String thingId, GroupEntity group, MemberEntity member) {
+        this.id = id;
+        this.role = role;
+        this.member = member;
+        this.thingId = thingId;
+        this.group = group;
+    }
+
+    @Builder
+    public GroupMemberEntity(Long id, GroupMemberRole role, String thingId, MemberEntity member) {
+        this.id = id;
+        this.role = role;
+        this.member = member;
+        this.thingId = thingId;
+    }
 }

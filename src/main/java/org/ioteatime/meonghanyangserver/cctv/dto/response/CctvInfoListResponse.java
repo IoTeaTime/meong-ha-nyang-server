@@ -5,4 +5,4 @@ import java.util.List;
 
 @Schema(description = "cctv 정보 목록 응답")
 public record CctvInfoListResponse(
-        @Schema(description = "CCTV ID", example = "1") List<CctvInfoResponse> cctv) {}
+        @Schema(description = "CCTV 정보 목록") List<CctvInfoResponse> cctv) {}
