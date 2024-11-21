@@ -5,6 +5,8 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.kinesisvideo.AmazonKinesisVideo;
 import com.amazonaws.services.kinesisvideo.AmazonKinesisVideoClient;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +26,32 @@ public class AwsConfig {
 
     @Value("${aws.ses.secret-key}")
     private String sesSecretKey;
+
+    @Value("${aws.s3.access-key}")
+    private String s3AccessKey;
+
+    @Value("${aws.s3.secret-key}")
+    private String s3SecretKey;
+
+    @Bean
+    public AmazonS3 amazonS3() {
+        AWSCredentials awsCredentials =
+                new AWSCredentials() {
+                    @Override
+                    public String getAWSAccessKeyId() {
+                        return s3AccessKey;
+                    }
+
+                    @Override
+                    public String getAWSSecretKey() {
+                        return s3SecretKey;
+                    }
+                };
+        return AmazonS3Client.builder()
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .build();
+    }
 
     @Bean
     public AmazonKinesisVideo amazonKinesisVideo() {
