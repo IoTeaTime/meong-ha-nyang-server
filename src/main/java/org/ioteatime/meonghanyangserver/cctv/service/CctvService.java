@@ -9,6 +9,7 @@ import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
 import org.ioteatime.meonghanyangserver.cctv.mapper.CctvResponseMapper;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
+import org.ioteatime.meonghanyangserver.clients.iot.IotShadowMqttClient;
 import org.ioteatime.meonghanyangserver.clients.kvs.KvsClient;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
@@ -24,8 +25,9 @@ import org.springframework.stereotype.Service;
 public class CctvService {
     private final KvsClient kvsClient;
     private final CctvRepository cctvRepository;
-    private final GroupMemberRepository groupMemberRepository;
     private final GroupRepository groupRepository;
+    private final IotShadowMqttClient iotShadowMqttClient;
+    private final GroupMemberRepository groupMemberRepository;
 
     public void createCctv(CreateCctvRequest createCctvRequest) {
 
@@ -64,7 +66,9 @@ public class CctvService {
                         .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
         // 1. KVS 시그널링 채널 삭제
         kvsClient.deleteSignalingChannel(cctv.getKvsChannelName());
-        // 2. CCTV 테이블에서 삭제
+        // 2. IoT desired -> 삭제되었음을 알림
+        iotShadowMqttClient.updateShadow(cctv.getThingId(), "kvsChannelDeleteRequested", true);
+        // 3. CCTV 테이블에서 삭제
         cctvRepository.deleteById(cctvId);
     }
 

@@ -136,7 +136,7 @@ public class GroupMemberService {
         if (groupMember.getRole().equals(GroupMemberRole.ROLE_MASTER)) {
             // 방장 퇴장
             groupMemberRepository.deleteByGroupId(groupId);
-            cctvRepository.deleteByCctvId(groupId);
+            cctvRepository.deleteByGroupId(groupId);
             groupRepository.deleteById(groupId);
         } else {
             // 참여자 퇴장

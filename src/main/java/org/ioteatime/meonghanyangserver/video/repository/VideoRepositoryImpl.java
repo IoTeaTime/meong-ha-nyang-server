@@ -16,4 +16,9 @@ public class VideoRepositoryImpl implements VideoRepository {
     public Optional<VideoEntity> findById(Long videoId) {
         return jpaVideoRepository.findById(videoId);
     }
+
+    @Override
+    public void deleteAllByGroupId(Long groupId) {
+        jpaVideoRepository.deleteAllByGroupId(groupId);
+    }
 }

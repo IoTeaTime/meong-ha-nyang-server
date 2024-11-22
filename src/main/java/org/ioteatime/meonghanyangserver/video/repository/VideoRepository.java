@@ -5,4 +5,6 @@ import org.ioteatime.meonghanyangserver.video.domain.VideoEntity;
 
 public interface VideoRepository {
     Optional<VideoEntity> findById(Long videoId);
+
+    void deleteAllByGroupId(Long groupId);
 }
