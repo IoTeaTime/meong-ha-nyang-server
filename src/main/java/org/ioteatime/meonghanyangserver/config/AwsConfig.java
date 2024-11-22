@@ -16,12 +16,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.common.exception.InternalServerException;
 import org.ioteatime.meonghanyangserver.common.type.AwsErrorType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.crt.CRT;
 import software.amazon.awssdk.crt.mqtt.MqttClientConnection;
 import software.amazon.awssdk.crt.mqtt.MqttClientConnectionEvents;
 import software.amazon.awssdk.iot.AwsIotMqttConnectionBuilder;
+import software.amazon.awssdk.iot.iotshadow.IotShadowClient;
 
 @Slf4j
 @Configuration
@@ -92,7 +94,7 @@ public class AwsConfig {
     }
 
     @Bean
-    public MqttClientConnection awsIotMqttClient() {
+    public AWSIot awsIot() {
         AWSCredentials awsCredentials =
                 new AWSCredentials() {
                     @Override
@@ -106,12 +108,14 @@ public class AwsConfig {
                     }
                 };
 
-        AWSIot awsIot =
-                AWSIotClient.builder()
-                        .withRegion(Regions.AP_NORTHEAST_2)
-                        .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                        .build();
+        return AWSIotClient.builder()
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .build();
+    }
 
+    @Bean
+    public MqttClientConnection awsIotMqttClient(@Autowired AWSIot awsIot) {
         // 키 생성 및 정책 추가
         CreateKeysAndCertificateResult keysAndCertificate =
                 getCreateKeysAndCertificateResult(awsIot);
@@ -121,6 +125,11 @@ public class AwsConfig {
         connection.connect();
 
         return connection;
+    }
+
+    @Bean
+    public IotShadowClient iotShadowClient(@Autowired MqttClientConnection awsIotMqttClient) {
+        return new IotShadowClient(awsIotMqttClient);
     }
 
     private CreateKeysAndCertificateResult getCreateKeysAndCertificateResult(AWSIot awsIot) {
