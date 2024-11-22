@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.member.service;
 
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
@@ -12,6 +13,8 @@ import org.ioteatime.meonghanyangserver.member.dto.request.ChangePasswordRequest
 import org.ioteatime.meonghanyangserver.member.dto.response.MemberDetailResponse;
 import org.ioteatime.meonghanyangserver.member.mapper.MemberResponseMapper;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
+import org.ioteatime.meonghanyangserver.redis.AccessToken;
+import org.ioteatime.meonghanyangserver.redis.AccessTokenRepository;
 import org.ioteatime.meonghanyangserver.redis.RefreshToken;
 import org.ioteatime.meonghanyangserver.redis.RefreshTokenRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +28,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final AccessTokenRepository accessTokenRepository;
 
     public MemberDetailResponse getMemberDetail(Long memberId) {
         MemberEntity memberEntity =
@@ -86,5 +90,19 @@ public class MemberService {
         return AuthResponseMapper.from(newAccessToken);
     }
 
-    public void logout(Long memberId) {}
+    @Transactional
+    public void logout(Long memberId,String accessToken) {
+        refreshTokenRepository.deleteByMemberId(memberId);
+        accessToken = accessToken.substring(7);
+        Date data = jwtUtils.getExpirationDateFromToken(accessToken);
+        //access token의 남은 시간
+        long ttl = (data.getTime() - System.currentTimeMillis()) / 1000;
+
+        AccessToken accessTokenEntity = AccessToken.builder()
+                .accessToken(accessToken)
+                .ttl(ttl).build();
+        //access token 블랙리스트
+        accessTokenRepository.save(accessTokenEntity);
+
+    }
 }

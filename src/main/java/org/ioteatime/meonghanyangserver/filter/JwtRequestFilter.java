@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.filter;
 
+import com.amazonaws.services.kinesisvideo.model.NotAuthorizedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.exception.UnauthorizedException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
@@ -52,6 +54,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwtToken = authorizationHeader.substring(7);
             jwtId = jwtUtils.getIdFromToken(jwtToken);
             log.debug("jwt : ", jwtToken);
+            if(jwtUtils.blackListAccessToken(jwtToken)){
+                throw new BadRequestException(AuthErrorType.HEADER_INVALID);
+            }
         } else {
             log.error("Authorization 헤더 누락 또는 토큰 형식 오류");
             throw new UnauthorizedException(AuthErrorType.HEADER_INVALID);

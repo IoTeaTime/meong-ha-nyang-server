@@ -11,6 +11,7 @@ import java.util.Objects;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
+import org.ioteatime.meonghanyangserver.redis.AccessTokenRepository;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +19,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtils {
     private final SecretKey key;
+    private final AccessTokenRepository accessTokenRepository;
 
-    public JwtUtils(Environment env) {
+    public JwtUtils(Environment env, AccessTokenRepository accessTokenRepository) {
+        this.accessTokenRepository = accessTokenRepository;
         String secretKeyString = env.getProperty("token.secret");
         byte[] decodedKey = Base64.getDecoder().decode(secretKeyString);
         this.key = Keys.hmacShaKeyFor(decodedKey);
@@ -71,7 +74,7 @@ public class JwtUtils {
         return String.valueOf(claims.get("name"));
     }
 
-    private Date getExpirationDateFromToken(String token) {
+    public Date getExpirationDateFromToken(String token) {
         final Claims claims = getAllClaimsFromToken(token);
         return claims.getExpiration();
     }
@@ -103,5 +106,10 @@ public class JwtUtils {
 
     public String includeBearer(String token) {
         return "Bearer " + token;
+    }
+
+    //access token 블랙리스트 유무 확인
+    public boolean blackListAccessToken(String token){
+        return accessTokenRepository.existsByAccessToken(token);
     }
 }

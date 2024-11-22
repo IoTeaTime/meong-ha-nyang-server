@@ -29,5 +29,5 @@ public interface MemberApi {
     Api<RefreshResponse> refreshToken(@RequestHeader("Authorization") String authorizationHeader);
 
     @Operation(summary = "로그아웃을 진행합니다.", description = "담당자: 최민석")
-    Api<?> logout(@LoginMember Long memberId);
+    Api<?> logout(@LoginMember Long memberId, @RequestHeader("Authorization") String accessToken);
 }
