@@ -2,6 +2,7 @@ package org.ioteatime.meonghanyangserver.config;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.filter.ExceptionHandlerFilter;
 import org.ioteatime.meonghanyangserver.filter.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtRequestFilter jwtRequestFilter;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -39,7 +41,8 @@ public class SecurityConfig {
 
         http.httpBasic(HttpBasicConfigurer::disable);
 
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtRequestFilter.class);
 
         http.authorizeHttpRequests(
                 (auth) ->
