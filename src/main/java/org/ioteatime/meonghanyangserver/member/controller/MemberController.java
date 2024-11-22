@@ -10,7 +10,6 @@ import org.ioteatime.meonghanyangserver.member.dto.request.ChangePasswordRequest
 import org.ioteatime.meonghanyangserver.member.dto.response.MemberDetailResponse;
 import org.ioteatime.meonghanyangserver.member.service.MemberService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.Authentication;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,8 +44,9 @@ public class MemberController implements MemberApi {
     }
 
     @PostMapping("/sign-out")
-    public Api<?> logout(@LoginMember Long memberId,@RequestHeader("Authorization") String accessToken) {
-        memberService.logout(memberId,accessToken);
+    public Api<?> logout(
+            @LoginMember Long memberId, @RequestHeader("Authorization") String accessToken) {
+        memberService.logout(memberId, accessToken);
         return Api.success(AuthSuccessType.SIGN_OUT);
     }
 }

@@ -13,12 +13,9 @@ import org.springframework.data.redis.core.index.Indexed;
 @Builder
 @RedisHash(value = "accessToken")
 public class AccessToken {
-    @Id
-    private Long id;
+    @Id private Long id;
 
-    @Indexed
-    private String accessToken;
+    @Indexed private String accessToken;
 
-    @TimeToLive
-    private long ttl;
+    @TimeToLive private long ttl;
 }

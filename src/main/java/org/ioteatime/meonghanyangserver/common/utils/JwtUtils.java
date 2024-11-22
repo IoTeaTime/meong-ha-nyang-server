@@ -108,8 +108,8 @@ public class JwtUtils {
         return "Bearer " + token;
     }
 
-    //access token 블랙리스트 유무 확인
-    public boolean blackListAccessToken(String token){
+    // access token 블랙리스트 유무 확인
+    public boolean blackListAccessToken(String token) {
         return accessTokenRepository.existsByAccessToken(token);
     }
 }

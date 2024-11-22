@@ -12,7 +12,6 @@ public enum AuthSuccessType implements SuccessTypeCode {
     VERIFY_EMAIL_CODE(200, "OK", "이메일 인증 코드 검증에 성공하였습니다."),
     SIGN_OUT(200, "OK", "로그아웃에 성공하였습니다.");
 
-
     private final Integer code;
     private final String message;
     private final String description;

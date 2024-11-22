@@ -1,6 +1,5 @@
 package org.ioteatime.meonghanyangserver.filter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,15 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.exception.*;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
-import org.ioteatime.meonghanyangserver.common.type.CommonErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.dto.CustomUserDetail;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -56,7 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 jwtToken = authorizationHeader.substring(7);
-                //access token 블랙리스트 확인
+                // access token 블랙리스트 확인
                 if (jwtUtils.blackListAccessToken(jwtToken)) {
                     throw new UnauthorizedException(AuthErrorType.HEADER_INVALID);
                 }
@@ -88,12 +84,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 }
                 filterChain.doFilter(request, response);
             }
-        }catch (ApiExceptionImpl exception) {
+        } catch (ApiExceptionImpl exception) {
             exceptionHandle(response, exception);
         }
     }
-    //jwtRequest filter exception handle
-    private void exceptionHandle(HttpServletResponse response, ApiExceptionImpl exception) throws IOException {
+
+    // jwtRequest filter exception handle
+    private void exceptionHandle(HttpServletResponse response, ApiExceptionImpl exception)
+            throws IOException {
         response.setStatus(exception.getHttpStatus().value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
