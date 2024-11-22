@@ -13,12 +13,16 @@ import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
+import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
+import org.ioteatime.meonghanyangserver.group.dto.response.UpdateNicknameAndGroupNameResponse;
+import org.ioteatime.meonghanyangserver.group.mapper.GroupResponseMapper;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.dto.request.ChangePasswordRequest;
+import org.ioteatime.meonghanyangserver.member.dto.request.UpdateNicknameAndGroupNameRequest;
 import org.ioteatime.meonghanyangserver.member.dto.response.MemberDetailResponse;
 import org.ioteatime.meonghanyangserver.member.mapper.MemberResponseMapper;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
@@ -146,5 +150,32 @@ public class MemberService {
         newAccessToken = jwtUtils.includeBearer(newAccessToken);
 
         return AuthResponseMapper.from(newAccessToken);
+    }
+
+    @Transactional
+    public UpdateNicknameAndGroupNameResponse updateNicknameAndGroupName(
+            Long memberId, UpdateNicknameAndGroupNameRequest request) {
+        String updatedNickname = null, updatedGroupName = null;
+        if (request.nickname() != null) {
+            MemberEntity memberEntity =
+                    memberRepository
+                            .findById(memberId)
+                            .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
+            memberEntity = memberEntity.updateNickname(request.nickname());
+            updatedNickname = memberEntity.getNickname();
+        }
+        if (request.groupName() != null) {
+            GroupMemberEntity groupMemberEntity =
+                    groupMemberRepository
+                            .findByMemberId(memberId)
+                            .orElseThrow(
+                                    () ->
+                                            new NotFoundException(
+                                                    GroupErrorType.GROUP_MEMBER_NOT_FOUND));
+            GroupEntity group = groupMemberEntity.getGroup();
+            group = group.updateGroupName(request.groupName());
+            updatedGroupName = group.getGroupName();
+        }
+        return GroupResponseMapper.from(updatedNickname, updatedGroupName);
     }
 }

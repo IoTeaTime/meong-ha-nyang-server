@@ -6,6 +6,7 @@ import org.ioteatime.meonghanyangserver.cctv.mapper.CctvResponseMapper;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.dto.response.CreateGroupResponse;
 import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
+import org.ioteatime.meonghanyangserver.group.dto.response.UpdateNicknameAndGroupNameResponse;
 import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberInfoResponse;
 import org.ioteatime.meonghanyangserver.groupmember.mapper.GroupMemberResponseMapper;
 
@@ -30,5 +31,9 @@ public class GroupResponseMapper {
                 groupEntity.getCreatedAt(),
                 deviceInfoResponseList,
                 cctvInfoResponseList);
+    }
+
+    public static UpdateNicknameAndGroupNameResponse from(String nickname, String groupName) {
+        return new UpdateNicknameAndGroupNameResponse(nickname, groupName);
     }
 }
