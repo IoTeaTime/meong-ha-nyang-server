@@ -4,6 +4,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.filter.ExceptionHandlerFilter;
 import org.ioteatime.meonghanyangserver.filter.JwtRequestFilter;
+import org.ioteatime.meonghanyangserver.handler.CustomLogoutHandler;
+import org.ioteatime.meonghanyangserver.handler.CustomLogoutSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,6 +27,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     private final JwtRequestFilter jwtRequestFilter;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final CustomLogoutHandler customLogoutHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -43,7 +47,6 @@ public class SecurityConfig {
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerFilter, JwtRequestFilter.class);
-
         http.authorizeHttpRequests(
                 (auth) ->
                         auth.requestMatchers(
@@ -55,7 +58,11 @@ public class SecurityConfig {
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated());
-
+        http.logout(
+                logout ->
+                        logout.logoutUrl("/api/member/sign-out")
+                                .addLogoutHandler(customLogoutHandler)
+                                .logoutSuccessHandler(customLogoutSuccessHandler));
         http.sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

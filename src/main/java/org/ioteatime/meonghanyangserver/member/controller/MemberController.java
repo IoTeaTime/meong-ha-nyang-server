@@ -44,9 +44,7 @@ public class MemberController implements MemberApi {
     }
 
     @PostMapping("/sign-out")
-    public Api<?> logout(
-            @LoginMember Long memberId, @RequestHeader("Authorization") String accessToken) {
-        memberService.logout(memberId, accessToken);
+    public Api<?> logout() {
         return Api.success(AuthSuccessType.SIGN_OUT);
     }
 }
