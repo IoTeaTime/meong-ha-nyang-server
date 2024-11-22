@@ -19,7 +19,6 @@ import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.iot.iotshadow.IotShadowClient;
 
 @Service
 @RequiredArgsConstructor

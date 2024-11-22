@@ -22,7 +22,6 @@ public class IotShadowMqttClient {
 
         updateShadowRequest.thingName = thingName;
 
-        iotShadowClient.PublishUpdateShadow(
-                updateShadowRequest, QualityOfService.AT_LEAST_ONCE);
+        iotShadowClient.PublishUpdateShadow(updateShadowRequest, QualityOfService.AT_LEAST_ONCE);
     }
 }

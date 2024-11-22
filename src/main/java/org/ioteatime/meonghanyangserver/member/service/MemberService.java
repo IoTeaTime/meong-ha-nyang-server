@@ -28,10 +28,7 @@ import org.ioteatime.meonghanyangserver.video.repository.VideoRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import software.amazon.awssdk.crt.mqtt.QualityOfService;
 import software.amazon.awssdk.iot.iotshadow.IotShadowClient;
-import software.amazon.awssdk.iot.iotshadow.model.ShadowState;
-import software.amazon.awssdk.iot.iotshadow.model.UpdateShadowRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -85,7 +82,8 @@ public class MemberService {
 
                         // CCTV 상태 shadow에서 kvsChannelDeleteRequested 필드 true로 pub -> (iot 기기 삭제는
                         // 모바일에서)
-                        iotShadowMqttClient.updateShadow(cctv.getThingId(), "kvsChannelDeleteRequested", true);
+                        iotShadowMqttClient.updateShadow(
+                                cctv.getThingId(), "kvsChannelDeleteRequested", true);
                     });
             // CCTV 목록 삭제
             cctvRepository.deleteByGroupId(groupId);
