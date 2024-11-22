@@ -1,5 +1,7 @@
 package org.ioteatime.meonghanyangserver.handler;
 
+import io.jsonwebtoken.io.IOException;
+import jakarta.servlet.ServletException;
 import jakarta.validation.UnexpectedTypeException;
 import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.common.api.Api;
@@ -36,4 +38,5 @@ public class GlobalExceptionHandler {
         log.info("", exception);
         return ResponseEntity.status(exception.getHttpStatus()).body(Api.fail(exception));
     }
+
 }
