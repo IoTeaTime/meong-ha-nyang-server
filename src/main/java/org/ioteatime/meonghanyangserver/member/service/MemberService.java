@@ -6,6 +6,7 @@ import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
+import org.ioteatime.meonghanyangserver.clients.iot.IotShadowMqttClient;
 import org.ioteatime.meonghanyangserver.clients.kvs.KvsClient;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
@@ -27,10 +28,7 @@ import org.ioteatime.meonghanyangserver.video.repository.VideoRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import software.amazon.awssdk.crt.mqtt.QualityOfService;
 import software.amazon.awssdk.iot.iotshadow.IotShadowClient;
-import software.amazon.awssdk.iot.iotshadow.model.ShadowState;
-import software.amazon.awssdk.iot.iotshadow.model.UpdateShadowRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +40,7 @@ public class MemberService {
     private final IotShadowClient iotShadowClient;
     private final VideoRepository videoRepository;
     private final MemberRepository memberRepository;
+    private final IotShadowMqttClient iotShadowMqttClient;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final GroupMemberRepository groupMemberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -83,17 +82,8 @@ public class MemberService {
 
                         // CCTV 상태 shadow에서 kvsChannelDeleteRequested 필드 true로 pub -> (iot 기기 삭제는
                         // 모바일에서)
-                        ShadowState shadowState = new ShadowState();
-                        shadowState.desired.put("kvsChannelDeleteRequested", true);
-                        shadowState.reportedIsNullable = true;
-
-                        UpdateShadowRequest updateShadowRequest = new UpdateShadowRequest();
-                        updateShadowRequest.state = shadowState;
-
-                        updateShadowRequest.thingName = cctv.getThingId();
-
-                        iotShadowClient.PublishUpdateShadow(
-                                updateShadowRequest, QualityOfService.AT_LEAST_ONCE);
+                        iotShadowMqttClient.updateShadow(
+                                cctv.getThingId(), "kvsChannelDeleteRequested", true);
                     });
             // CCTV 목록 삭제
             cctvRepository.deleteByGroupId(groupId);
