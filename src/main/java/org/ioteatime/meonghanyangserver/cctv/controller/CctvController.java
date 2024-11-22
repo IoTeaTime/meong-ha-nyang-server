@@ -1,7 +1,9 @@
 package org.ioteatime.meonghanyangserver.cctv.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.cctv.dto.request.UpdateCctvNickname;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
 import org.ioteatime.meonghanyangserver.cctv.service.CctvService;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.CctvSuccessType;
@@ -25,5 +27,12 @@ public class CctvController implements CctvApi {
             @LoginMember Long memberId, @PathVariable Long groupId) {
         CctvInfoListResponse cctvInfoListResponse = cctvService.cctvInfoList(memberId, groupId);
         return Api.success(CctvSuccessType.GET_CCTV_DETAIL_LIST, cctvInfoListResponse);
+    }
+
+    @PatchMapping
+    public Api<CctvInfoResponse> updateNickName(
+            @LoginMember Long memberId, @RequestBody UpdateCctvNickname request) {
+        CctvInfoResponse response = cctvService.updateNickname(memberId, request);
+        return Api.success(CctvSuccessType.UPDATE_NICKNAME, response);
     }
 }

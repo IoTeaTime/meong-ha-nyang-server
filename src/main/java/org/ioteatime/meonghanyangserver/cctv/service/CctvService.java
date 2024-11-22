@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.CreateCctvRequest;
+import org.ioteatime.meonghanyangserver.cctv.dto.request.UpdateCctvNickname;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
 import org.ioteatime.meonghanyangserver.cctv.mapper.CctvResponseMapper;
@@ -89,5 +90,21 @@ public class CctvService {
                 cctvEntityList.stream().map(CctvResponseMapper::from).toList();
         CctvInfoListResponse cctvInfoListResponse = new CctvInfoListResponse(cctvInfoResponseList);
         return cctvInfoListResponse;
+    }
+
+    @Transactional
+    public CctvInfoResponse updateNickname(Long memberId, UpdateCctvNickname request) {
+        // cctvId로 cctv 객체 찾기
+        CctvEntity cctvEntity =
+                cctvRepository
+                        .findById(request.cctvId())
+                        .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
+        // groupId와 memberId로 groupMember가 존재하는지 확인 -> 아니면 에러
+        groupMemberRepository
+                .findByGroupIdAndMemberId(cctvEntity.getGroup().getId(), memberId)
+                .orElseThrow(() -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
+        // cctv 이름 변경
+        cctvEntity = cctvEntity.updateNickname(request.cctvNickname());
+        return CctvResponseMapper.from(cctvEntity);
     }
 }
