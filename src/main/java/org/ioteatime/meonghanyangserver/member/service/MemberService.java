@@ -156,9 +156,9 @@ public class MemberService {
     public void logout(Long memberId, String accessToken) {
         refreshTokenRepository.deleteByMemberId(memberId);
         accessToken = accessToken.substring(7);
-        Date data = jwtUtils.getExpirationDateFromToken(accessToken);
+        Date date = jwtUtils.getExpirationDateFromToken(accessToken);
         // access token의 남은 시간
-        long ttl = (data.getTime() - System.currentTimeMillis()) / 1000;
+        long ttl = (date.getTime() - System.currentTimeMillis()) / 1000;
 
         AccessToken accessTokenEntity =
                 AccessToken.builder().accessToken(accessToken).ttl(ttl).build();
