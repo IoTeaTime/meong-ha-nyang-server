@@ -2,6 +2,7 @@ package org.ioteatime.meonghanyangserver.cctv.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,5 +13,5 @@ public interface CctvApi {
     Api<?> out(@LoginMember Long userId, @PathVariable Long cctvId);
 
     @Operation(summary = "CCTV 정보 목록 조회", description = "담당자: 최민석")
-    Api<?> cctvInfoList(@LoginMember Long memberId, @PathVariable Long groupId);
+    Api<CctvInfoListResponse> cctvInfoList(@LoginMember Long memberId, @PathVariable Long groupId);
 }
