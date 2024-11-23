@@ -1,6 +1,5 @@
 package org.ioteatime.meonghanyangserver.member.service;
 
-import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
@@ -23,7 +22,6 @@ import org.ioteatime.meonghanyangserver.member.dto.request.ChangePasswordRequest
 import org.ioteatime.meonghanyangserver.member.dto.response.MemberDetailResponse;
 import org.ioteatime.meonghanyangserver.member.mapper.MemberResponseMapper;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
-import org.ioteatime.meonghanyangserver.redis.AccessToken;
 import org.ioteatime.meonghanyangserver.redis.AccessTokenRepository;
 import org.ioteatime.meonghanyangserver.redis.RefreshToken;
 import org.ioteatime.meonghanyangserver.redis.RefreshTokenRepository;
