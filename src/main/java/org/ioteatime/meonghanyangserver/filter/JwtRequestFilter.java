@@ -7,8 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
-import org.ioteatime.meonghanyangserver.common.exception.UnauthorizedException;
+import org.ioteatime.meonghanyangserver.common.exception.*;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
@@ -34,6 +33,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         String uri = request.getRequestURI();
         if (uri.contains("/open-api")
                 || uri.contains("/swagger-ui")
@@ -50,6 +50,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwtToken = authorizationHeader.substring(7);
+            // access token 블랙리스트 확인
+            if (jwtUtils.blackListAccessToken(jwtToken)) {
+                throw new UnauthorizedException(AuthErrorType.HEADER_INVALID);
+            }
             jwtId = jwtUtils.getIdFromToken(jwtToken);
             log.debug("jwt : ", jwtToken);
         } else {

@@ -22,6 +22,7 @@ import org.ioteatime.meonghanyangserver.member.dto.request.ChangePasswordRequest
 import org.ioteatime.meonghanyangserver.member.dto.response.MemberDetailResponse;
 import org.ioteatime.meonghanyangserver.member.mapper.MemberResponseMapper;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
+import org.ioteatime.meonghanyangserver.redis.AccessTokenRepository;
 import org.ioteatime.meonghanyangserver.redis.RefreshToken;
 import org.ioteatime.meonghanyangserver.redis.RefreshTokenRepository;
 import org.ioteatime.meonghanyangserver.video.repository.VideoRepository;
@@ -44,6 +45,7 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final GroupMemberRepository groupMemberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final AccessTokenRepository accessTokenRepository;
 
     public MemberDetailResponse getMemberDetail(Long memberId) {
         MemberEntity memberEntity =
