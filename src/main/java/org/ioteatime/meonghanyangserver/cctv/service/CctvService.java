@@ -18,6 +18,8 @@ import org.ioteatime.meonghanyangserver.common.type.CctvErrorType;
 import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.springframework.stereotype.Service;
 
@@ -82,29 +84,36 @@ public class CctvService {
     }
 
     public CctvInfoListResponse cctvInfoList(Long memberId, Long groupId) {
-        if (!groupMemberRepository.existsByMemberIdAndGroupId(memberId, groupId)) {
-            throw new BadRequestException(GroupErrorType.GROUP_MEMBER_NOT_FOUND);
-        }
+        validateMaster(memberId, groupId);
         List<CctvEntity> cctvEntityList = cctvRepository.findByGroupId(groupId);
         List<CctvInfoResponse> cctvInfoResponseList =
                 cctvEntityList.stream().map(CctvResponseMapper::from).toList();
-        CctvInfoListResponse cctvInfoListResponse = new CctvInfoListResponse(cctvInfoResponseList);
-        return cctvInfoListResponse;
+        return CctvResponseMapper.from(cctvInfoResponseList);
     }
 
     @Transactional
     public CctvInfoResponse updateNickname(Long memberId, UpdateCctvNickname request) {
-        // cctvId로 cctv 객체 찾기
+        // CctvId로 cctv 객체 찾기
         CctvEntity cctvEntity =
                 cctvRepository
                         .findById(request.cctvId())
                         .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
-        // groupId와 memberId로 groupMember가 존재하는지 확인 -> 아니면 에러
-        groupMemberRepository
-                .findByGroupIdAndMemberId(cctvEntity.getGroup().getId(), memberId)
-                .orElseThrow(() -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
+        validateMaster(memberId, cctvEntity.getGroup().getId());
         // cctv 이름 변경
         cctvEntity = cctvEntity.updateNickname(request.cctvNickname());
         return CctvResponseMapper.from(cctvEntity);
+    }
+
+    private void validateMaster(Long memberId, Long groupId) {
+        // GroupId와 memberId로 groupMember가 존재하는지 확인 -> 아니면 에러
+        GroupMemberEntity groupMemberEntity =
+                groupMemberRepository
+                        .findByGroupIdAndMemberId(groupId, memberId)
+                        .orElseThrow(
+                                () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
+        // Member가 Master인지 확인 -> 아니면 에러
+        if (groupMemberEntity.getRole() != GroupMemberRole.ROLE_MASTER) {
+            throw new BadRequestException(GroupErrorType.ONLY_MASTER_UPDATE_CCTV_NICKNAME);
+        }
     }
 }
