@@ -151,18 +151,4 @@ public class MemberService {
 
         return AuthResponseMapper.from(newAccessToken);
     }
-
-    @Transactional
-    public void logout(Long memberId, String accessToken) {
-        refreshTokenRepository.deleteByMemberId(memberId);
-        accessToken = accessToken.substring(7);
-        Date date = jwtUtils.getExpirationDateFromToken(accessToken);
-        // access token의 남은 시간
-        long ttl = (date.getTime() - System.currentTimeMillis()) / 1000;
-
-        AccessToken accessTokenEntity =
-                AccessToken.builder().accessToken(accessToken).ttl(ttl).build();
-        // access token 블랙리스트
-        accessTokenRepository.save(accessTokenEntity);
-    }
 }
