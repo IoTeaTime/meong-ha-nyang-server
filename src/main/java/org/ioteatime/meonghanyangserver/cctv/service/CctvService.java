@@ -5,10 +5,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.CreateCctvRequest;
+import org.ioteatime.meonghanyangserver.cctv.dto.request.UpdateCctvNickname;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
 import org.ioteatime.meonghanyangserver.cctv.mapper.CctvResponseMapper;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
+import org.ioteatime.meonghanyangserver.clients.iot.IotShadowMqttClient;
 import org.ioteatime.meonghanyangserver.clients.kvs.KvsClient;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
@@ -24,8 +26,9 @@ import org.springframework.stereotype.Service;
 public class CctvService {
     private final KvsClient kvsClient;
     private final CctvRepository cctvRepository;
-    private final GroupMemberRepository groupMemberRepository;
     private final GroupRepository groupRepository;
+    private final IotShadowMqttClient iotShadowMqttClient;
+    private final GroupMemberRepository groupMemberRepository;
 
     public void createCctv(CreateCctvRequest createCctvRequest) {
 
@@ -64,7 +67,9 @@ public class CctvService {
                         .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
         // 1. KVS 시그널링 채널 삭제
         kvsClient.deleteSignalingChannel(cctv.getKvsChannelName());
-        // 2. CCTV 테이블에서 삭제
+        // 2. IoT desired -> 삭제되었음을 알림
+        iotShadowMqttClient.updateShadow(cctv.getThingId(), "kvsChannelDeleteRequested", true);
+        // 3. CCTV 테이블에서 삭제
         cctvRepository.deleteById(cctvId);
     }
 
@@ -85,5 +90,21 @@ public class CctvService {
                 cctvEntityList.stream().map(CctvResponseMapper::from).toList();
         CctvInfoListResponse cctvInfoListResponse = new CctvInfoListResponse(cctvInfoResponseList);
         return cctvInfoListResponse;
+    }
+
+    @Transactional
+    public CctvInfoResponse updateNickname(Long memberId, UpdateCctvNickname request) {
+        // cctvId로 cctv 객체 찾기
+        CctvEntity cctvEntity =
+                cctvRepository
+                        .findById(request.cctvId())
+                        .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
+        // groupId와 memberId로 groupMember가 존재하는지 확인 -> 아니면 에러
+        groupMemberRepository
+                .findByGroupIdAndMemberId(cctvEntity.getGroup().getId(), memberId)
+                .orElseThrow(() -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
+        // cctv 이름 변경
+        cctvEntity = cctvEntity.updateNickname(request.cctvNickname());
+        return CctvResponseMapper.from(cctvEntity);
     }
 }

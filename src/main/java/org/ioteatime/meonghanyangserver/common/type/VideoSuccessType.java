@@ -1,15 +1,21 @@
 package org.ioteatime.meonghanyangserver.common.type;
 
-public enum AwsErrorType implements ErrorTypeCode {
-    KVS_CHANNEL_NAME_NOT_FOUND("NOT FOUND", "채널 이름에 해당하는 KVS 채널을 찾을 수 없습니다."),
-    IOT_MQTT_CONNECTION_FAILED("SERVER ERROR", "IoT MQTT 연결에 실패하였습니다.");
+public enum VideoSuccessType implements SuccessTypeCode {
+    GET_PRESIGNED_URL(200, "OK", "Presigned Url 조회에 성공하였습니다.");
 
+    private final Integer code;
     private final String message;
     private final String description;
 
-    AwsErrorType(String message, String description) {
+    VideoSuccessType(Integer code, String message, String description) {
+        this.code = code;
         this.message = message;
         this.description = description;
+    }
+
+    @Override
+    public Integer getCode() {
+        return this.code;
     }
 
     @Override

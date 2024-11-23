@@ -37,4 +37,9 @@ public class GroupEntity {
 
     @OneToMany(mappedBy = "group")
     private List<CctvEntity> cctvEntities;
+
+    public GroupEntity updateGroupName(String groupName) {
+        this.groupName = groupName;
+        return this;
+    }
 }

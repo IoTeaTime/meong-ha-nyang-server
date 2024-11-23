@@ -41,7 +41,7 @@ public class CctvRepositoryImpl implements CctvRepository {
     }
 
     @Override
-    public void deleteByCctvId(Long groupId) {
+    public void deleteByGroupId(Long groupId) {
         jpaCctvRepository.deleteByGroupId(groupId);
     }
 

@@ -1,4 +1,4 @@
-package org.ioteatime.meonghanyangserver.video.entity;
+package org.ioteatime.meonghanyangserver.video.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
