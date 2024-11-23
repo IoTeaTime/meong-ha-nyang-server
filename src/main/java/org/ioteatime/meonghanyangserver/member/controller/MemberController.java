@@ -59,4 +59,9 @@ public class MemberController implements MemberApi {
             return Api.success(AuthSuccessType.UPDATE_NICKNAME_AND_GROUP_NAME, response);
         }
     }
+
+    @PostMapping("/sign-out")
+    public Api<?> logout() {
+        return Api.success(AuthSuccessType.SIGN_OUT);
+    }
 }

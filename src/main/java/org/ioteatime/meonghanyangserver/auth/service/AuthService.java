@@ -56,7 +56,11 @@ public class AuthService {
         if (accessToken.isEmpty() || refreshToken.isEmpty()) {
             throw new NotFoundException(AuthErrorType.TOKEN_NOT_FOUND);
         }
-        RefreshToken refreshTokenEntity = RefreshToken.builder().refreshToken(refreshToken).build();
+        RefreshToken refreshTokenEntity =
+                RefreshToken.builder()
+                        .memberId(memberEntity.getId())
+                        .refreshToken(refreshToken)
+                        .build();
 
         refreshTokenRepository.save(refreshTokenEntity);
         accessToken = jwtUtils.includeBearer(accessToken);

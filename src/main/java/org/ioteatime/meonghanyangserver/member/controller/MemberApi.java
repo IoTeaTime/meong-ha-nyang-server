@@ -35,4 +35,7 @@ public interface MemberApi {
                     "담당자: 양원채\n\n닉네임 또는 그룹명을 갱신할 수 있으며, 한꺼번에 갱신도 가능합니다.\n\n갱신하고 싶지 않은 필드는 아예 적지 않거나 null로 담아 요청하시면 됩니다. 응답으로는 변경된 사항만 응답합니다.")
     Api<UpdateNicknameAndGroupNameResponse> updateNicknameAndGroupName(
             @LoginMember Long memberId, @RequestBody UpdateNicknameAndGroupNameRequest request);
+
+    @Operation(summary = "로그아웃을 진행합니다.", description = "담당자: 최민석")
+    Api<?> logout();
 }
