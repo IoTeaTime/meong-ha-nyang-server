@@ -148,7 +148,7 @@ public class MemberService {
             throw new BadRequestException(AuthErrorType.TOKEN_NOT_EQUALS);
         }
 
-        String newAccessToken = jwtUtils.generateAccessToken(memberEntity);
+        String newAccessToken = jwtUtils.generateAccessToken(memberEntity.getNickname(), memberId);
         newAccessToken = jwtUtils.includeBearer(newAccessToken);
 
         return AuthResponseMapper.from(newAccessToken);
