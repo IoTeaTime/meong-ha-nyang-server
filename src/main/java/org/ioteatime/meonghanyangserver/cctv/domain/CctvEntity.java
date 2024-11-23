@@ -49,4 +49,9 @@ public class CctvEntity {
         this.kvsChannelName = kvsChannelName;
         this.thingId = thingId;
     }
+
+    public CctvEntity updateNickname(String nickname) {
+        this.cctvNickname = nickname;
+        return this;
+    }
 }

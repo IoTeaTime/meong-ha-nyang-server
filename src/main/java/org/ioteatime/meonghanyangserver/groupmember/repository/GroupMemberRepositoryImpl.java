@@ -1,6 +1,7 @@
 package org.ioteatime.meonghanyangserver.groupmember.repository;
 
 import static org.ioteatime.meonghanyangserver.groupmember.doamin.QGroupMemberEntity.groupMemberEntity;
+import static org.ioteatime.meonghanyangserver.member.domain.QMemberEntity.memberEntity;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -97,6 +98,8 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
         return Optional.ofNullable(
                 jpaQueryFactory
                         .selectFrom(groupMemberEntity)
+                        .join(groupMemberEntity.member, memberEntity)
+                        .fetchJoin()
                         .where(
                                 groupMemberEntity
                                         .group
