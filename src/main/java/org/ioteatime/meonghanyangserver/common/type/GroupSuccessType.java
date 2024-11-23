@@ -8,7 +8,8 @@ public enum GroupSuccessType implements SuccessTypeCode {
     GET_GROUP_TOTAL_INFO(200, "OK", "그룹 통합 데이터 조회에 성공하였습니다."),
     DELETE_GROUP_MEMBER(200, "OK", "그룹에서 참여자 제외를 성공하였습니다."),
     JOIN_GROUP_MEMBER(201, "CREATE", "그룹에 참여자 등록을 성공하였습니다"),
-    GET_GROUP_MEMBER_INFO_LIST(200, "OK", "그룹 참여자 목록 데이터 조회에 성공하였습니다.");
+    GET_GROUP_MEMBER_INFO_LIST(200, "OK", "그룹 참여자 목록 데이터 조회에 성공하였습니다."),
+    UPDATE_GROUP_NAME(200, "OK", "그룹 이름 변경에 성공하였습니다.");
 
     private final Integer code;
     private final String message;

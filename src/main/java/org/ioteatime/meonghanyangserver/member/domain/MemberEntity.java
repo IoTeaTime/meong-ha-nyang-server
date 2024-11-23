@@ -67,4 +67,9 @@ public class MemberEntity {
         this.updatedAt = LocalDateTime.now();
         return this;
     }
+
+    public MemberEntity updateNickname(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
 }
