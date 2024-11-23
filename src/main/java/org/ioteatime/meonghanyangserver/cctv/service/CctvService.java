@@ -113,7 +113,7 @@ public class CctvService {
                                 () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
         // Member가 Master인지 확인 -> 아니면 에러
         if (groupMemberEntity.getRole() != GroupMemberRole.ROLE_MASTER) {
-            throw new BadRequestException(GroupErrorType.ONLY_MASTER_UPDATE_CCTV_NICKNAME);
+            throw new BadRequestException(GroupErrorType.ONLY_MASTER);
         }
     }
 }
