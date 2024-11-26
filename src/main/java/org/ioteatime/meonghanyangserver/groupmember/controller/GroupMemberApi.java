@@ -24,7 +24,7 @@ public interface GroupMemberApi {
             @PathVariable Long groupId,
             @PathVariable Long groupMemberId);
 
-    @Operation(summary = "그룹에서 참여자를 제외합니다.", description = "담당자: 최민석")
+    @Operation(summary = "그룹에서 참여자가 스스로 퇴장합니다.", description = "담당자: 최민석")
     public Api<?> deleteGroupMember(@LoginMember Long memberId, @PathVariable Long groupId);
 
     @Operation(summary = "그룹 참여자들의 정보를 조회합니다.", description = "담당자: 최민석")

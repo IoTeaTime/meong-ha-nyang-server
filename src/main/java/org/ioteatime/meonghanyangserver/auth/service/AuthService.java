@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.auth.dto.db.LoginWithMemberInfo;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthEntityMapper;
@@ -39,26 +40,28 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public LoginResponse login(LoginRequest loginRequest) {
-        MemberEntity memberEntity =
+        LoginWithMemberInfo memberInfo =
                 memberRepository
-                        .findByEmail(loginRequest.email())
+                        .findGroupMemberInfoByEmail(loginRequest.email())
                         .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
 
         boolean passwordMatch =
-                bCryptPasswordEncoder.matches(loginRequest.password(), memberEntity.getPassword());
+                bCryptPasswordEncoder.matches(loginRequest.password(), memberInfo.password());
         if (!passwordMatch) {
             throw new BadRequestException(AuthErrorType.PASSWORD_NOT_MATCH);
         }
 
-        String accessToken = jwtUtils.generateAccessToken(memberEntity);
-        String refreshToken = jwtUtils.generateRefreshToken(memberEntity);
+        String accessToken =
+                jwtUtils.generateAccessToken(memberInfo.nickname(), memberInfo.memberId());
+        String refreshToken =
+                jwtUtils.generateRefreshToken(memberInfo.nickname(), memberInfo.memberId());
 
         if (accessToken.isEmpty() || refreshToken.isEmpty()) {
             throw new NotFoundException(AuthErrorType.TOKEN_NOT_FOUND);
         }
         RefreshToken refreshTokenEntity =
                 RefreshToken.builder()
-                        .memberId(memberEntity.getId())
+                        .memberId(memberInfo.memberId())
                         .refreshToken(refreshToken)
                         .build();
 
@@ -66,7 +69,7 @@ public class AuthService {
         accessToken = jwtUtils.includeBearer(accessToken);
         refreshToken = jwtUtils.includeBearer(refreshToken);
 
-        return AuthResponseMapper.from(memberEntity.getId(), accessToken, refreshToken);
+        return AuthResponseMapper.from(memberInfo, accessToken, refreshToken);
     }
 
     public MemberSimpleResponse joinProcess(JoinRequest userDto) {
