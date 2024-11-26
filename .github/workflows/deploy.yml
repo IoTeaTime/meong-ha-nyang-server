@@ -1,7 +1,8 @@
 name: Production 배포
 on:
   push:
-    branches: ['main', 'fix/175-redis-oom']
+    branches:
+      - main
 env:
   DOCKERHUB_USERNAME: meonghanyang
   DOCKERHUB_IMAGE_NAME: server
