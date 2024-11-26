@@ -24,7 +24,7 @@ public class CctvController implements CctvApi {
 
     @GetMapping("/list/{groupId}")
     public Api<CctvInfoListResponse> cctvInfoList(
-            @LoginMember Long memberId, @PathVariable Long groupId) {
+            @LoginMember Long memberId, @PathVariable("groupId") Long groupId) {
         CctvInfoListResponse cctvInfoListResponse = cctvService.cctvInfoList(memberId, groupId);
         return Api.success(CctvSuccessType.GET_CCTV_DETAIL_LIST, cctvInfoListResponse);
     }
