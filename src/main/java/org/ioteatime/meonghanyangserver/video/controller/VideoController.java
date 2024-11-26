@@ -24,4 +24,9 @@ public class VideoController implements VideoApi {
                 videoService.getVideoPresignedUrl(memberId, videoId, groupId);
         return Api.success(VideoSuccessType.GET_PRESIGNED_URL, videoPresignedUrlResponse);
     }
+
+    @Override
+    public Api<?> searchToDate(Long memberId, Long groupId, String date) {
+        return null;
+    }
 }
