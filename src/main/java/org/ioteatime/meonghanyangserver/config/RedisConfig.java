@@ -11,7 +11,8 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 
 @Configuration
 @EnableRedisRepositories(
-        enableKeyspaceEvents = RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP)
+        enableKeyspaceEvents = RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP,
+        keyspaceNotificationsConfigParameter = "")
 public class RedisConfig {
     @Value("${spring.data.redis.host}")
     private String host;
@@ -27,7 +28,7 @@ public class RedisConfig {
         RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration();
         redisConfiguration.setHostName(host);
         redisConfiguration.setPort(Integer.parseInt(port));
-        //        redisConfiguration.setPassword(password);
+        redisConfiguration.setPassword(password);
         return new LettuceConnectionFactory(redisConfiguration);
     }
 }
