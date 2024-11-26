@@ -28,14 +28,14 @@ public class JwtUtils {
         this.key = Keys.hmacShaKeyFor(decodedKey);
     }
 
-    public String generateAccessToken(MemberEntity memberEntity) {
+    public String generateAccessToken(String nickname, Long memberId) {
         Date nowDate = new Date();
         Date expiration = new Date(nowDate.getTime() + Duration.ofHours(2).toMillis());
         String jwtToken =
                 Jwts.builder()
-                        .claim("name", memberEntity.getNickname())
+                        .claim("name", nickname)
                         .claim("sub", "meong-ha-nyang")
-                        .claim("jti", String.valueOf(memberEntity.getId()))
+                        .claim("jti", String.valueOf(memberId))
                         .claim("iat", nowDate)
                         .claim("exp", expiration)
                         .signWith(key)
@@ -44,14 +44,14 @@ public class JwtUtils {
         return jwtToken;
     }
 
-    public String generateRefreshToken(MemberEntity memberEntity) {
+    public String generateRefreshToken(String nickname, Long memberId) {
         Date nowDate = new Date();
         Date expiration = new Date(nowDate.getTime() + Duration.ofDays(30).toMillis());
         String jwtToken =
                 Jwts.builder()
-                        .claim("name", memberEntity.getNickname())
+                        .claim("name", nickname)
                         .claim("sub", "meong-ha-nyang")
-                        .claim("jti", String.valueOf(memberEntity.getId()))
+                        .claim("jti", String.valueOf(memberId))
                         .claim("iat", nowDate)
                         .claim("exp", expiration)
                         .signWith(key)

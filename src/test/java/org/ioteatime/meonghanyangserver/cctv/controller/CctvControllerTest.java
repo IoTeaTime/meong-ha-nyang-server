@@ -47,7 +47,9 @@ class CctvControllerTest extends ControllerTestConfig {
                         .password("testpassword")
                         .build();
         memberRepository.save(member);
-        accessToken = jwtUtils.includeBearer(jwtUtils.generateAccessToken(member));
+        accessToken =
+                jwtUtils.includeBearer(
+                        jwtUtils.generateAccessToken(member.getNickname(), member.getId()));
     }
 
     @Test

@@ -1,6 +1,8 @@
 package org.ioteatime.meonghanyangserver.cctv.mapper;
 
+import java.util.List;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
 
 public class CctvResponseMapper {
@@ -10,5 +12,9 @@ public class CctvResponseMapper {
                 cctvEntity.getCctvNickname(),
                 cctvEntity.getThingId(),
                 cctvEntity.getKvsChannelName());
+    }
+
+    public static CctvInfoListResponse from(List<CctvInfoResponse> cctvInfoResponseList) {
+        return new CctvInfoListResponse(cctvInfoResponseList);
     }
 }
