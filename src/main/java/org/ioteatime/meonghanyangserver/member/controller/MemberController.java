@@ -10,7 +10,7 @@ import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.ioteatime.meonghanyangserver.group.dto.response.UpdateNicknameAndGroupNameResponse;
 import org.ioteatime.meonghanyangserver.member.dto.request.ChangePasswordRequest;
 import org.ioteatime.meonghanyangserver.member.dto.request.UpdateNicknameAndGroupNameRequest;
-import org.ioteatime.meonghanyangserver.member.dto.response.MemberDetailResponse;
+import org.ioteatime.meonghanyangserver.member.dto.response.MemberWithGroupDetailResponse;
 import org.ioteatime.meonghanyangserver.member.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +21,9 @@ public class MemberController implements MemberApi {
     private final MemberService memberService;
 
     @GetMapping("/{memberId}")
-    public Api<MemberDetailResponse> getMemberDetail(@PathVariable("memberId") Long memberId) {
-        MemberDetailResponse userDto = memberService.getMemberDetail(memberId);
+    public Api<MemberWithGroupDetailResponse> getMemberDetail(
+            @PathVariable("memberId") Long memberId) {
+        MemberWithGroupDetailResponse userDto = memberService.getMemberDetail(memberId);
         return Api.success(AuthSuccessType.GET_USER_DETAIL, userDto);
     }
 
