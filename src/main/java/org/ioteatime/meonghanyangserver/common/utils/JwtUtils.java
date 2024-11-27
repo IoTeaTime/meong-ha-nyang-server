@@ -64,17 +64,16 @@ public class JwtUtils {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        try{
+        try {
             Jws<Claims> jwt =
                     Jwts.parser()
                             .verifyWith(key) // SecretKey를 이용한 서명 검증
                             .build()
                             .parseSignedClaims(token);
             return jwt.getPayload();
-        }catch (ExpiredJwtException exception){
+        } catch (ExpiredJwtException exception) {
             throw new UnauthorizedException(AuthErrorType.TOKEN_NOT_FOUND);
         }
-
     }
 
     public String getNameFromToken(String token) {
