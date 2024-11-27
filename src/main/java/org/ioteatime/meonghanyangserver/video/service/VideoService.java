@@ -40,7 +40,7 @@ public class VideoService {
 
     public VideoInfoListResponse searchToDate(Long memberId, Long groupId, LocalDate date) {
         if (!groupMemberRepository.existsByMemberIdAndGroupId(memberId, groupId)) {
-            throw new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND);
+            throw new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND_IN_GROUP);
         }
 
         List<VideoEntity> videoEntityList =
