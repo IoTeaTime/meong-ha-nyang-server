@@ -1,6 +1,7 @@
 package org.ioteatime.meonghanyangserver.member.service;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
@@ -57,11 +58,11 @@ public class MemberService {
                         .findById(memberId)
                         .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
 
-        GroupMemberEntity groupMemberEntity =
-                groupMemberRepository.findByMemberId(memberId).orElse(null);
+        Optional<GroupMemberEntity> groupMemberEntity =
+                groupMemberRepository.findByMemberId(memberId);
         GroupEntity groupEntity = null;
-        if (groupMemberEntity != null) {
-            groupEntity = groupMemberEntity.getGroup();
+        if (groupMemberEntity.isPresent()) {
+            groupEntity = groupMemberEntity.get().getGroup();
         }
 
         return MemberResponseMapper.from(memberEntity, groupEntity);
