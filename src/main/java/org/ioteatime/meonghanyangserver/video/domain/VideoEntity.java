@@ -23,6 +23,9 @@ public class VideoEntity {
     @Column(nullable = false, length = 100)
     private String videoPath;
 
+    @Column(nullable = false, length = 100)
+    private String thumbnailPath;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 }

@@ -1,10 +1,9 @@
 package org.ioteatime.meonghanyangserver.videothumbnail.domain;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.Data;
 import org.ioteatime.meonghanyangserver.video.domain.VideoEntity;
-
-import java.time.LocalDateTime;
 
 @Data
 @Entity

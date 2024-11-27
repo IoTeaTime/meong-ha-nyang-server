@@ -1,15 +1,15 @@
 package org.ioteatime.meonghanyangserver.video.controller;
 
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.VideoSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
+import org.ioteatime.meonghanyangserver.video.dto.response.VideoInfoListResponse;
 import org.ioteatime.meonghanyangserver.video.dto.response.VideoPresignedUrlResponse;
 import org.ioteatime.meonghanyangserver.video.service.VideoService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,8 +25,13 @@ public class VideoController implements VideoApi {
         return Api.success(VideoSuccessType.GET_PRESIGNED_URL, videoPresignedUrlResponse);
     }
 
-    @Override
-    public Api<?> searchToDate(Long memberId, Long groupId, String date) {
-        return null;
+    @GetMapping("/group/{groupId}")
+    public Api<VideoInfoListResponse> searchToDate(
+            @LoginMember Long memberId,
+            @PathVariable("groupId") Long groupId,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        VideoInfoListResponse videoInfoListResponse =
+                videoService.searchToDate(memberId, groupId, date);
+        return Api.success(VideoSuccessType.GET_VIDEO_INFO, videoInfoListResponse);
     }
 }
