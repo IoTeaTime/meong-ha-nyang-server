@@ -1,6 +1,7 @@
 package org.ioteatime.meonghanyangserver.common.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -10,6 +11,8 @@ import java.util.Date;
 import java.util.Objects;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
+import org.ioteatime.meonghanyangserver.common.exception.UnauthorizedException;
+import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.redis.AccessTokenRepository;
 import org.springframework.core.env.Environment;
@@ -61,12 +64,17 @@ public class JwtUtils {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        Jws<Claims> jwt =
-                Jwts.parser()
-                        .verifyWith(key) // SecretKey를 이용한 서명 검증
-                        .build()
-                        .parseSignedClaims(token);
-        return jwt.getPayload();
+        try{
+            Jws<Claims> jwt =
+                    Jwts.parser()
+                            .verifyWith(key) // SecretKey를 이용한 서명 검증
+                            .build()
+                            .parseSignedClaims(token);
+            return jwt.getPayload();
+        }catch (ExpiredJwtException exception){
+            throw new UnauthorizedException(AuthErrorType.TOKEN_NOT_FOUND);
+        }
+
     }
 
     public String getNameFromToken(String token) {
@@ -85,9 +93,7 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String token, MemberEntity memberEntity) {
-        if (isTokenExpired(token)) {
-            return false;
-        }
+        isTokenExpired(token);
 
         Long jwtId = getIdFromToken(token);
         Long id = memberEntity.getId();
