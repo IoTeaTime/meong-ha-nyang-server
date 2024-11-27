@@ -1,6 +1,7 @@
 package org.ioteatime.meonghanyangserver.member.service;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
@@ -23,7 +24,7 @@ import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberReposi
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.dto.request.ChangePasswordRequest;
 import org.ioteatime.meonghanyangserver.member.dto.request.UpdateNicknameAndGroupNameRequest;
-import org.ioteatime.meonghanyangserver.member.dto.response.MemberDetailResponse;
+import org.ioteatime.meonghanyangserver.member.dto.response.MemberWithGroupDetailResponse;
 import org.ioteatime.meonghanyangserver.member.mapper.MemberResponseMapper;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.ioteatime.meonghanyangserver.redis.AccessTokenRepository;
@@ -51,13 +52,20 @@ public class MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final AccessTokenRepository accessTokenRepository;
 
-    public MemberDetailResponse getMemberDetail(Long memberId) {
+    public MemberWithGroupDetailResponse getMemberDetail(Long memberId) {
         MemberEntity memberEntity =
                 memberRepository
                         .findById(memberId)
                         .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
 
-        return MemberResponseMapper.from(memberEntity);
+        Optional<GroupMemberEntity> groupMemberEntity =
+                groupMemberRepository.findByMemberId(memberId);
+        GroupEntity groupEntity = null;
+        if (groupMemberEntity.isPresent()) {
+            groupEntity = groupMemberEntity.get().getGroup();
+        }
+
+        return MemberResponseMapper.from(memberEntity, groupEntity);
     }
 
     // NOTE.
