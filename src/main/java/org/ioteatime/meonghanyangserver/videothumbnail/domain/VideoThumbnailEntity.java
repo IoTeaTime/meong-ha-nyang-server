@@ -1,27 +1,21 @@
-package org.ioteatime.meonghanyangserver.video.domain;
+package org.ioteatime.meonghanyangserver.videothumbnail.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.Data;
-import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
+import org.ioteatime.meonghanyangserver.video.domain.VideoEntity;
 
 @Data
 @Entity
-@Table(name = "video")
-public class VideoEntity {
+@Table(name = "video_thumbnail")
+public class VideoThumbnailEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
-    private String videoName;
-
-    @ManyToOne
+    @OneToOne
     @JoinColumn(nullable = false)
-    private GroupEntity group;
-
-    @Column(nullable = false, length = 100)
-    private String videoPath;
+    private VideoEntity videoEntity;
 
     @Column(nullable = false, length = 100)
     private String thumbnailPath;

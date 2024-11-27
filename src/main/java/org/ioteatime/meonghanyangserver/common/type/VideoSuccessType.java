@@ -1,7 +1,8 @@
 package org.ioteatime.meonghanyangserver.common.type;
 
 public enum VideoSuccessType implements SuccessTypeCode {
-    GET_PRESIGNED_URL(200, "OK", "Presigned Url 조회에 성공하였습니다.");
+    GET_PRESIGNED_URL(200, "OK", "Presigned Url 조회에 성공하였습니다."),
+    GET_VIDEO_INFO(200, "OK", "동영상 정보 조회에 성공하였습니다.");
 
     private final Integer code;
     private final String message;
