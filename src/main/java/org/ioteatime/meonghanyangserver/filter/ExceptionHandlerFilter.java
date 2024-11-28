@@ -35,7 +35,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     private void exceptionHandle(HttpServletResponse response, ApiExceptionImpl exception)
             throws IOException {
 
-        slackService.sendSlackMessage(exception, "error");
+        slackService.sendSlackMessage(exception.getHttpStatus(), exception, "error");
 
         log.error(exception.getMessage(), exception.getCause());
 

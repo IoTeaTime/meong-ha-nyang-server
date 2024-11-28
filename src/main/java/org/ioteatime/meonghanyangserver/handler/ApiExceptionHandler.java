@@ -22,7 +22,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(value = ApiExceptionImpl.class)
     public ResponseEntity<Api<Object>> apiResponseEntity(ApiExceptionImpl apiExceptionImpl) {
         log.info("{}", apiExceptionImpl);
-        slackService.sendSlackMessage(apiExceptionImpl, "error");
+        slackService.sendSlackMessage(apiExceptionImpl.getHttpStatus(), apiExceptionImpl, "error");
         return ResponseEntity.status(apiExceptionImpl.getHttpStatus())
                 .body(Api.fail(apiExceptionImpl));
     }

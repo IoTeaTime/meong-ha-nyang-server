@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,7 +18,7 @@ public class SlackService {
     @Value("${slack.key}")
     String slackToken;
 
-    public void sendSlackMessage(Throwable message, String channel) {
+    public void sendSlackMessage(HttpStatus status, Throwable message, String channel) {
         if (slackToken.isEmpty()) {
             log.info("DEV MODE - Slack error 메시지를 전송하지 않습니다.");
             return;
@@ -33,15 +34,17 @@ public class SlackService {
         try {
             MethodsClient methods = Slack.getInstance().methods(slackToken);
 
+            // 상태코드와 핵심 오류 메시지를 전송
             ChatPostMessageRequest request =
                     ChatPostMessageRequest.builder()
                             .channel(channelAddress)
-                            .text(message.getMessage())
+                            .text(status + " : " + message.getMessage())
                             .build();
 
             ChatPostMessageResponse chatPostMessageResponse = methods.chatPostMessage(request);
             String ts = chatPostMessageResponse.getTs();
 
+            // 상세 오류 메시지를 스레드로 전송
             ChatPostMessageRequest replyRequest =
                     ChatPostMessageRequest.builder()
                             .channel(channelAddress)
