@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.member.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import org.ioteatime.meonghanyangserver.member.dto.request.UpdateNicknameAndGrou
 import org.ioteatime.meonghanyangserver.member.dto.response.MemberWithGroupDetailResponse;
 import org.ioteatime.meonghanyangserver.member.mapper.MemberResponseMapper;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
+import org.ioteatime.meonghanyangserver.redis.AccessToken;
 import org.ioteatime.meonghanyangserver.redis.AccessTokenRepository;
 import org.ioteatime.meonghanyangserver.redis.RefreshToken;
 import org.ioteatime.meonghanyangserver.redis.RefreshTokenRepository;
@@ -72,13 +74,19 @@ public class MemberService {
     // 1. Master는 권한을 위임하지 않는다. -> Master가 탈퇴하면 그룹이 삭제된다.
     // 2. 회원은 하나의 그룹에만 소속된다.
     @Transactional
-    public void deleteMember(Long memberId) {
+    public void deleteMember(String authHeader, Long memberId) {
         // MemberId 기준으로 GroupMember 조회
-        GroupMemberEntity groupMemberEntity =
-                groupMemberRepository
-                        .findByMemberId(memberId)
-                        .orElseThrow(
-                                () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
+        Optional<GroupMemberEntity> groupMemberOptionalEntity =
+                groupMemberRepository.findByMemberId(memberId);
+
+        // GroupMember가 없으면 == 가입된 그룹이 없으면 바로 탈퇴 진행
+        if (groupMemberOptionalEntity.isEmpty()) {
+            deleteMemberAndToken(authHeader, memberId);
+            return;
+        }
+
+        GroupMemberEntity groupMemberEntity = groupMemberOptionalEntity.get();
+
         // 탈퇴하는 사람이 MASTER이면 Group을 삭제
         if (groupMemberEntity.getRole() == GroupMemberRole.ROLE_MASTER) {
             // MemberId 기준으로 GroupMember 통해 GroupId 조회
@@ -112,7 +120,21 @@ public class MemberService {
             groupMemberRepository.deleteById(groupMemberEntity.getId());
         }
         // member 삭제 (PARTICIPANT도 해당)
+        deleteMemberAndToken(authHeader, memberId);
+    }
+
+    private void deleteMemberAndToken(String authHeader, Long memberId) {
         memberRepository.deleteById(memberId);
+        refreshTokenRepository.deleteByMemberId(memberId);
+        authHeader = jwtUtils.extractTokenFromHeader(authHeader);
+        Date date = jwtUtils.getExpirationDateFromToken(authHeader);
+        // access token의 남은 시간
+        long ttl = (date.getTime() - System.currentTimeMillis()) / 1000;
+
+        AccessToken accessTokenEntity =
+                AccessToken.builder().accessToken(authHeader).ttl(ttl).build();
+        // access token 블랙리스트
+        accessTokenRepository.save(accessTokenEntity);
     }
 
     @Transactional
