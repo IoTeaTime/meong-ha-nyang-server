@@ -49,12 +49,7 @@ public class SecurityConfig {
                 .addFilterBefore(exceptionHandlerFilter, JwtRequestFilter.class);
         http.authorizeHttpRequests(
                 (auth) ->
-                        auth.requestMatchers(
-                                        "/open-api/**",
-                                        "/swagger-ui/**",
-                                        "/v3/**",
-                                        "/error",
-                                        "/api/**")
+                        auth.requestMatchers("/open-api/**", "/swagger-ui/**", "/v3/**", "/error")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated());
