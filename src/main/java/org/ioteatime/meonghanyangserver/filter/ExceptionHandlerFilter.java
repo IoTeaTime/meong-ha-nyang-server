@@ -6,15 +6,20 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.exception.ApiExceptionImpl;
+import org.ioteatime.meonghanyangserver.common.slack.SlackService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
+    private final SlackService slackService;
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -29,6 +34,11 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     // jwtRequest filter exception handle
     private void exceptionHandle(HttpServletResponse response, ApiExceptionImpl exception)
             throws IOException {
+
+        slackService.sendSlackMessage(exception, "error");
+
+        log.error(exception.getMessage(), exception.getCause());
+
         response.setStatus(exception.getHttpStatus().value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
