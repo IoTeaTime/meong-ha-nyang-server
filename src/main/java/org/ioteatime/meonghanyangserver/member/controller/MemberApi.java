@@ -20,7 +20,8 @@ public interface MemberApi {
     Api<MemberWithGroupDetailResponse> getMemberDetail(@PathVariable("memberId") Long memberId);
 
     @Operation(summary = "회원 정보를 삭제합니다.", description = "담당자: 임지인")
-    Api<Object> deleteMember(@LoginMember Long memberId);
+    Api<Object> deleteMember(
+            @RequestHeader("Authorization") String authHeader, @LoginMember Long memberId);
 
     @Operation(summary = "회원의 비밀번호를 변경합니다.", description = "담당자: 임지인")
     Api<Object> changeMemberPassword(

@@ -28,8 +28,9 @@ public class MemberController implements MemberApi {
     }
 
     @DeleteMapping
-    public Api<Object> deleteMember(@LoginMember Long memberId) {
-        memberService.deleteMember(memberId);
+    public Api<Object> deleteMember(
+            @RequestHeader("Authorization") String authHeader, @LoginMember Long memberId) {
+        memberService.deleteMember(authHeader, memberId);
         return Api.success(AuthSuccessType.DELETE_USER);
     }
 
