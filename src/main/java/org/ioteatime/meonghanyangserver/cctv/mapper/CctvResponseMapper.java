@@ -4,6 +4,7 @@ import java.util.List;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CreateCctvResponse;
 
 public class CctvResponseMapper {
     public static CctvInfoResponse from(CctvEntity cctvEntity) {
@@ -16,5 +17,9 @@ public class CctvResponseMapper {
 
     public static CctvInfoListResponse from(List<CctvInfoResponse> cctvInfoResponseList) {
         return new CctvInfoListResponse(cctvInfoResponseList);
+    }
+
+    public static CreateCctvResponse from(Long cctvId) {
+        return new CreateCctvResponse(cctvId);
     }
 }
