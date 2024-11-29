@@ -1,7 +1,6 @@
 package org.ioteatime.meonghanyangserver.groupmember.service;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInviteResponse;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
@@ -19,7 +18,6 @@ import org.ioteatime.meonghanyangserver.groupmember.dto.request.JoinGroupMemberR
 import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberInfoListResponse;
 import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberInfoResponse;
 import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberResponse;
-import org.ioteatime.meonghanyangserver.groupmember.mapper.GroupMemberEntityMapper;
 import org.ioteatime.meonghanyangserver.groupmember.mapper.GroupMemberResponseMapper;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
@@ -30,22 +28,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class GroupMemberService {
-    private final GroupMemberRepository groupMemberRepository;
-    private final MemberRepository memberRepository;
-    private final GroupRepository groupRepository;
-    private final KvsChannelNameGenerator kvsChannelNameGenerator;
     private final CctvRepository cctvRepository;
-
-    // input user
-    public void createGroupMember(
-            GroupEntity groupEntity,
-            MemberEntity memberEntity,
-            GroupMemberRole groupMemberRole,
-            String thingId) {
-        GroupMemberEntity groupMember =
-                GroupMemberEntityMapper.from(groupEntity, memberEntity, groupMemberRole, thingId);
-        groupMemberRepository.save(groupMember);
-    }
+    private final GroupRepository groupRepository;
+    private final MemberRepository memberRepository;
+    private final GroupMemberRepository groupMemberRepository;
+    private final KvsChannelNameGenerator kvsChannelNameGenerator;
 
     @Transactional
     public void joinGroupMember(Long memberId, JoinGroupMemberRequest joinGroupMemberRequest) {
@@ -64,7 +51,10 @@ public class GroupMemberService {
                         .findById(memberId)
                         .orElseThrow(() -> new BadRequestException(AuthErrorType.NOT_FOUND));
 
-        createGroupMember(groupEntity, memberEntity, GroupMemberRole.ROLE_PARTICIPANT, thingId);
+        GroupMemberEntity groupMemberEntity =
+                GroupMemberEntity.from(
+                        GroupMemberRole.ROLE_PARTICIPANT, thingId, groupEntity, memberEntity);
+        groupMemberRepository.save(groupMemberEntity);
     }
 
     public boolean existsGroupMember(Long memberId) {
@@ -103,7 +93,8 @@ public class GroupMemberService {
     }
 
     public GroupEntity getGroup(Long memberId) {
-        return Optional.ofNullable(groupMemberRepository.findGroupMember(memberId))
+        return groupMemberRepository
+                .findGropFromGroupMember(memberId)
                 .orElseThrow(() -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
     }
 

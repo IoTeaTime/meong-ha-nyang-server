@@ -43,11 +43,20 @@ public class GroupMemberEntity {
         this.group = group;
     }
 
-    @Builder
     public GroupMemberEntity(Long id, GroupMemberRole role, String thingId, MemberEntity member) {
         this.id = id;
         this.role = role;
         this.member = member;
         this.thingId = thingId;
+    }
+
+    public static GroupMemberEntity from(
+            GroupMemberRole role, String thingId, GroupEntity group, MemberEntity member) {
+        return GroupMemberEntity.builder()
+                .role(role)
+                .thingId(thingId)
+                .group(group)
+                .member(member)
+                .build();
     }
 }
