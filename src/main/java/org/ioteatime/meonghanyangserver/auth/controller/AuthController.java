@@ -1,8 +1,10 @@
 package org.ioteatime.meonghanyangserver.auth.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.EmailRequest;
+import org.ioteatime.meonghanyangserver.auth.dto.request.IssuePasswordRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.VerifyEmailRequest;
 import org.ioteatime.meonghanyangserver.auth.service.AuthService;
@@ -40,6 +42,12 @@ public class AuthController implements AuthApi {
     public Api<?> duplicateEmail(@RequestBody EmailRequest emailReq) {
         authService.verifyEmail(emailReq.email());
         return Api.success(AuthSuccessType.EMAIL_VERIFIED);
+    }
+
+    @PatchMapping("/change-password")
+    public Api<?> issuePassword(@Valid @RequestBody IssuePasswordRequest issuePasswordRequest) {
+        authService.issuePassword(issuePasswordRequest);
+        return Api.success(AuthSuccessType.ISSUE_PASSWORD);
     }
 
     @PostMapping("/sign-in")
