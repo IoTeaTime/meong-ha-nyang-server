@@ -8,6 +8,7 @@ import org.ioteatime.meonghanyangserver.cctv.dto.request.CreateCctvRequest;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.UpdateCctvNickname;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CreateCctvResponse;
 import org.ioteatime.meonghanyangserver.cctv.mapper.CctvResponseMapper;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
 import org.ioteatime.meonghanyangserver.clients.iot.IotShadowMqttClient;
@@ -32,7 +33,7 @@ public class CctvService {
     private final IotShadowMqttClient iotShadowMqttClient;
     private final GroupMemberRepository groupMemberRepository;
 
-    public void createCctv(CreateCctvRequest createCctvRequest) {
+    public CreateCctvResponse createCctv(CreateCctvRequest createCctvRequest) {
 
         if (cctvRepository.existsByThingId(createCctvRequest.thingId())) {
             throw new BadRequestException(CctvErrorType.ALREADY_EXIST);
@@ -53,8 +54,9 @@ public class CctvService {
                         .group(groupEntity)
                         .build();
 
+        CctvEntity cctvEntity = cctvRepository.save(cctv);
         // 저장
-        cctvRepository.save(cctv);
+        return CctvResponseMapper.from(cctvEntity.getId());
     }
 
     @Transactional
