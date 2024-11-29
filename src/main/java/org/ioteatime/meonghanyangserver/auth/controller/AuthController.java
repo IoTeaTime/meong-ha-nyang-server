@@ -47,7 +47,7 @@ public class AuthController implements AuthApi {
     @PatchMapping("/change-password")
     public Api<?> issuePassword(@Valid @RequestBody IssuePasswordRequest issuePasswordRequest) {
         authService.issuePassword(issuePasswordRequest);
-        return null;
+        return Api.success(AuthSuccessType.ISSUE_PASSWORD);
     }
 
     @PostMapping("/sign-in")
