@@ -129,12 +129,13 @@ public class AuthService {
 
     @Transactional
     public void issuePassword(IssuePasswordRequest issuePasswordRequest) {
-        // 임시비밀번호 발급
-        String password = getCode();
+
         MemberEntity memberEntity =
                 memberRepository
                         .findByEmail(issuePasswordRequest.email())
                         .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
+        // 임시비밀번호 발급
+        String password = getCode();
 
         String encodedPassword = bCryptPasswordEncoder.encode(password);
 
