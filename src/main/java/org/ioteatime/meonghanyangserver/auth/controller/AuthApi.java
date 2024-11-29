@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.EmailRequest;
+import org.ioteatime.meonghanyangserver.auth.dto.request.IssuePasswordRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.VerifyEmailRequest;
 import org.ioteatime.meonghanyangserver.common.api.Api;
@@ -27,4 +28,7 @@ public interface AuthApi {
 
     @Operation(summary = "이메일 중복을 확인 합니다.", description = "담당자: 조경재")
     Api<?> duplicateEmail(@Valid @RequestBody EmailRequest email);
+
+    @Operation(summary = "임시 비밀번호를 발급해줍니다.", description = "담당자: 최민석")
+    Api<?> issuePassword(@Valid @RequestBody IssuePasswordRequest issuePasswordRequest);
 }

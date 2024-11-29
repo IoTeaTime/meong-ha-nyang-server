@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.auth.service;
 
+import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -7,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.auth.dto.db.LoginWithMemberInfo;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
+import org.ioteatime.meonghanyangserver.auth.dto.request.IssuePasswordRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthEntityMapper;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
@@ -123,5 +125,27 @@ public class AuthService {
         if (!code.equals(emailCode.getCode())) {
             throw new UnauthorizedException(AuthErrorType.CODE_NOT_EQUALS);
         }
+    }
+
+    @Transactional
+    public void issuePassword(IssuePasswordRequest issuePasswordRequest) {
+        // 임시비밀번호 발급
+        String password = getCode();
+        MemberEntity memberEntity =
+                memberRepository
+                        .findByEmail(issuePasswordRequest.email())
+                        .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
+
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
+
+        memberEntity.updatePassword(encodedPassword);
+        String mailSubject = "[\uD83D\uDC36 멍하냥] 임시 비밀번호입니다.";
+        String mailContent =
+                """
+                <b>임시 비밀번호를 발급받았습니다.</b>
+                <p>%s</p>
+                """
+                        .formatted(password);
+        sesClient.sendEmail(issuePasswordRequest.email(), mailSubject, mailContent);
     }
 }
