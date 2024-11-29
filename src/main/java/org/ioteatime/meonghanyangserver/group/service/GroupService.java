@@ -1,7 +1,6 @@
 package org.ioteatime.meonghanyangserver.group.service;
 
 import jakarta.transaction.Transactional;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.clients.google.FcmClient;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
@@ -16,9 +15,9 @@ import org.ioteatime.meonghanyangserver.group.dto.response.GroupTotalResponse;
 import org.ioteatime.meonghanyangserver.group.mapper.GroupEntityMapper;
 import org.ioteatime.meonghanyangserver.group.mapper.GroupResponseMapper;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
-import org.ioteatime.meonghanyangserver.groupmember.repository.JpaGroupMemberRepository;
-import org.ioteatime.meonghanyangserver.groupmember.service.GroupMemberService;
+import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -29,15 +28,14 @@ public class GroupService {
     private final FcmClient fcmClient;
     private final GroupRepository groupRepository;
     private final MemberRepository memberRepository;
-    private final GroupMemberService groupMemberService;
+    private final GroupMemberRepository groupMemberRepository;
     private final RandomStringGenerator randomStringGenerator;
-    private final JpaGroupMemberRepository groupUserRepository;
 
     // create group
     @Transactional
     public CreateGroupResponse createGroup(Long memberId, CreateGroupRequest createGroupRequest) {
 
-        boolean groupUserEntity = groupMemberService.existsGroupMember(memberId);
+        boolean groupUserEntity = groupMemberRepository.existsGroupMember(memberId);
         String thingId = createGroupRequest.thingId();
         if (groupUserEntity) {
             throw new BadRequestException(GroupErrorType.ALREADY_EXISTS);
@@ -55,8 +53,10 @@ public class GroupService {
         GroupEntity groupEntity = GroupEntityMapper.toEntity(roomName, fcmTopic);
 
         GroupEntity newGroupEntity = groupRepository.save(groupEntity);
-        groupMemberService.createGroupMember(
-                newGroupEntity, memberEntity, GroupMemberRole.ROLE_MASTER, thingId);
+        GroupMemberEntity groupMemberEntity =
+                GroupMemberEntity.from(
+                        GroupMemberRole.ROLE_MASTER, thingId, newGroupEntity, memberEntity);
+        groupMemberRepository.save(groupMemberEntity);
 
         // FCM 토픽 구독
         fcmClient.subTopic(memberEntity.getFcmToken(), fcmTopic);
@@ -71,7 +71,8 @@ public class GroupService {
 
     public GroupTotalResponse getGroupTotalData(Long memberId) {
         GroupEntity groupEntity =
-                Optional.ofNullable(groupMemberService.getGroup(memberId))
+                groupMemberRepository
+                        .findGropFromGroupMember(memberId)
                         .orElseThrow(
                                 () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
 

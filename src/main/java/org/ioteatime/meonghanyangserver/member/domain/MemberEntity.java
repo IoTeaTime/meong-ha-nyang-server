@@ -72,4 +72,9 @@ public class MemberEntity {
         this.nickname = nickname;
         return this;
     }
+
+    public MemberEntity updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+        return this;
+    }
 }

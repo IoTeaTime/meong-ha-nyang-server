@@ -17,13 +17,13 @@ public class GroupMemberController implements GroupMemberApi {
     private final GroupMemberService groupMemberService;
 
     @GetMapping
-    public Api<?> getGroupMemberInfo(@LoginMember Long memberId) {
+    public Api<GroupMemberResponse> getGroupMemberInfo(@LoginMember Long memberId) {
         GroupMemberResponse groupMemberResponse = groupMemberService.getGroupMemberInfo(memberId);
         return Api.success(GroupSuccessType.GET_GROUP_MEMBER_INFO, groupMemberResponse);
     }
 
     @PostMapping("/viewer")
-    public Api<Void> joinGroupAsMember(
+    public Api<?> joinGroupAsMember(
             @LoginMember Long memberId,
             @RequestBody JoinGroupMemberRequest joinGroupMemberRequest) {
         groupMemberService.joinGroupMember(memberId, joinGroupMemberRequest);
@@ -33,20 +33,22 @@ public class GroupMemberController implements GroupMemberApi {
     @DeleteMapping("/{groupId}/member/{groupMemberId}")
     public Api<?> deleteMasterGroupMember(
             @LoginMember Long memberId,
-            @PathVariable Long groupId,
-            @PathVariable Long groupMemberId) {
+            @PathVariable("groupId") Long groupId,
+            @PathVariable("groupMemberId") Long groupMemberId) {
         groupMemberService.deleteMasterGroupMember(memberId, groupId, groupMemberId);
         return Api.success(GroupSuccessType.DELETE_GROUP_MEMBER);
     }
 
     @DeleteMapping("/{groupId}/member")
-    public Api<?> deleteGroupMember(@LoginMember Long memberId, @PathVariable Long groupId) {
+    public Api<?> deleteGroupMember(
+            @LoginMember Long memberId, @PathVariable("groupId") Long groupId) {
         groupMemberService.deleteGroupMember(memberId, groupId);
         return Api.success(GroupSuccessType.DELETE_GROUP_MEMBER);
     }
 
     @GetMapping("/{groupId}/member")
-    public Api<?> getGroupMemberInfoList(@LoginMember Long memberId, @PathVariable Long groupId) {
+    public Api<GroupMemberInfoListResponse> getGroupMemberInfoList(
+            @LoginMember Long memberId, @PathVariable("groupId") Long groupId) {
         GroupMemberInfoListResponse groupMemberInfoListResponse =
                 groupMemberService.getGroupMemberInfoList(memberId, groupId);
         return Api.success(

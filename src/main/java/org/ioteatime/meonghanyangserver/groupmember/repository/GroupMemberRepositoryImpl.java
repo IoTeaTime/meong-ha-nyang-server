@@ -37,12 +37,13 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     }
 
     @Override
-    public GroupEntity findGroupMember(Long memberId) {
-        return jpaQueryFactory
-                .select(groupMemberEntity.group)
-                .from(groupMemberEntity)
-                .where(groupMemberEntity.member.id.eq(memberId))
-                .fetchOne();
+    public Optional<GroupEntity> findGropFromGroupMember(Long memberId) {
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .select(groupMemberEntity.group)
+                        .from(groupMemberEntity)
+                        .where(groupMemberEntity.member.id.eq(memberId))
+                        .fetchOne());
     }
 
     @Override
