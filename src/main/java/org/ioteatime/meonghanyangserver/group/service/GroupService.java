@@ -72,7 +72,7 @@ public class GroupService {
     public GroupTotalResponse getGroupTotalData(Long memberId) {
         GroupEntity groupEntity =
                 groupMemberRepository
-                        .findGropFromGroupMember(memberId)
+                        .findGroupFromGroupMember(memberId)
                         .orElseThrow(
                                 () -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
 

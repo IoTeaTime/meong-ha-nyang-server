@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
+import jakarta.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,7 @@ public class FcmClient {
     @Value("${google.application-credentials}")
     private String applicationCredentials;
 
+    @PostConstruct
     public void init() {
         try {
             InputStream refreshToken = new FileInputStream(applicationCredentials);

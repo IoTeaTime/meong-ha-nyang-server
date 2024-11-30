@@ -1,7 +1,8 @@
 package org.ioteatime.meonghanyangserver.common.type;
 
 public enum FcmSuccessType implements SuccessTypeCode {
-    SAVE(200, "OK", "FCM 토큰 저장에 성공하였습니다");
+    SAVE(200, "OK", "FCM 토큰 저장에 성공하였습니다."),
+    GROUP_TOPIC(200, "OK", "FCM 토픽 조회에 성공하였습니다.");
 
     private final Integer code;
     private final String message;
