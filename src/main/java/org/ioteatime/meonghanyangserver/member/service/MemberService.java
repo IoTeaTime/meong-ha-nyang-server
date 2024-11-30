@@ -87,10 +87,14 @@ public class MemberService {
 
         GroupMemberEntity groupMemberEntity = groupMemberOptionalEntity.get();
 
+        Long groupMemberId = groupMemberEntity.getId();
+        Long groupId = groupMemberEntity.getGroup().getId();
+
+        // GroupMember 삭제
+        groupMemberRepository.deleteById(groupMemberId);
+
         // 탈퇴하는 사람이 MASTER이면 Group을 삭제
         if (groupMemberEntity.getRole() == GroupMemberRole.ROLE_MASTER) {
-            // MemberId 기준으로 GroupMember 통해 GroupId 조회
-            Long groupId = groupMemberEntity.getGroup().getId();
             // GroupId 기준으로 video 조회하여 삭제 (S3 배치 작업 추가 필요)
             videoRepository.deleteAllByGroupId(groupId);
 
@@ -109,9 +113,6 @@ public class MemberService {
                     });
             // CCTV 목록 삭제
             cctvRepository.deleteByGroupId(groupId);
-
-            // GroupMember 삭제
-            groupMemberRepository.deleteById(groupMemberEntity.getId());
 
             // group 삭제
             groupRepository.deleteById(groupId);
