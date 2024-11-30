@@ -149,6 +149,11 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     }
 
     @Override
+    public void deleteAllByGroupId(Long groupId) {
+        jpaGroupMemberRepository.deleteAllByGroupId(groupId);
+    }
+
+    @Override
     public Optional<GroupMemberEntity> findByMemberIdAndGroupId(Long memberId, Long groupId) {
         QGroupMemberEntity groupMember = QGroupMemberEntity.groupMemberEntity;
 
