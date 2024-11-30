@@ -89,12 +89,10 @@ public class MemberService {
 
         Long groupMemberId = groupMemberEntity.getId();
         Long groupId = groupMemberEntity.getGroup().getId();
-
-        // GroupMember 삭제
-        groupMemberRepository.deleteById(groupMemberId);
+        GroupMemberRole groupMemberRole = groupMemberEntity.getRole();
 
         // 탈퇴하는 사람이 MASTER이면 Group을 삭제
-        if (groupMemberEntity.getRole() == GroupMemberRole.ROLE_MASTER) {
+        if (groupMemberRole == GroupMemberRole.ROLE_MASTER) {
             // GroupId 기준으로 video 조회하여 삭제 (S3 배치 작업 추가 필요)
             videoRepository.deleteAllByGroupId(groupId);
 
@@ -114,13 +112,17 @@ public class MemberService {
             // CCTV 목록 삭제
             cctvRepository.deleteByGroupId(groupId);
 
-            // group 삭제
+            // GroupId 기준으로 groupMember 모두 찾아 삭제
+            groupMemberRepository.deleteAllByGroupId(groupId);
+
+            // Group 삭제
             groupRepository.deleteById(groupId);
         } else {
             // GroupMember 삭제만 진행 (PARTICIPANT인 경우)
-            groupMemberRepository.deleteById(groupMemberEntity.getId());
+            groupMemberRepository.deleteById(groupMemberId);
         }
-        // member 삭제 (PARTICIPANT도 해당)
+
+        // Member 삭제 (PARTICIPANT도 해당)
         deleteMemberAndToken(authHeader, memberId);
     }
 
