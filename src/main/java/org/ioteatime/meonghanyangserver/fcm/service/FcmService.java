@@ -13,8 +13,6 @@ import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberReposi
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class FcmService {
@@ -28,7 +26,8 @@ public class FcmService {
                 .updateFcmTokenById(memberId, token)
                 .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
         // 토픽이 갱신될 때마다 토픽 다시 구독
-        groupMemberRepository.findGroupFromGroupMember(memberId)
+        groupMemberRepository
+                .findGroupFromGroupMember(memberId)
                 .ifPresent(groupEntity -> fcmClient.subTopic(token, groupEntity.getFcmTopic()));
     }
 
