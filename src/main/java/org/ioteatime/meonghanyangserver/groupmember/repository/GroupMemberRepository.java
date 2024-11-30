@@ -13,7 +13,7 @@ public interface GroupMemberRepository {
 
     Optional<GroupMemberEntity> findByMemberId(Long memberId);
 
-    Optional<GroupEntity> findGropFromGroupMember(Long memberId);
+    Optional<GroupEntity> findGroupFromGroupMember(Long memberId);
 
     void deleteById(Long id);
 

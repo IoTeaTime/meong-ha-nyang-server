@@ -37,7 +37,7 @@ public class GroupMemberRepositoryImpl implements GroupMemberRepository {
     }
 
     @Override
-    public Optional<GroupEntity> findGropFromGroupMember(Long memberId) {
+    public Optional<GroupEntity> findGroupFromGroupMember(Long memberId) {
         return Optional.ofNullable(
                 jpaQueryFactory
                         .select(groupMemberEntity.group)

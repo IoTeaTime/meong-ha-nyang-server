@@ -94,7 +94,7 @@ public class GroupMemberService {
 
     public GroupEntity getGroup(Long memberId) {
         return groupMemberRepository
-                .findGropFromGroupMember(memberId)
+                .findGroupFromGroupMember(memberId)
                 .orElseThrow(() -> new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND));
     }
 
