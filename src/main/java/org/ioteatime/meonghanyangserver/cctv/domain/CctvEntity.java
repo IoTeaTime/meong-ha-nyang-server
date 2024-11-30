@@ -43,11 +43,11 @@ public class CctvEntity {
     }
 
     @Builder
-    public CctvEntity(Long id, String cctvNickname, String kvsChannelName, String thingId) {
+    public CctvEntity(Long id, String cctvNickname, String thingId, String kvsChannelName) {
         this.id = id;
         this.cctvNickname = cctvNickname;
-        this.kvsChannelName = kvsChannelName;
         this.thingId = thingId;
+        this.kvsChannelName = kvsChannelName;
     }
 
     public CctvEntity updateNickname(String nickname) {
