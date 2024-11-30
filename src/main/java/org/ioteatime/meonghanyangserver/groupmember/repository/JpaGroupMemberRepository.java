@@ -18,4 +18,6 @@ public interface JpaGroupMemberRepository extends JpaRepository<GroupMemberEntit
     void deleteByGroupIdAndMemberId(Long groupId, Long memberId);
 
     void deleteByGroupId(Long groupId);
+
+    void deleteAllByGroupId(Long groupId);
 }

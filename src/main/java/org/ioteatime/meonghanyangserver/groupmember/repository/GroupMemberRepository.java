@@ -35,4 +35,6 @@ public interface GroupMemberRepository {
             Long memberId, Long groupId, GroupMemberRole groupMemberRole);
 
     List<GroupMemberEntity> findByGroupIdAndRole(Long groupId, GroupMemberRole groupMemberRole);
+
+    void deleteAllByGroupId(Long groupId);
 }
