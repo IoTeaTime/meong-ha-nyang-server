@@ -5,8 +5,6 @@ token:
   secret: ${JWT_SECRET}
 
 google:
-  service-account: ${GCP_SERVICE_ACCOUNT}
-  gmail-service-account: ${GMAIL_SERVICE_ACCOUNT}
   official-gmail: ${OFFICIAL_GMAIL}
   application-credentials: ${GOOGLE_APPLICATION_CREDENTIALS}
 
