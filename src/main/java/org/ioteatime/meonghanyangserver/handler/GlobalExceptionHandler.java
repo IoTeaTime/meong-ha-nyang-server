@@ -68,4 +68,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 Api.fail(CommonErrorType.ILLEGAL_ARGUMENT), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Api<Object>> exception(final Exception exception) {
+        log.error("{}", exception);
+        slackService.sendSlackMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception, "error");
+        return new ResponseEntity<>(
+                Api.fail(CommonErrorType.INTERNAL_SERVER), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
