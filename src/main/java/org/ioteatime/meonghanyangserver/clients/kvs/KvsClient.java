@@ -1,10 +1,7 @@
 package org.ioteatime.meonghanyangserver.clients.kvs;
 
 import com.amazonaws.services.kinesisvideo.AmazonKinesisVideo;
-import com.amazonaws.services.kinesisvideo.model.DeleteSignalingChannelRequest;
-import com.amazonaws.services.kinesisvideo.model.DescribeSignalingChannelRequest;
-import com.amazonaws.services.kinesisvideo.model.DescribeSignalingChannelResult;
-import com.amazonaws.services.kinesisvideo.model.ResourceNotFoundException;
+import com.amazonaws.services.kinesisvideo.model.*;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.type.AwsErrorType;
@@ -33,5 +30,12 @@ public class KvsClient {
         } catch (ResourceNotFoundException err) {
             throw new NotFoundException(AwsErrorType.KVS_CHANNEL_NAME_NOT_FOUND);
         }
+    }
+
+    public void createSignalingChannel(String channelName) {
+        CreateSignalingChannelRequest signalingChannelRequest = new CreateSignalingChannelRequest();
+        signalingChannelRequest.setChannelName(channelName);
+
+        amazonKinesisVideo.createSignalingChannel(signalingChannelRequest);
     }
 }
