@@ -1,0 +1,12 @@
+<included>
+    <appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%yellow(%d{HH:mm:ss.SSS}) [%-30thread] %highlight([%-5level]) %boldWhite(%-50F) -%kvp- %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 질의문 예쁘게 보기 -->
+    <logger name="org.hibernate.SQL" level="DEBUG" />
+</included>

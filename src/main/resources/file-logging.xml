@@ -1,0 +1,26 @@
+<included>
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE_JSON">
+        <file>logs/mhn_spring_server_log.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/mhn_spring_server_log.%d.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                <appendLineSeparator>true</appendLineSeparator>
+                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"/>
+                <timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</timestampFormat>
+                <timestampFormatTimezoneId>Etc/Utc</timestampFormatTimezoneId>
+            </layout>
+        </encoder>
+    </appender>
+
+    <!-- hikari 로그 보기 -->
+<!--    <logger name="com.zaxxer.hikari" level="DEBUG" />-->
+    <!-- 질의문 예쁘게 보기 -->
+    <logger name="org.hibernate.SQL" level="DEBUG" />
+    <!-- 질의문 파라미터 보기 -->
+    <logger name="org.hibernate.orm.jdbc.bind" level="TRACE" />
+    <!-- 트랜잭션 로그 보기 -->
+    <logger name="org.springframework.transaction.interceptor" level="TRACE" />
+</included>
