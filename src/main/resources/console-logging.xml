@@ -8,5 +8,7 @@
     </appender>
 
     <!-- 질의문 예쁘게 보기 -->
-    <logger name="org.hibernate.SQL" level="DEBUG" />
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
 </included>

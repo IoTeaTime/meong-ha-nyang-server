@@ -18,9 +18,15 @@
     <!-- hikari 로그 보기 -->
 <!--    <logger name="com.zaxxer.hikari" level="DEBUG" />-->
     <!-- 질의문 예쁘게 보기 -->
-    <logger name="org.hibernate.SQL" level="DEBUG" />
+    <logger name="org.hibernate.SQL" level="DEBUG">
+        <appender-ref ref="FILE_JSON" />
+    </logger>
     <!-- 질의문 파라미터 보기 -->
-    <logger name="org.hibernate.orm.jdbc.bind" level="TRACE" />
+    <logger name="org.hibernate.orm.jdbc.bind" level="TRACE" additivity="false">
+        <appender-ref ref="FILE_JSON" />
+    </logger>
     <!-- 트랜잭션 로그 보기 -->
-    <logger name="org.springframework.transaction.interceptor" level="TRACE" />
+    <logger name="org.springframework.transaction.interceptor" level="TRACE" additivity="false">
+        <appender-ref ref="FILE_JSON" />
+    </logger>
 </included>
