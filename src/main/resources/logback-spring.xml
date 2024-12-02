@@ -13,7 +13,7 @@
     <springProfile name="prod">
         <include resource="console-logging.xml" />
         <include resource="file-logging.xml" />
-        <root level="DEBUG">
+        <root level="INFO">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="FILE_JSON" />
         </root>
