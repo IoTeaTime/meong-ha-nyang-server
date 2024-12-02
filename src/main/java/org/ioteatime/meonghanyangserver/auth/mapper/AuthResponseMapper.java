@@ -1,8 +1,9 @@
 package org.ioteatime.meonghanyangserver.auth.mapper;
 
-import org.ioteatime.meonghanyangserver.auth.dto.db.LoginWithMemberInfo;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
+import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.dto.response.MemberSimpleResponse;
 
 public class AuthResponseMapper {
@@ -11,13 +12,26 @@ public class AuthResponseMapper {
     }
 
     public static LoginResponse from(
-            LoginWithMemberInfo memberInfo, String accessToken, String refreshToken) {
+            MemberEntity member,
+            GroupMemberEntity groupMember,
+            String accessToken,
+            String refreshToken) {
         return LoginResponse.builder()
-                .memberId(memberInfo.memberId())
+                .memberId(member.getId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .isGroupMember(memberInfo.isGroupMember())
-                .role(memberInfo.role())
+                .isGroupMember(true)
+                .groupId(groupMember.getGroup().getId())
+                .role(groupMember.getRole())
+                .build();
+    }
+
+    public static LoginResponse from(MemberEntity member, String accessToken, String refreshToken) {
+        return LoginResponse.builder()
+                .memberId(member.getId())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .isGroupMember(false)
                 .build();
     }
 
