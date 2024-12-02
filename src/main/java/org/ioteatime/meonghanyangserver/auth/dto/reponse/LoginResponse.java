@@ -16,6 +16,7 @@ public record LoginResponse(
                 String refreshToken,
         @NotNull @Schema(description = "회원이 가입한 그룹이 있는지 여부", example = "true")
                 Boolean isGroupMember,
+        @Schema(description = "회원이 가입한 그룹의 ID", example = "1") Long groupId,
         @Schema(description = "회원의 그룹 역할", example = "MASTER") GroupMemberRole role) {
 
     @Builder
@@ -24,11 +25,13 @@ public record LoginResponse(
             String accessToken,
             String refreshToken,
             Boolean isGroupMember,
+            Long groupId,
             GroupMemberRole role) {
         this.memberId = memberId;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.isGroupMember = isGroupMember;
+        this.groupId = groupId;
         this.role = role;
     }
 }
