@@ -33,6 +33,7 @@ services:
     volumes:
       - "./client_secret.json:/client_secret.json"
       - "./monghanyang-21fad-54f38c79a642.json:/monghanyang-21fad-54f38c79a642.json"
+      - "./logs:/logs"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.server.rule=Host(`api.meonghanyang.kro.kr`)"
