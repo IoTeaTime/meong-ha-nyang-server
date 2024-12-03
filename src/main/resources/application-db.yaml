@@ -12,6 +12,11 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
+  batch:
+    job:
+      enabled: false # 배치 작업이 서버 실행과 함께 실행되지 않도록 설정
+    jdbc:
+      initialize-schema: always # 운영 서버에서는 항상 never
 #  flyway:
 #    enabled: true
 #    baseline-on-migrate: true
