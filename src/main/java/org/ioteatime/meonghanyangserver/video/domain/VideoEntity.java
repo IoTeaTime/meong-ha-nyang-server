@@ -16,8 +16,8 @@ public class VideoEntity {
     @Column(nullable = false, length = 50)
     private String videoName;
 
-    @ManyToOne
     @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private GroupEntity group;
 
     @Column(nullable = false, length = 100)

@@ -12,7 +12,8 @@ spring:
       host: ${REDIS_TEST_HOST}
       port: ${REDIS_TEST_PORT}
       password: ${REDIS_TEST_PASSWORD}
-
-logging:
-  level:
-    org.springframework.orm.jpa: INFO
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: never

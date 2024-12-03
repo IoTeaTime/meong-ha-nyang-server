@@ -3,10 +3,10 @@ package org.ioteatime.meonghanyangserver.auth.service;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
-import org.ioteatime.meonghanyangserver.auth.dto.db.LoginWithMemberInfo;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.LoginResponse;
 import org.ioteatime.meonghanyangserver.auth.dto.request.IssuePasswordRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
@@ -18,6 +18,7 @@ import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.exception.UnauthorizedException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
+import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.dto.request.JoinRequest;
@@ -39,31 +40,36 @@ public class AuthService {
     private final GroupMemberRepository deviceRepository;
     private final EmailCodeRepository emailCodeRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final GroupMemberRepository groupMemberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     public LoginResponse login(LoginRequest loginRequest) {
-        LoginWithMemberInfo memberInfo =
+        // 회원 조회, 없으면 오류
+        MemberEntity memberEntity =
                 memberRepository
-                        .findGroupMemberInfoByEmail(loginRequest.email())
+                        .findByEmail(loginRequest.email())
                         .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
+        // 그룹 가입 정보 조회
+        Optional<GroupMemberEntity> groupMemberEntity =
+                groupMemberRepository.findByMemberId(memberEntity.getId());
 
         boolean passwordMatch =
-                bCryptPasswordEncoder.matches(loginRequest.password(), memberInfo.password());
+                bCryptPasswordEncoder.matches(loginRequest.password(), memberEntity.getPassword());
         if (!passwordMatch) {
             throw new BadRequestException(AuthErrorType.PASSWORD_NOT_MATCH);
         }
 
         String accessToken =
-                jwtUtils.generateAccessToken(memberInfo.nickname(), memberInfo.memberId());
+                jwtUtils.generateAccessToken(memberEntity.getNickname(), memberEntity.getId());
         String refreshToken =
-                jwtUtils.generateRefreshToken(memberInfo.nickname(), memberInfo.memberId());
+                jwtUtils.generateRefreshToken(memberEntity.getNickname(), memberEntity.getId());
 
         if (accessToken.isEmpty() || refreshToken.isEmpty()) {
             throw new NotFoundException(AuthErrorType.TOKEN_NOT_FOUND);
         }
         RefreshToken refreshTokenEntity =
                 RefreshToken.builder()
-                        .memberId(memberInfo.memberId())
+                        .memberId(memberEntity.getId())
                         .refreshToken(refreshToken)
                         .build();
 
@@ -71,7 +77,11 @@ public class AuthService {
         accessToken = jwtUtils.includeBearer(accessToken);
         refreshToken = jwtUtils.includeBearer(refreshToken);
 
-        return AuthResponseMapper.from(memberInfo, accessToken, refreshToken);
+        if (groupMemberEntity.isPresent()) {
+            return AuthResponseMapper.from(
+                    memberEntity, groupMemberEntity.get(), accessToken, refreshToken);
+        }
+        return AuthResponseMapper.from(memberEntity, accessToken, refreshToken);
     }
 
     public MemberSimpleResponse joinProcess(JoinRequest userDto) {
