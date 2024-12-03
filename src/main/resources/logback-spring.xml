@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+<!--    DEV에서는 콘솔 로깅만 진행-->
+    <springProfile name="dev">
+        <include resource="console-logging.xml" />
+<!--        <root level="DEBUG"> 디버깅하고 싶을 때-->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+
+<!--    운영 환경에서는 파일 로깅도 함께 진행-->
+    <springProfile name="prod">
+        <include resource="console-logging.xml" />
+        <include resource="file-logging.xml" />
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE_JSON" />
+        </root>
+    </springProfile>
+</configuration>

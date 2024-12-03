@@ -29,7 +29,11 @@ public class FcmClient {
                             .setCredentials(GoogleCredentials.fromStream(refreshToken))
                             .build();
 
-            FirebaseApp.initializeApp(options);
+            if (FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+            } else {
+                FirebaseApp.getInstance(); // 이미 생성된 경우 존재하는 인스턴스 사용
+            }
         } catch (IOException e) {
             throw new InternalServerException(FcmErrorType.IO);
         }
