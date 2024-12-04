@@ -13,6 +13,6 @@ public interface ImageDeviceApi {
             summary = "이미지 저장을 위한 presigned url을 발급 받습니다.",
             description =
                     "담당자: 임지인\n\n캡쳐 이미지 저장을 위한 URL 발급 요청입니다.\n\nCCTV의 Access Token과 함께 요청 하시면 됩니다.")
-    public Api<ImageSaveUrlResponse> getImageSaveUrl(
+    Api<ImageSaveUrlResponse> getImageSaveUrl(
             @LoginMember Long cctvId, @PathVariable String fileName);
 }
