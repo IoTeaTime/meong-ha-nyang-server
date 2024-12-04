@@ -1,11 +1,9 @@
 package org.ioteatime.meonghanyangserver.image.domain;
 
-
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
