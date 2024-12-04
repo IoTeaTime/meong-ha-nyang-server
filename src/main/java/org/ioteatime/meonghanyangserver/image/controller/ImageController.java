@@ -6,7 +6,10 @@ import org.ioteatime.meonghanyangserver.common.type.ImageSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.ioteatime.meonghanyangserver.image.dto.response.GroupDateImageResponse;
 import org.ioteatime.meonghanyangserver.image.service.ImageService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
