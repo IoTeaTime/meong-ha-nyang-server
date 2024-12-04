@@ -27,7 +27,7 @@ public class ImageEntity {
     @Column(nullable = false, length = 100)
     private String imagePath;
 
-    @Column(nullable = false)
     @CreatedDate
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 }
