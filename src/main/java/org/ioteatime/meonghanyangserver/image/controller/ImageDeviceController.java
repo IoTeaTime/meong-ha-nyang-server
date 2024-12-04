@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/open-api/image")
+@RequestMapping("/api/image-device")
 public class ImageDeviceController implements ImageDeviceApi {
     private final ImageService imageService;
 
-    @GetMapping("/{cctvId}/{fileName}")
+    @GetMapping("/{fileName}")
     public Api<ImageSaveUrlResponse> getImageSaveUrl(
             @PathVariable Long cctvId, @PathVariable String fileName) {
         ImageSaveUrlResponse imageSaveUrlResponse = imageService.getImageSaveUrl(cctvId, fileName);
