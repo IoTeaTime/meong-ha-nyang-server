@@ -44,7 +44,7 @@ public class ImageRepositoryImpl implements ImageRepository {
                                                 .createdAt
                                                 .dayOfMonth()
                                                 .eq(searchDate.getDayOfMonth())))
-                .orderBy(imageEntity.createdAt.asc())
+                .orderBy(imageEntity.createdAt.desc())
                 .fetch();
     }
 }
