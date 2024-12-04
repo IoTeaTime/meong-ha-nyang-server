@@ -10,7 +10,8 @@ public enum AuthErrorType implements ErrorTypeCode {
     PASSWORD_INVALID("BAD REQUEST", "비밀번호가 유효하지 않습니다."),
     CODE_NOT_EQUALS("BAD REQUEST", "이메일 인증 코드가 일치하지 않습니다."),
     EMAIL_DUPLICATED("BAD REQUEST", "이메일이 중복되었습니다."),
-    REFRESH_TOKEN_NOT_FOUND("NOT FOUND", "REFRESH TOKEN을 찾을 수 없습니다.");
+    REFRESH_TOKEN_NOT_FOUND("NOT FOUND", "REFRESH TOKEN을 찾을 수 없습니다."),
+    INVALID_AUTH_JWT_REQUEST("BAD REQUEST", "회원이 요청할 수 없는 잘못된 경로입니다.");
 
     private final String message;
     private final String description;

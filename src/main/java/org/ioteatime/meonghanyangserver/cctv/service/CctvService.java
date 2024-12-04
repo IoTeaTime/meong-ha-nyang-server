@@ -17,6 +17,8 @@ import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.type.CctvErrorType;
 import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
+import org.ioteatime.meonghanyangserver.common.utils.JwtCctvUtils;
+import org.ioteatime.meonghanyangserver.common.utils.JwtUtils;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
@@ -27,7 +29,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CctvService {
+    private final JwtUtils jwtUtils;
     private final KvsClient kvsClient;
+    private final JwtCctvUtils jwtCctvUtils;
     private final CctvRepository cctvRepository;
     private final GroupRepository groupRepository;
     private final IotShadowMqttClient iotShadowMqttClient;
@@ -55,8 +59,13 @@ public class CctvService {
                         .build();
 
         CctvEntity cctvEntity = cctvRepository.save(cctv);
+
+        String accessToken =
+                jwtUtils.includeBearer(
+                        jwtCctvUtils.generateCctvAccessToken(
+                                cctvEntity.getCctvNickname(), cctvEntity.getId()));
         // 저장
-        return CctvResponseMapper.from(cctvEntity.getId());
+        return CctvResponseMapper.from(cctvEntity.getId(), accessToken);
     }
 
     @Transactional
@@ -81,7 +90,7 @@ public class CctvService {
         CctvEntity cctvEntity =
                 cctvRepository
                         .findByCctvId(cctvId)
-                        .orElseThrow(() -> new BadRequestException(CctvErrorType.NOT_FOUND));
+                        .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
         return CctvResponseMapper.from(cctvEntity);
     }
 
