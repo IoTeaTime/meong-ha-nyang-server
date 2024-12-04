@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 
 public interface CctvRepository {
+    boolean existsById(Long cctvId);
+
     boolean existsByKvsChannelName(String kvsChannelName);
 
     boolean existsByThingId(String thingId);

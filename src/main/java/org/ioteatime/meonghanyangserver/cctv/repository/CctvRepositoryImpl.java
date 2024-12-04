@@ -16,6 +16,10 @@ public class CctvRepositoryImpl implements CctvRepository {
     private final JPAQueryFactory jpaQueryFactory;
     private final JpaCctvRepository jpaCctvRepository;
 
+    public boolean existsById(Long cctvId) {
+        return jpaCctvRepository.existsById(cctvId);
+    }
+
     public boolean existsByKvsChannelName(String kvsChannelName) {
         return jpaCctvRepository.existsByKvsChannelName(kvsChannelName);
     }
