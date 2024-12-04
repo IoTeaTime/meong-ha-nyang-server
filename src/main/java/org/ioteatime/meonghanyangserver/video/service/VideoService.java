@@ -2,12 +2,12 @@ package org.ioteatime.meonghanyangserver.video.service;
 
 import com.amazonaws.HttpMethod;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.clients.s3.S3Client;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
 import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
-import org.ioteatime.meonghanyangserver.common.type.VideoErrorType;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
 import org.ioteatime.meonghanyangserver.video.domain.VideoEntity;
 import org.ioteatime.meonghanyangserver.video.dto.response.VideoInfoListResponse;
@@ -24,20 +24,6 @@ public class VideoService {
     private final GroupMemberRepository groupMemberRepository;
     private final S3Client s3Client;
 
-    public VideoPresignedUrlResponse getVideoPresignedUrl(
-            Long memberId, Long videoId, Long groupId) {
-        if (!groupMemberRepository.existsByMemberIdAndGroupId(memberId, groupId)) {
-            throw new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND);
-        }
-        VideoEntity videoEntity =
-                videoRepository
-                        .findById(videoId)
-                        .orElseThrow(() -> new NotFoundException(VideoErrorType.VIDEO_NOT_FOUND));
-        String presignedURL =
-                s3Client.generatePreSignUrl(videoEntity.getVideoPath(), HttpMethod.GET);
-        return VideoResponseMapper.form(presignedURL);
-    }
-
     public VideoInfoListResponse searchToDate(Long memberId, Long groupId, LocalDate date) {
         if (!groupMemberRepository.existsByMemberIdAndGroupId(memberId, groupId)) {
             throw new NotFoundException(GroupErrorType.GROUP_MEMBER_NOT_FOUND_IN_GROUP);
@@ -52,11 +38,27 @@ public class VideoService {
                                 it -> {
                                     String presignedURL =
                                             s3Client.generatePreSignUrl(
-                                                    it.getThumbnailPath(), HttpMethod.GET);
+                                                    it.getThumbnailPath(),
+                                                    HttpMethod.GET,
+                                                    Calendar.DAY_OF_MONTH,
+                                                    1);
                                     return VideoResponseMapper.form(it, presignedURL);
                                 })
                         .toList();
 
         return VideoInfoListResponse.builder().video(videoInfoResponseList).build();
+    }
+
+    public VideoPresignedUrlResponse generateVideoPresignedUrl(Long cctvId, String videoName) {
+        videoName =
+                "video/"
+                        + "Mhn_record_"
+                        + cctvId
+                        + System.currentTimeMillis()
+                        + videoName.substring(videoName.lastIndexOf("."));
+
+        String presignedURL =
+                s3Client.generatePreSignUrl(videoName, HttpMethod.POST, Calendar.MINUTE, 10);
+        return VideoResponseMapper.form(presignedURL);
     }
 }

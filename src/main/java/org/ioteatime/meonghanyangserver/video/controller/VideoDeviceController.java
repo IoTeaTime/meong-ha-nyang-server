@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.VideoSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
+import org.ioteatime.meonghanyangserver.video.dto.request.VideoNameRequest;
 import org.ioteatime.meonghanyangserver.video.dto.response.VideoPresignedUrlResponse;
 import org.ioteatime.meonghanyangserver.video.service.VideoService;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class VideoDeviceController implements VideoDeviceApi {
     private final VideoService videoService;
 
-    @GetMapping("/{videoId}/group/{groupId}")
-    public Api<VideoPresignedUrlResponse> getVideoPresignedUrl(
-            @LoginMember Long memberId, @PathVariable Long videoId, @PathVariable Long groupId) {
+    @PostMapping("/presigned-url")
+    public Api<VideoPresignedUrlResponse> getVideoPresignedUrlForUpload(
+            @LoginMember Long cctvId, @RequestBody VideoNameRequest videoNameRequest) {
         VideoPresignedUrlResponse videoPresignedUrlResponse =
-                videoService.getVideoPresignedUrl(memberId, videoId, groupId);
-        return Api.success(VideoSuccessType.GET_PRESIGNED_URL, videoPresignedUrlResponse);
+                videoService.generateVideoPresignedUrl(cctvId, videoNameRequest.videoName());
+        return Api.success(VideoSuccessType.GENERATE_PRESIGNED_URL, videoPresignedUrlResponse);
     }
 }
