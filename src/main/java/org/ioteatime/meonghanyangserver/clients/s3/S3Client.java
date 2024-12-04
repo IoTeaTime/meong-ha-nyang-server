@@ -21,10 +21,11 @@ public class S3Client {
     @Value("${aws.s3-bucket}")
     private String bucket;
 
-    public String generatePreSignUrl(String filename, HttpMethod httpMethod) {
+    public String generatePreSignUrl(
+            String filename, HttpMethod httpMethod, Integer standard, Integer amount) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.add(Calendar.MINUTE, 10);
+        calendar.add(standard, amount);
         GeneratePresignedUrlRequest generatePresignedUrlRequest =
                 new GeneratePresignedUrlRequest(bucket, filename)
                         .withMethod(httpMethod)
