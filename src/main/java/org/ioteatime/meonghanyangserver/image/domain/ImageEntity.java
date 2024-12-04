@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Entity
 @Table(name = "image")
+@EntityListeners(AuditingEntityListener.class)
 public class ImageEntity {
 
     @Id
@@ -25,5 +28,6 @@ public class ImageEntity {
     private String imagePath;
 
     @Column(nullable = false)
+    @CreatedDate
     private LocalDateTime createdAt;
 }
