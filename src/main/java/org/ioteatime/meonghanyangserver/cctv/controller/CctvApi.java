@@ -21,4 +21,7 @@ public interface CctvApi {
     @Operation(summary = "CCTV 이름 변경", description = "담당자: 양원채")
     Api<CctvInfoResponse> updateNickName(
             @LoginMember Long memberId, @RequestBody UpdateCctvNickname request);
+
+    @Operation(summary = "CCTV 정보", description = "담당자: 양원채")
+    Api<CctvInfoResponse> cctvInfo(@PathVariable("cctvId") Long cctvId);
 }
