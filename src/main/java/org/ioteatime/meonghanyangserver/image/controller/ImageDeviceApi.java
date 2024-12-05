@@ -20,8 +20,7 @@ public interface ImageDeviceApi {
 
     @Operation(
             summary = "이미지 저장에 성공시에 DB에 저장합니다",
-            description =
-                    "담당자: 임지인\n\n이미지 저장 후 API를 호출하여 DB에 반영합니다.\n\n이미지 이름과 함께 URL에서 경로를 추출하고 요청 하시면 됩니다.\n\n 파일 경로는 '/'로 시작하면 안됩니다")
+            description = "담당자: 임지인\n\n이미지 저장 후 API를 호출하여 DB에 반영합니다.")
     Api<?> imageSaveSuccess(
             @LoginMember Long cctvId, @RequestBody FinishUploadRequest finishUploadRequest);
 }

@@ -40,7 +40,7 @@ public class ImageService {
             throw new BadRequestException(ImageErrorType.NOT_IMAGE_FILE);
         }
 
-        fileName =
+        String imagePath =
                 "img/"
                         + "Mhn_capture_"
                         + cctvId
@@ -48,8 +48,8 @@ public class ImageService {
                         + fileName.substring(fileName.lastIndexOf("."));
 
         String presignedUrl =
-                s3Client.generatePreSignUrl(fileName, HttpMethod.PUT, Calendar.MINUTE, 10);
-        return ImageResponseMapper.form(presignedUrl);
+                s3Client.generatePreSignUrl(imagePath, HttpMethod.PUT, Calendar.MINUTE, 10);
+        return ImageResponseMapper.form(presignedUrl, fileName, imagePath);
     }
 
     public void saveImage(Long cctvId, FinishUploadRequest finishUploadRequest) {
