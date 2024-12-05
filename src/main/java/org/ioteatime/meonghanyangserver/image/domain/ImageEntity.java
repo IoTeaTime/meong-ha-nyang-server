@@ -33,16 +33,10 @@ public class ImageEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public ImageEntity(
-            Long id,
-            String imageName,
-            GroupEntity group,
-            String imagePath,
-            LocalDateTime createdAt) {
-        this.id = id;
+    public ImageEntity(String imageName, GroupEntity group, String imagePath) {
+
         this.imageName = imageName;
         this.group = group;
         this.imagePath = imagePath;
-        this.createdAt = createdAt;
     }
 }
