@@ -1,7 +1,7 @@
 package org.ioteatime.meonghanyangserver.common.type;
 
 public enum ImageSuccessType implements SuccessTypeCode {
-    SUCCESS_UPLOAD_IMAGE(201, "OK", "이미지 저장에 성공하였습니다."),
+    SUCCESS_UPLOAD_IMAGE(201, "CREATE", "이미지 저장에 성공하였습니다."),
     GET_LIST_OF_DATE(200, "OK", "날짜에 해당하는 이미지 목록 조회에 성공하였습니다."),
     CREATE_PRESIGNED_URL(200, "OK", "Presigned Url 생성에 성공하였습니다.");
 
