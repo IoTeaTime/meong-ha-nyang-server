@@ -19,12 +19,12 @@ public class ImageItemWriter implements ItemWriter<ImageEntity> {
     @Override
     public void write(Chunk<? extends ImageEntity> chunk) {
         List<? extends ImageEntity> imageEntities = chunk.getItems();
-        List<Long> videoIds = imageEntities.stream().map(ImageEntity::getId).toList();
+        List<Long> imageIds = imageEntities.stream().map(ImageEntity::getId).toList();
 
-        if (videoIds.isEmpty()) return;
+        if (imageIds.isEmpty()) return;
 
-        em.createQuery("DELETE FROM ImageEntity WHERE id IN (:videoIds)")
-                .setParameter("videoIds", videoIds)
+        em.createQuery("DELETE FROM ImageEntity WHERE id IN (:imageIds)")
+                .setParameter("imageIds", imageIds)
                 .executeUpdate();
     }
 }
