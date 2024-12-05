@@ -2,6 +2,7 @@ package org.ioteatime.meonghanyangserver.image.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import lombok.Builder;
 import lombok.Getter;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Entity
+@Builder
 @Table(name = "image")
 @EntityListeners(AuditingEntityListener.class)
 public class ImageEntity {

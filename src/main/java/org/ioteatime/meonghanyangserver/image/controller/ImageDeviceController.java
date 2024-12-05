@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.ImageSuccessType;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
+import org.ioteatime.meonghanyangserver.image.dto.request.FinishUploadRequest;
 import org.ioteatime.meonghanyangserver.image.dto.request.ImageNameRequest;
 import org.ioteatime.meonghanyangserver.image.dto.response.ImageSaveUrlResponse;
 import org.ioteatime.meonghanyangserver.image.service.ImageService;
@@ -21,5 +22,12 @@ public class ImageDeviceController implements ImageDeviceApi {
         ImageSaveUrlResponse imageSaveUrlResponse =
                 imageService.getImageSaveUrl(cctvId, imageNameRequest.imageName());
         return Api.success(ImageSuccessType.CREATE_PRESIGNED_URL, imageSaveUrlResponse);
+    }
+
+    @PostMapping("/complete-upload")
+    public Api<Object> imageSaveSuccess(
+            @LoginMember Long cctvId, @RequestBody FinishUploadRequest finishUploadRequest) {
+        imageService.saveImage(cctvId, finishUploadRequest);
+        return Api.success((ImageSuccessType.SUCCESS_UPLOAD_IMAGE));
     }
 }

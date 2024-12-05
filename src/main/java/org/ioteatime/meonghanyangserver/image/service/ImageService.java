@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
 import org.ioteatime.meonghanyangserver.clients.s3.S3Client;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
@@ -14,6 +15,8 @@ import org.ioteatime.meonghanyangserver.common.type.GroupErrorType;
 import org.ioteatime.meonghanyangserver.common.type.ImageErrorType;
 import org.ioteatime.meonghanyangserver.group.domain.GroupEntity;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
+import org.ioteatime.meonghanyangserver.image.domain.ImageEntity;
+import org.ioteatime.meonghanyangserver.image.dto.request.FinishUploadRequest;
 import org.ioteatime.meonghanyangserver.image.dto.response.GroupDateImageResponse;
 import org.ioteatime.meonghanyangserver.image.dto.response.ImageResponse;
 import org.ioteatime.meonghanyangserver.image.dto.response.ImageSaveUrlResponse;
@@ -47,6 +50,20 @@ public class ImageService {
         String presignedUrl =
                 s3Client.generatePreSignUrl(fileName, HttpMethod.PUT, Calendar.MINUTE, 10);
         return ImageResponseMapper.form(presignedUrl);
+    }
+
+    public void saveImage(Long cctvId, FinishUploadRequest finishUploadRequest) {
+        CctvEntity cctv =
+                cctvRepository
+                        .findById(cctvId)
+                        .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
+
+        imageRepository.save(
+                ImageEntity.builder()
+                        .imageName(finishUploadRequest.imageName())
+                        .imagePath(finishUploadRequest.imagePath())
+                        .group(cctv.getGroup())
+                        .build());
     }
 
     public GroupDateImageResponse findAllByMemberIdAndDate(
