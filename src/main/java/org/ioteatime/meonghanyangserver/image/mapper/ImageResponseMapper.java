@@ -10,7 +10,8 @@ public class ImageResponseMapper {
         return new GroupDateImageResponse(images);
     }
 
-    public static ImageSaveUrlResponse form(String presignedUrl) {
-        return new ImageSaveUrlResponse(presignedUrl);
+    public static ImageSaveUrlResponse form(
+            String presignedUrl, String fileName, String imagePath) {
+        return new ImageSaveUrlResponse(presignedUrl, fileName, imagePath);
     }
 }
