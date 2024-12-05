@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Entity
-@Builder
 @Table(name = "image")
 @EntityListeners(AuditingEntityListener.class)
 public class ImageEntity {
@@ -32,4 +31,18 @@ public class ImageEntity {
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Builder
+    public ImageEntity(
+            Long id,
+            String imageName,
+            GroupEntity group,
+            String imagePath,
+            LocalDateTime createdAt) {
+        this.id = id;
+        this.imageName = imageName;
+        this.group = group;
+        this.imagePath = imagePath;
+        this.createdAt = createdAt;
+    }
 }
