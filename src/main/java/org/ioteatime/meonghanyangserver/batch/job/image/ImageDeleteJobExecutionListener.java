@@ -15,7 +15,7 @@ public class ImageDeleteJobExecutionListener implements JobExecutionListener {
     public void beforeJob(JobExecution jobExecution) {
         LocalDateTime now = LocalDateTime.now();
         log.info(
-                "[{}] - 7일이 지난 이미지 삭제 배치 작업을 시작합니다.",
+                "[{}] - 14일이 지난 이미지 삭제 배치 작업을 시작합니다.",
                 now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 

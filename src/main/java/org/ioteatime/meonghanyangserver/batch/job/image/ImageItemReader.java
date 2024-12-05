@@ -31,12 +31,12 @@ public class ImageItemReader implements ItemReader<ImageEntity> {
     }
 
     private void fetchNext() {
-        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+        LocalDateTime twoWeeksAgo = LocalDateTime.now().minusDays(14);
         TypedQuery<ImageEntity> query =
                 em.createQuery(
-                                "SELECT v FROM ImageEntity v WHERE v.createdAt <= (:sevenDaysAgo)",
+                                "SELECT v FROM ImageEntity v WHERE v.createdAt <= (:twoWeeksAgo)",
                                 ImageEntity.class)
-                        .setParameter("sevenDaysAgo", sevenDaysAgo)
+                        .setParameter("twoWeeksAgo", twoWeeksAgo)
                         .setFirstResult(curIdx)
                         .setMaxResults(PAGE_SIZE);
         images = query.getResultList();

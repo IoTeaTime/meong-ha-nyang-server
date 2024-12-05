@@ -26,6 +26,7 @@ public class BatchScheduler {
     private final JobRepository jobRepository;
 
     // 매월 1일 7일 이상 오래된 비디오를 삭제하는 배치 작업을 수행
+    // 매월 1일 14일 이상 오래된 사진을 삭제하는 배치 작업 수행
     @Scheduled(cron = "0 0 0 1 * *")
     public void runJob() {
         Map<String, JobParameter<?>> confMap = new HashMap<>();
