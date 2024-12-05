@@ -19,7 +19,7 @@ public class CctvResponseMapper {
         return new CctvInfoListResponse(cctvInfoResponseList);
     }
 
-    public static CreateCctvResponse from(Long cctvId) {
-        return new CreateCctvResponse(cctvId);
+    public static CreateCctvResponse from(Long cctvId, String accessToken) {
+        return new CreateCctvResponse(cctvId, accessToken);
     }
 }

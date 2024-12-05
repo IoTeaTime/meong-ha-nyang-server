@@ -8,6 +8,7 @@ import org.ioteatime.meonghanyangserver.handler.CustomLogoutHandler;
 import org.ioteatime.meonghanyangserver.handler.CustomLogoutSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -50,6 +51,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(
                 (auth) ->
                         auth.requestMatchers("/open-api/**", "/swagger-ui/**", "/v3/**", "/error")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/cctv-device")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated());

@@ -35,4 +35,10 @@ public class CctvController implements CctvApi {
         CctvInfoResponse response = cctvService.updateNickname(memberId, request);
         return Api.success(CctvSuccessType.UPDATE_NICKNAME, response);
     }
+
+    @GetMapping("/{cctvId}")
+    public Api<CctvInfoResponse> cctvInfo(@PathVariable("cctvId") Long cctvId) {
+        CctvInfoResponse cctvInfoResponse = cctvService.cctvInfo(cctvId);
+        return Api.success(CctvSuccessType.GET_CCTV_DETAIL, cctvInfoResponse);
+    }
 }

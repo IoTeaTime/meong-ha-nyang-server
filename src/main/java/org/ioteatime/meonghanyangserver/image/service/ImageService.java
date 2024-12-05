@@ -2,6 +2,7 @@ package org.ioteatime.meonghanyangserver.image.service;
 
 import com.amazonaws.HttpMethod;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
@@ -43,7 +44,8 @@ public class ImageService {
                         + System.currentTimeMillis()
                         + fileName.substring(fileName.lastIndexOf("."));
 
-        String presignedUrl = s3Client.generatePreSignUrl(fileName, HttpMethod.PUT);
+        String presignedUrl =
+                s3Client.generatePreSignUrl(fileName, HttpMethod.PUT, Calendar.MINUTE, 10);
         return ImageResponseMapper.form(presignedUrl);
     }
 
@@ -66,7 +68,10 @@ public class ImageService {
                                     // 경로를 PresignedUrl로 변경
                                     String preSignedUrl =
                                             s3Client.generatePreSignUrl(
-                                                    image.getImagePath(), HttpMethod.GET);
+                                                    image.getImagePath(),
+                                                    HttpMethod.GET,
+                                                    Calendar.DAY_OF_MONTH,
+                                                    1);
                                     return image.updateToPresignedUrl(preSignedUrl);
                                 })
                         .toList();

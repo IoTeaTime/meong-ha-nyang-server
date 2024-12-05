@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/open-api/cctv")
+@RequestMapping("/api/cctv-device")
 public class CctvDeviceController implements CctvDeviceApi {
     private final CctvService cctvService;
 
@@ -22,7 +22,7 @@ public class CctvDeviceController implements CctvDeviceApi {
     }
 
     @GetMapping("/{cctvId}")
-    public Api<CctvInfoResponse> cctvInfo(@PathVariable Long cctvId) {
+    public Api<CctvInfoResponse> cctvInfo(@PathVariable("cctvId") Long cctvId) {
         CctvInfoResponse cctvInfoResponse = cctvService.cctvInfo(cctvId);
         return Api.success(CctvSuccessType.GET_CCTV_DETAIL, cctvInfoResponse);
     }

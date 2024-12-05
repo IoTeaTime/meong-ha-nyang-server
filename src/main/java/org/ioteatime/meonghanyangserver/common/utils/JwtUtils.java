@@ -5,12 +5,14 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Objects;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
+import org.ioteatime.meonghanyangserver.common.constant.JwtTokenType;
 import org.ioteatime.meonghanyangserver.common.exception.UnauthorizedException;
 import org.ioteatime.meonghanyangserver.common.type.AuthErrorType;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
@@ -116,5 +118,14 @@ public class JwtUtils {
     // access token 블랙리스트 유무 확인
     public boolean blackListAccessToken(String token) {
         return accessTokenRepository.existsByAccessToken(token);
+    }
+
+    public JwtTokenType findTokenType(String token) {
+        try {
+            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+            return JwtTokenType.MEMBER_JWT;
+        } catch (SignatureException e) {
+            return JwtTokenType.CCTV_JWT;
+        }
     }
 }
