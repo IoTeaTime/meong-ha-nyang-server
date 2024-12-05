@@ -24,8 +24,8 @@ public class ImageDeviceController implements ImageDeviceApi {
         return Api.success(ImageSuccessType.CREATE_PRESIGNED_URL, imageSaveUrlResponse);
     }
 
-    @PostMapping("/complete-upload")
-    public Api<Object> imageSaveSuccess(
+    @PostMapping
+    public Api<?> imageSaveSuccess(
             @LoginMember Long cctvId, @RequestBody FinishUploadRequest finishUploadRequest) {
         imageService.saveImage(cctvId, finishUploadRequest);
         return Api.success((ImageSuccessType.SUCCESS_UPLOAD_IMAGE));
