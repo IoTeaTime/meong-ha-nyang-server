@@ -3,6 +3,7 @@
 token:
   expiration-time: 86400000
   secret: ${JWT_SECRET}
+  cctv-secret: ${JWT_CCTV_SECRET}
 
 google:
   official-gmail: ${OFFICIAL_GMAIL}
