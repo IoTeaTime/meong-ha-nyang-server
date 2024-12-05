@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.clients.s3.S3Client;
 import org.ioteatime.meonghanyangserver.image.domain.ImageEntity;
-import org.ioteatime.meonghanyangserver.video.domain.VideoEntity;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;

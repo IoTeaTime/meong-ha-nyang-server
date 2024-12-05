@@ -3,14 +3,12 @@ package org.ioteatime.meonghanyangserver.batch.job.image;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.ioteatime.meonghanyangserver.image.domain.ImageEntity;
-import org.ioteatime.meonghanyangserver.video.domain.VideoEntity;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Component
 @StepScope

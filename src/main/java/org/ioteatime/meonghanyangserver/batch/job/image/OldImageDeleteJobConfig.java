@@ -1,7 +1,6 @@
 package org.ioteatime.meonghanyangserver.batch.job.image;
 
 import lombok.RequiredArgsConstructor;
-
 import org.ioteatime.meonghanyangserver.image.domain.ImageEntity;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

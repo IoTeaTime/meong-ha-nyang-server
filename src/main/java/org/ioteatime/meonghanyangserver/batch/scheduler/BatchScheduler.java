@@ -40,12 +40,11 @@ public class BatchScheduler {
                     oldImageDeleteJobConfig.oldImageDeleteJob(jobRepository), jobParameters);
 
         } catch (JobExecutionAlreadyRunningException
-                 | JobInstanceAlreadyCompleteException
-                 | JobParametersInvalidException
-                 | org.springframework.batch.core.repository.JobRestartException e) {
+                | JobInstanceAlreadyCompleteException
+                | JobParametersInvalidException
+                | org.springframework.batch.core.repository.JobRestartException e) {
 
             log.error(e.getMessage());
         }
     }
 }
-
