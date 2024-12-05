@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ioteatime.meonghanyangserver.batch.job.image.OldImageDeleteJobConfig;
 import org.ioteatime.meonghanyangserver.batch.job.media.OldMediaDeleteJobConfig;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final OldMediaDeleteJobConfig oldMediaDeleteJobConfig;
+    private final OldImageDeleteJobConfig oldImageDeleteJobConfig;
     private final JobRepository jobRepository;
 
     // 매월 1일 7일 이상 오래된 비디오를 삭제하는 배치 작업을 수행
@@ -33,12 +35,17 @@ public class BatchScheduler {
         try {
             jobLauncher.run(
                     oldMediaDeleteJobConfig.oldMediaDeleteJob(jobRepository), jobParameters);
+
+            jobLauncher.run(
+                    oldImageDeleteJobConfig.oldImageDeleteJob(jobRepository), jobParameters);
+
         } catch (JobExecutionAlreadyRunningException
-                | JobInstanceAlreadyCompleteException
-                | JobParametersInvalidException
-                | org.springframework.batch.core.repository.JobRestartException e) {
+                 | JobInstanceAlreadyCompleteException
+                 | JobParametersInvalidException
+                 | org.springframework.batch.core.repository.JobRestartException e) {
 
             log.error(e.getMessage());
         }
     }
 }
+
