@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
+import org.ioteatime.meonghanyangserver.cctv.dto.db.CctvWithGroupId;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -94,5 +95,23 @@ public class CctvRepositoryImpl implements CctvRepository {
                         .fetchJoin()
                         .where(cctvEntity.thingId.eq(thingId))
                         .fetchOne());
+    }
+
+    @Override
+    public Optional<CctvWithGroupId> findCctvWithGroupIdByCctvId(Long cctvId) {
+        CctvWithGroupId result =
+                jpaQueryFactory
+                        .select(
+                                Projections.constructor(
+                                        CctvWithGroupId.class,
+                                        cctvEntity.group.id,
+                                        cctvEntity.id,
+                                        cctvEntity.cctvNickname,
+                                        cctvEntity.thingId,
+                                        cctvEntity.kvsChannelName))
+                        .from(cctvEntity)
+                        .where(cctvEntity.id.eq(cctvId))
+                        .fetchOne();
+        return Optional.ofNullable(result);
     }
 }
