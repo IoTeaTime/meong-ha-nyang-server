@@ -107,8 +107,8 @@ public class CctvRepositoryImpl implements CctvRepository {
                                         cctvEntity.group.id,
                                         cctvEntity.id,
                                         cctvEntity.cctvNickname,
-                                        cctvEntity.thingId,
-                                        cctvEntity.kvsChannelName))
+                                        cctvEntity.kvsChannelName,
+                                        cctvEntity.thingId))
                         .from(cctvEntity)
                         .where(cctvEntity.id.eq(cctvId))
                         .fetchOne();
