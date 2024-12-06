@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.UpdateCctvNickname;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
-import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvNodeInfoResponse;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.utils.LoginMember;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,5 +23,5 @@ public interface CctvApi {
             @LoginMember Long memberId, @RequestBody UpdateCctvNickname request);
 
     @Operation(summary = "CCTV 정보", description = "담당자: 양원채")
-    Api<CctvNodeInfoResponse> cctvInfo(@PathVariable("cctvId") Long cctvId);
+    Api<CctvInfoResponse> cctvInfo(@PathVariable("cctvId") Long cctvId);
 }

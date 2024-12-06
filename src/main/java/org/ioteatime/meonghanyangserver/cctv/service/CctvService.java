@@ -9,7 +9,7 @@ import org.ioteatime.meonghanyangserver.cctv.dto.request.CreateCctvRequest;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.UpdateCctvNickname;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
-import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvNodeInfoResponse;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvSelfInfoResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CreateCctvResponse;
 import org.ioteatime.meonghanyangserver.cctv.mapper.CctvResponseMapper;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
@@ -88,12 +88,20 @@ public class CctvService {
         cctvRepository.deleteById(cctvId);
     }
 
-    public CctvNodeInfoResponse cctvInfo(Long cctvId) {
-        CctvWithGroupId cctvEntity =
+    public CctvInfoResponse cctvInfo(Long cctvId) {
+        CctvEntity cctvEntity =
                 cctvRepository
                         .findByCctvId(cctvId)
                         .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
-        return CctvResponseMapper.CctvSelfInfoFrom(cctvEntity);
+        return CctvResponseMapper.from(cctvEntity);
+    }
+
+    public CctvSelfInfoResponse cctvSelfInfo(Long cctvId) {
+        CctvWithGroupId cctvWithGroupId =
+                cctvRepository
+                        .findCctvWithGroupIdByCctvId(cctvId)
+                        .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
+        return CctvResponseMapper.CctvSelfInfoFrom(cctvWithGroupId);
     }
 
     public CctvInfoListResponse cctvInfoList(Long memberId, Long groupId) {

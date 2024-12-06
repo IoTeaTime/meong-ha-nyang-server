@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 @Schema(description = "CCTV 단일 기기 정보 응답")
-public record CctvNodeInfoResponse(
+public record CctvSelfInfoResponse(
         @NotBlank @Schema(description = "Group ID", example = "1") Long groupId,
         @NotBlank @Schema(description = "CCTV ID", example = "1") Long cctvId,
         @NotBlank @Schema(description = "CCTV 닉네임", example = "거실") String cctvNickname,

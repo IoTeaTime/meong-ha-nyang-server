@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.UpdateCctvNickname;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
-import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvNodeInfoResponse;
 import org.ioteatime.meonghanyangserver.cctv.service.CctvService;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.CctvSuccessType;
@@ -38,8 +37,8 @@ public class CctvController implements CctvApi {
     }
 
     @GetMapping("/{cctvId}")
-    public Api<CctvNodeInfoResponse> cctvInfo(@PathVariable("cctvId") Long cctvId) {
-        CctvNodeInfoResponse cctvNodeInfoResponse = cctvService.cctvInfo(cctvId);
-        return Api.success(CctvSuccessType.GET_CCTV_DETAIL, cctvNodeInfoResponse);
+    public Api<CctvInfoResponse> cctvInfo(@PathVariable("cctvId") Long cctvId) {
+        CctvInfoResponse cctvInfoResponse = cctvService.cctvInfo(cctvId);
+        return Api.success(CctvSuccessType.GET_CCTV_DETAIL, cctvInfoResponse);
     }
 }

@@ -5,7 +5,7 @@ import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
 import org.ioteatime.meonghanyangserver.cctv.dto.db.CctvWithGroupId;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
-import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvNodeInfoResponse;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvSelfInfoResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CreateCctvResponse;
 
 public class CctvResponseMapper {
@@ -17,8 +17,8 @@ public class CctvResponseMapper {
                 cctvEntity.getKvsChannelName());
     }
 
-    public static CctvNodeInfoResponse CctvSelfInfoFrom(CctvWithGroupId cctvWithGroupId) {
-        return new CctvNodeInfoResponse(
+    public static CctvSelfInfoResponse CctvSelfInfoFrom(CctvWithGroupId cctvWithGroupId) {
+        return new CctvSelfInfoResponse(
                 cctvWithGroupId.groupId(),
                 cctvWithGroupId.cctvId(),
                 cctvWithGroupId.cctvNickname(),

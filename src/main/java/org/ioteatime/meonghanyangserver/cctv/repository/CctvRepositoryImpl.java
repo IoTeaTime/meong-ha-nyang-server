@@ -51,13 +51,12 @@ public class CctvRepositoryImpl implements CctvRepository {
     }
 
     @Override
-    public Optional<CctvWithGroupId> findByCctvId(Long cctvId) {
-        CctvWithGroupId result =
+    public Optional<CctvEntity> findByCctvId(Long cctvId) {
+        CctvEntity result =
                 jpaQueryFactory
                         .select(
                                 Projections.constructor(
-                                        CctvWithGroupId.class,
-                                        cctvEntity.group.id,
+                                        CctvEntity.class,
                                         cctvEntity.id,
                                         cctvEntity.cctvNickname,
                                         cctvEntity.thingId,
@@ -84,5 +83,23 @@ public class CctvRepositoryImpl implements CctvRepository {
                         .fetch();
 
         return result;
+    }
+
+    @Override
+    public Optional<CctvWithGroupId> findCctvWithGroupIdByCctvId(Long cctvId) {
+        CctvWithGroupId result =
+                jpaQueryFactory
+                        .select(
+                                Projections.constructor(
+                                        CctvWithGroupId.class,
+                                        cctvEntity.group.id,
+                                        cctvEntity.id,
+                                        cctvEntity.cctvNickname,
+                                        cctvEntity.thingId,
+                                        cctvEntity.kvsChannelName))
+                        .from(cctvEntity)
+                        .where(cctvEntity.id.eq(cctvId))
+                        .fetchOne();
+        return Optional.ofNullable(result);
     }
 }
