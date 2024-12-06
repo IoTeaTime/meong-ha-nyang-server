@@ -25,11 +25,11 @@ public class AIDetectClient {
         this.iotMqttClient = iotMqttClient;
         this.cctvRepository = cctvRepository;
 
-        iotMqttClient.subscribe("/mhn/event/detect/things/#", this::handleDetectEvent);
+        iotMqttClient.subscribe("/mhn/event/detect/things/#", this::detectEventHandler);
         log.info("[객체 탐지] {}", "탐지 Topic을 구독하였습니다.");
     }
 
-    private void handleDetectEvent(MqttMessage mqttMessage) {
+    private void detectEventHandler(MqttMessage mqttMessage) {
         log.info("[객체 탐지] {}", "탐지 Topic이 발행되었습니다.");
         // thingId 기준 GroupId 검색
         if (mqttMessage.getTopic() == null || mqttMessage.getTopic().isEmpty()) {
@@ -45,7 +45,7 @@ public class AIDetectClient {
                     cctv.getGroup().getFcmTopic());
             log.info(
                     "[객체 탐지 알림] {}",
-                    cctv.getGroup().getGroupName() + " 그룹 객체 탐지 푸시 알림 전송에 성공하였습니다.");
+                    cctv.getGroup().getGroupName() + " 그룹에 객체 탐지 푸시 알림 전송을 성공하였습니다.");
         }
     }
 
