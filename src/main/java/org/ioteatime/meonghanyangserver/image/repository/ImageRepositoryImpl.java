@@ -9,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ioteatime.meonghanyangserver.image.domain.ImageEntity;
 import org.ioteatime.meonghanyangserver.image.dto.response.ImageResponse;
 import org.springframework.stereotype.Repository;
 
@@ -46,5 +47,10 @@ public class ImageRepositoryImpl implements ImageRepository {
                                                 .eq(searchDate.getDayOfMonth())))
                 .orderBy(imageEntity.createdAt.desc())
                 .fetch();
+    }
+
+    @Override
+    public ImageEntity save(ImageEntity imageEntity) {
+        return imageJpaRepository.save(imageEntity);
     }
 }

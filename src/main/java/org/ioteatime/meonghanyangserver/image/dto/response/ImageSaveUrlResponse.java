@@ -9,4 +9,10 @@ public record ImageSaveUrlResponse(
                 @Schema(
                         description = "이미지 저장용 presigned url",
                         example = "https://bucket.s3.ap-northeast-2.amazonaws.com/test?")
-                String presignedUrl) {}
+                String presignedUrl,
+        @NotNull @Schema(description = "이미지 이름", example = "test-image.jpg") String imageName,
+        @NotNull
+                @Schema(
+                        description = "S3의 이미지 저장 경로",
+                        example = "img/Mhn_capture_61733381438603.jpg")
+                String imagePath) {}
