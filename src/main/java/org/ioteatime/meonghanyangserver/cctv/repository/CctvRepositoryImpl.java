@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
+import org.ioteatime.meonghanyangserver.cctv.dto.db.CctvWithGroupId;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -50,12 +51,13 @@ public class CctvRepositoryImpl implements CctvRepository {
     }
 
     @Override
-    public Optional<CctvEntity> findByCctvId(Long cctvId) {
-        CctvEntity result =
+    public Optional<CctvWithGroupId> findByCctvId(Long cctvId) {
+        CctvWithGroupId result =
                 jpaQueryFactory
                         .select(
                                 Projections.constructor(
-                                        CctvEntity.class,
+                                        CctvWithGroupId.class,
+                                        cctvEntity.group.id,
                                         cctvEntity.id,
                                         cctvEntity.cctvNickname,
                                         cctvEntity.thingId,

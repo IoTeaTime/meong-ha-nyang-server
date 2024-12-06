@@ -3,6 +3,7 @@ package org.ioteatime.meonghanyangserver.cctv.repository;
 import java.util.List;
 import java.util.Optional;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
+import org.ioteatime.meonghanyangserver.cctv.dto.db.CctvWithGroupId;
 
 public interface CctvRepository {
     boolean existsById(Long cctvId);
@@ -19,7 +20,7 @@ public interface CctvRepository {
 
     void deleteByGroupId(Long groupId);
 
-    Optional<CctvEntity> findByCctvId(Long thingId);
+    Optional<CctvWithGroupId> findByCctvId(Long cctvId);
 
     List<CctvEntity> findByGroupId(Long groupId);
 }

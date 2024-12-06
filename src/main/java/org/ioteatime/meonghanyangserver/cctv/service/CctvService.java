@@ -4,10 +4,12 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
+import org.ioteatime.meonghanyangserver.cctv.dto.db.CctvWithGroupId;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.CreateCctvRequest;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.UpdateCctvNickname;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoListResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvInfoResponse;
+import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvNodeInfoResponse;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CreateCctvResponse;
 import org.ioteatime.meonghanyangserver.cctv.mapper.CctvResponseMapper;
 import org.ioteatime.meonghanyangserver.cctv.repository.CctvRepository;
@@ -86,12 +88,12 @@ public class CctvService {
         cctvRepository.deleteById(cctvId);
     }
 
-    public CctvInfoResponse cctvInfo(Long cctvId) {
-        CctvEntity cctvEntity =
+    public CctvNodeInfoResponse cctvInfo(Long cctvId) {
+        CctvWithGroupId cctvEntity =
                 cctvRepository
                         .findByCctvId(cctvId)
                         .orElseThrow(() -> new NotFoundException(CctvErrorType.NOT_FOUND));
-        return CctvResponseMapper.from(cctvEntity);
+        return CctvResponseMapper.CctvSelfInfoFrom(cctvEntity);
     }
 
     public CctvInfoListResponse cctvInfoList(Long memberId, Long groupId) {
