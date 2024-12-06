@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.auth.dto.reponse.RefreshResponse;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
 import org.ioteatime.meonghanyangserver.cctv.domain.CctvEntity;
@@ -38,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import software.amazon.awssdk.iot.iotshadow.IotShadowClient;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -75,13 +77,21 @@ public class MemberService {
     // 2. 회원은 하나의 그룹에만 소속된다.
     @Transactional
     public void deleteMember(String authHeader, Long memberId) {
+        log.info(
+                "[회원 탈퇴] {}",
+                "탈퇴 작업을 시작합니다. AuthHeader : " + authHeader + " memberId : " + memberId);
         // MemberId 기준으로 GroupMember 조회
         Optional<GroupMemberEntity> groupMemberOptionalEntity =
                 groupMemberRepository.findByMemberId(memberId);
 
+        // Redis에서 refreshToken을 삭제하고 accessToken을 블랙리스트로 저장
+        deleteMemberToken(authHeader, memberId);
+        log.info("[회원 탈퇴] {}", "Redis에서 refreshToken을 삭제하고 accessToken을 블랙리스트로 저장하였습니다.");
+
         // GroupMember가 없으면 == 가입된 그룹이 없으면 바로 탈퇴 진행
         if (groupMemberOptionalEntity.isEmpty()) {
-            deleteMemberAndToken(authHeader, memberId);
+            memberRepository.deleteById(memberId);
+            log.info("[회원 탈퇴] {}", "가입된 그룹이 없어 바로 탈퇴를 진행하였습니다.");
             return;
         }
 
@@ -95,10 +105,24 @@ public class MemberService {
         if (groupMemberRole == GroupMemberRole.ROLE_MASTER) {
             // GroupId 기준으로 video 조회하여 삭제 (S3 배치 작업 추가 필요)
             videoRepository.deleteAllByGroupId(groupId);
+            log.info("[방장 회원 탈퇴] {}", "GroupId 기준으로 video 조회하여 삭제하였습니다.");
 
-            // KVS 채널 삭제는 rollback이 어려우므로 최대한 마지막에 처리
             // GroupId 기준으로 cctv 조회하여 정보 목록 확인
             List<CctvEntity> cctvEntities = cctvRepository.findByGroupId(groupId);
+
+            // CCTV 목록 삭제
+            cctvRepository.deleteByGroupId(groupId);
+            log.info("[방장 회원 탈퇴] {}", "GroupId 기준으로 CCTV 목록을 삭제하였습니다.");
+
+            // GroupId 기준으로 groupMember 모두 찾아 삭제
+            groupMemberRepository.deleteAllByGroupId(groupId);
+            log.info("[방장 회원 탈퇴] {}", "GroupId 기준으로 GroupMember를 모두 삭제하였습니다.");
+
+            // Group 삭제
+            groupRepository.deleteById(groupId);
+            log.info("[방장 회원 탈퇴] {}", "GroupId 기준으로 Group을 삭제하였습니다.");
+
+            // KVS 채널 삭제는 rollback이 어려우므로 최대한 마지막에 처리
             // CCTV 목록을 순회하여 KVS 채널 삭제
             cctvEntities.forEach(
                     cctv -> {
@@ -109,25 +133,19 @@ public class MemberService {
                         iotShadowMqttClient.updateShadow(
                                 cctv.getThingId(), "kvsChannelDeleteRequested", true);
                     });
-            // CCTV 목록 삭제
-            cctvRepository.deleteByGroupId(groupId);
-
-            // GroupId 기준으로 groupMember 모두 찾아 삭제
-            groupMemberRepository.deleteAllByGroupId(groupId);
-
-            // Group 삭제
-            groupRepository.deleteById(groupId);
+            log.info("[방장 회원 탈퇴] {}", "CCTV의 KVS 채널을 모두 삭제하였습니다.");
         } else {
             // GroupMember 삭제만 진행 (PARTICIPANT인 경우)
             groupMemberRepository.deleteById(groupMemberId);
+            log.info("[참여자 회원 탈퇴] {}", "GroupId 기준으로 GroupMember를 모두 삭제하였습니다.");
         }
 
         // Member 삭제 (PARTICIPANT도 해당)
-        deleteMemberAndToken(authHeader, memberId);
+        memberRepository.deleteById(memberId);
+        log.info("[회원 탈퇴] {}", "Member를 삭제하였습니다.");
     }
 
-    private void deleteMemberAndToken(String authHeader, Long memberId) {
-        memberRepository.deleteById(memberId);
+    private void deleteMemberToken(String authHeader, Long memberId) {
         refreshTokenRepository.deleteByMemberId(memberId);
         authHeader = jwtUtils.extractTokenFromHeader(authHeader);
         Date date = jwtUtils.getExpirationDateFromToken(authHeader);

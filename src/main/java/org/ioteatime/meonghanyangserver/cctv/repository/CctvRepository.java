@@ -25,4 +25,6 @@ public interface CctvRepository {
     List<CctvEntity> findByGroupId(Long groupId);
 
     Optional<CctvWithGroupId> findCctvWithGroupIdByCctvId(Long cctvId);
+
+    Optional<CctvEntity> findByThingId(String thingId);
 }

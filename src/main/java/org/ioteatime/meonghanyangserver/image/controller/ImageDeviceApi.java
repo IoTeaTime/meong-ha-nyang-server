@@ -9,7 +9,7 @@ import org.ioteatime.meonghanyangserver.image.dto.request.ImageNameRequest;
 import org.ioteatime.meonghanyangserver.image.dto.response.ImageSaveUrlResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "Image Device Api", description = "Image 관련 API 목록입니다.")
+@Tag(name = "ImageDevice Api", description = "Image 관련 API 목록입니다.")
 public interface ImageDeviceApi {
     @Operation(
             summary = "이미지 저장을 위한 presigned url을 발급 받습니다.",
