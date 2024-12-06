@@ -26,7 +26,6 @@ public class AIDetectClient {
         this.cctvRepository = cctvRepository;
 
         iotMqttClient.subscribe("/mhn/event/detect/things/#", this::handleDetectEvent);
-        iotMqttClient.subscribe("/mhn/event/detect/things/+", this::handleDetectEvent);
         log.info("[객체 탐지] {}", "탐지 Topic을 구독하였습니다.");
     }
 
@@ -42,7 +41,7 @@ public class AIDetectClient {
             CctvEntity cctv = cctvEntity.get();
             fcmClient.sendPush(
                     "뽀삐가 나타났어요!",
-                    Arrays.toString(mqttMessage.getPayload()),
+                    Arrays.toString(mqttMessage.getPayload()), // Payload 수정 필요
                     cctv.getGroup().getFcmTopic());
             log.info(
                     "[객체 탐지 알림] {}",
