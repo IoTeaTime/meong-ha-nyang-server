@@ -1,6 +1,7 @@
 package org.ioteatime.meonghanyangserver.cctv.repository;
 
 import static org.ioteatime.meonghanyangserver.cctv.domain.QCctvEntity.cctvEntity;
+import static org.ioteatime.meonghanyangserver.group.domain.QGroupEntity.groupEntity;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -82,5 +83,16 @@ public class CctvRepositoryImpl implements CctvRepository {
                         .fetch();
 
         return result;
+    }
+
+    @Override
+    public Optional<CctvEntity> findByThingId(String thingId) {
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .selectFrom(cctvEntity)
+                        .join(cctvEntity.group, groupEntity)
+                        .fetchJoin()
+                        .where(cctvEntity.thingId.eq(thingId))
+                        .fetchOne());
     }
 }

@@ -19,7 +19,9 @@ public interface CctvRepository {
 
     void deleteByGroupId(Long groupId);
 
-    Optional<CctvEntity> findByCctvId(Long thingId);
+    Optional<CctvEntity> findByCctvId(Long cctvId);
 
     List<CctvEntity> findByGroupId(Long groupId);
+
+    Optional<CctvEntity> findByThingId(String thingId);
 }
