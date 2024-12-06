@@ -26,6 +26,7 @@ public class AIDetectClient {
         this.cctvRepository = cctvRepository;
 
         iotMqttClient.subscribe("/mhn/event/detect/things/#", this::detectEventHandler);
+        iotMqttClient.subscribe("/mhn/event/detect/things/*", this::detectEventHandler);
         log.info("[객체 탐지] {}", "탐지 Topic을 구독하였습니다.");
     }
 
