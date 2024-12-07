@@ -181,7 +181,8 @@ public class AwsConfig {
             builder.withConnectionEventCallbacks(callbacks)
                     .withClientId(awsProperties.iotClientId())
                     .withEndpoint(awsProperties.iotEndpoint())
-                    .withCleanSession(true);
+                    .withCleanSession(true)
+                    .withKeepAliveSecs(300);
 
             // 연결 후 builder 닫기
             MqttClientConnection connection = builder.build();
