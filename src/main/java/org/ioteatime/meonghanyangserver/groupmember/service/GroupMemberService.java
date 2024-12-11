@@ -20,6 +20,7 @@ import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberInfo
 import org.ioteatime.meonghanyangserver.groupmember.dto.response.GroupMemberResponse;
 import org.ioteatime.meonghanyangserver.groupmember.mapper.GroupMemberResponseMapper;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
+import org.ioteatime.meonghanyangserver.image.repository.ImageRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class GroupMemberService {
     private final MemberRepository memberRepository;
     private final GroupMemberRepository groupMemberRepository;
     private final KvsChannelNameGenerator kvsChannelNameGenerator;
+    private final ImageRepository imageRepository;
 
     @Transactional
     public void joinGroupMember(Long memberId, JoinGroupMemberRequest joinGroupMemberRequest) {
@@ -128,6 +130,7 @@ public class GroupMemberService {
             // 방장 퇴장
             groupMemberRepository.deleteByGroupId(groupId);
             cctvRepository.deleteByGroupId(groupId);
+            imageRepository.deleteByGroupId(groupId);
             groupRepository.deleteById(groupId);
         } else {
             // 참여자 퇴장

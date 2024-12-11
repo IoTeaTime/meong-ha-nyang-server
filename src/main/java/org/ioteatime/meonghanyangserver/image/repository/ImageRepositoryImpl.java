@@ -53,4 +53,9 @@ public class ImageRepositoryImpl implements ImageRepository {
     public ImageEntity save(ImageEntity imageEntity) {
         return imageJpaRepository.save(imageEntity);
     }
+
+    @Override
+    public void deleteByGroupId(Long groupId) {
+        imageJpaRepository.deleteByGroupId(groupId);
+    }
 }
