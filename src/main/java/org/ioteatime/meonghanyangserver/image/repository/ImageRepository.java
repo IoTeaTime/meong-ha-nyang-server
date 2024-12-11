@@ -9,4 +9,6 @@ public interface ImageRepository {
     List<ImageResponse> findAllByGroupIdAndDate(Long groupId, LocalDateTime searchDate);
 
     ImageEntity save(ImageEntity imageEntity);
+
+    void deleteByGroupId(Long groupId);
 }
