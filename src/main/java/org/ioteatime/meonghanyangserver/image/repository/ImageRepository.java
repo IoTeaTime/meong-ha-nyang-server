@@ -11,4 +11,6 @@ public interface ImageRepository {
     ImageEntity save(ImageEntity imageEntity);
 
     void deleteByGroupId(Long groupId);
+
+    void updateGroupNull(Long groupId);
 }

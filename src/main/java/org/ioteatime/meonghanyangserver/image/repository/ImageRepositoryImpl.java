@@ -58,4 +58,13 @@ public class ImageRepositoryImpl implements ImageRepository {
     public void deleteByGroupId(Long groupId) {
         imageJpaRepository.deleteByGroupId(groupId);
     }
+
+    @Override
+    public void updateGroupNull(Long groupId) {
+        queryFactory
+                .update(imageEntity)
+                .setNull(imageEntity.group)
+                .where(imageEntity.group.id.eq(groupId))
+                .execute();
+    }
 }

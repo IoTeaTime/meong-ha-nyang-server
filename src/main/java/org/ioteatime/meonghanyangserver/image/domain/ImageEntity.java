@@ -23,7 +23,7 @@ public class ImageEntity {
     @Column(nullable = false, length = 50)
     private String imageName;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
     private GroupEntity group;
 
@@ -35,10 +35,11 @@ public class ImageEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public ImageEntity(String imageName, GroupEntity group, String imagePath) {
-
+    public ImageEntity(
+            String imageName, GroupEntity group, String imagePath, LocalDateTime createdAt) {
         this.imageName = imageName;
         this.group = group;
         this.imagePath = imagePath;
+        this.createdAt = createdAt;
     }
 }

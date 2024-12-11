@@ -38,7 +38,8 @@ public class BatchScheduler {
                     oldMediaDeleteJobConfig.oldMediaDeleteJob(jobRepository), jobParameters);
 
             jobLauncher.run(
-                    oldImageDeleteJobConfig.oldImageDeleteJob(jobRepository), jobParameters);
+                    oldImageDeleteJobConfig.oldOrRemovedImageDeleteJob(jobRepository),
+                    jobParameters);
 
         } catch (JobExecutionAlreadyRunningException
                 | JobInstanceAlreadyCompleteException
