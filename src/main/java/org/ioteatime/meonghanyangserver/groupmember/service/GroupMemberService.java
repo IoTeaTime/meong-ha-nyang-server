@@ -130,7 +130,7 @@ public class GroupMemberService {
             // 방장 퇴장
             groupMemberRepository.deleteByGroupId(groupId);
             cctvRepository.deleteByGroupId(groupId);
-            imageRepository.deleteByGroupId(groupId);
+            imageRepository.updateGroupNull(groupId);
             groupRepository.deleteById(groupId);
         } else {
             // 참여자 퇴장

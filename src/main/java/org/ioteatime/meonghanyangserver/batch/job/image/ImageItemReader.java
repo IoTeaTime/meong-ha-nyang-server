@@ -34,7 +34,7 @@ public class ImageItemReader implements ItemReader<ImageEntity> {
         LocalDateTime twoWeeksAgo = LocalDateTime.now().minusDays(14);
         TypedQuery<ImageEntity> query =
                 em.createQuery(
-                                "SELECT v FROM ImageEntity v WHERE v.createdAt <= (:twoWeeksAgo)",
+                                "SELECT v FROM ImageEntity v WHERE v.createdAt <= (:twoWeeksAgo) OR v.group IS NULL",
                                 ImageEntity.class)
                         .setParameter("twoWeeksAgo", twoWeeksAgo)
                         .setFirstResult(curIdx)

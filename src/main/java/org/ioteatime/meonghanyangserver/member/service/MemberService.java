@@ -116,9 +116,9 @@ public class MemberService {
             cctvRepository.deleteByGroupId(groupId);
             log.info("[방장 회원 탈퇴] {}", "GroupId 기준으로 CCTV 목록을 삭제하였습니다.");
 
-            // Image 목록 삭제
-            imageRepository.deleteByGroupId(groupId);
-            log.info("[방장 회원 탈퇴] {}", "GroupId 기준으로 Image 목록을 삭제하였습니다.");
+            // Image 목록 group 필드 null
+            imageRepository.updateGroupNull(groupId);
+            log.info("[방장 회원 탈퇴] {}", "GroupId 기준으로 Image 목록의 Group 필드를 Null로 변경하였습니다.");
 
             // GroupId 기준으로 groupMember 모두 찾아 삭제
             groupMemberRepository.deleteAllByGroupId(groupId);

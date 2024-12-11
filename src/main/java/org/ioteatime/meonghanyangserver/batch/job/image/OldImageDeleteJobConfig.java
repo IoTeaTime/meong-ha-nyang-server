@@ -23,8 +23,8 @@ public class OldImageDeleteJobConfig {
 
     @Bean
     @JobScope
-    public Step oldImageDeleteStep(JobRepository jobRepository) {
-        return new StepBuilder("oldImageDeleteStep", jobRepository)
+    public Step oldOrRemovedImageDeleteStep(JobRepository jobRepository) {
+        return new StepBuilder("oldOrRemovedImageDeleteStep", jobRepository)
                 .<ImageEntity, ImageEntity>chunk(10, transactionManager)
                 .reader(itemReader)
                 .processor(itemProcessor)
@@ -34,10 +34,10 @@ public class OldImageDeleteJobConfig {
     }
 
     @Bean
-    public Job oldImageDeleteJob(JobRepository jobRepository) {
-        return new JobBuilder("oldImageDeleteJob", jobRepository)
+    public Job oldOrRemovedImageDeleteJob(JobRepository jobRepository) {
+        return new JobBuilder("oldOrRemovedImageDeleteJob", jobRepository)
                 .listener(imageDeleteJobExecutionListener)
-                .start(oldImageDeleteStep(jobRepository))
+                .start(oldOrRemovedImageDeleteStep(jobRepository))
                 .build();
     }
 }
