@@ -23,6 +23,7 @@ import org.ioteatime.meonghanyangserver.group.repository.GroupRepository;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.GroupMemberEntity;
 import org.ioteatime.meonghanyangserver.groupmember.doamin.enums.GroupMemberRole;
 import org.ioteatime.meonghanyangserver.groupmember.repository.GroupMemberRepository;
+import org.ioteatime.meonghanyangserver.image.repository.ImageRepository;
 import org.ioteatime.meonghanyangserver.member.domain.MemberEntity;
 import org.ioteatime.meonghanyangserver.member.dto.request.ChangePasswordRequest;
 import org.ioteatime.meonghanyangserver.member.dto.request.UpdateNicknameAndGroupNameRequest;
@@ -55,6 +56,7 @@ public class MemberService {
     private final GroupMemberRepository groupMemberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final AccessTokenRepository accessTokenRepository;
+    private final ImageRepository imageRepository;
 
     public MemberWithGroupDetailResponse getMemberDetail(Long memberId) {
         MemberEntity memberEntity =
@@ -113,6 +115,10 @@ public class MemberService {
             // CCTV 목록 삭제
             cctvRepository.deleteByGroupId(groupId);
             log.info("[방장 회원 탈퇴] {}", "GroupId 기준으로 CCTV 목록을 삭제하였습니다.");
+
+            // Image 목록 삭제
+            imageRepository.deleteByGroupId(groupId);
+            log.info("[방장 회원 탈퇴] {}", "GroupId 기준으로 Image 목록을 삭제하였습니다.");
 
             // GroupId 기준으로 groupMember 모두 찾아 삭제
             groupMemberRepository.deleteAllByGroupId(groupId);
