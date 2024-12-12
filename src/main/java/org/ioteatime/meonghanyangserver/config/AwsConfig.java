@@ -12,6 +12,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
+import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ioteatime.meonghanyangserver.common.exception.InternalServerException;
@@ -177,9 +178,10 @@ public class AwsConfig {
                         }
                     };
 
+            String uniqueClientId = createUniqueClientId();
             // 연결 설정
             builder.withConnectionEventCallbacks(callbacks)
-                    .withClientId(awsProperties.iotClientId())
+                    .withClientId(uniqueClientId)
                     .withEndpoint(awsProperties.iotEndpoint())
                     .withCleanSession(true)
                     .withKeepAliveSecs(300);
@@ -193,5 +195,11 @@ public class AwsConfig {
             e.printStackTrace();
             throw new InternalServerException(AwsErrorType.IOT_MQTT_CONNECTION_FAILED);
         }
+    }
+
+    private String createUniqueClientId() {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        int index = random.nextInt(3000);
+        return awsProperties.iotClientId() + index;
     }
 }
