@@ -31,7 +31,7 @@ services:
       - '8080:8080'
     env_file: .env
     volumes:
-      - "./client_secret_442820160906-mpbltfh7036rl8jtlal40so1tfotkf24.apps.googleusercontent.com.json:/client_secret_442820160906-mpbltfh7036rl8jtlal40so1tfotkf24.apps.googleusercontent.com.json"
+      - "./gmail_client_secret.json:/gmail_client_secret.json"
       - "./monghanyang-21fad-54f38c79a642.json:/monghanyang-21fad-54f38c79a642.json"
       - "./logs:/logs"
     labels:
