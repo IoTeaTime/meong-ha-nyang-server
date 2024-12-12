@@ -47,10 +47,10 @@ public class GoogleMailClient {
             // Build flow and trigger user authorization request.
             GoogleAuthorizationCodeFlow flow =
                     new GoogleAuthorizationCodeFlow.Builder(
-                            HTTP_TRANSPORT,
-                            jsonFactory,
-                            clientSecrets,
-                            Set.of(GmailScopes.GMAIL_SEND))
+                                    HTTP_TRANSPORT,
+                                    jsonFactory,
+                                    clientSecrets,
+                                    Set.of(GmailScopes.GMAIL_SEND))
                             .setDataStoreFactory(
                                     new FileDataStoreFactory(Paths.get("tokens").toFile()))
                             .setAccessType("offline")
@@ -68,9 +68,9 @@ public class GoogleMailClient {
             GsonFactory jsonFactory = GsonFactory.getDefaultInstance();
             Gmail service =
                     new Gmail.Builder(
-                            httpTransport,
-                            jsonFactory,
-                            getCredentials(httpTransport, jsonFactory))
+                                    httpTransport,
+                                    jsonFactory,
+                                    getCredentials(httpTransport, jsonFactory))
                             .setApplicationName("Test Mailer")
                             .build();
 

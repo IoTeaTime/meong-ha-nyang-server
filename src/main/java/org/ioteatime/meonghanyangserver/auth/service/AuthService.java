@@ -106,7 +106,7 @@ public class AuthService {
                 """
                         .formatted(code);
         googleMailClient.sendMail(email, mailSubject, mailContent);
-//        sesClient.sendEmail(email, mailSubject, mailContent);
+        //        sesClient.sendEmail(email, mailSubject, mailContent);
     }
 
     private static String getCode() {
@@ -161,6 +161,6 @@ public class AuthService {
                 """
                         .formatted(password);
         googleMailClient.sendMail(issuePasswordRequest.email(), mailSubject, mailContent);
-//        sesClient.sendEmail(issuePasswordRequest.email(), mailSubject, mailContent);
+        //        sesClient.sendEmail(issuePasswordRequest.email(), mailSubject, mailContent);
     }
 }
