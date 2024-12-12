@@ -48,7 +48,7 @@ public class AIDetectClient {
             String message =
                     writeMessage(cctv.getGroup().getGroupName(), cctv.getCctvNickname(), aiObject);
 
-            fcmClient.sendPush("뽀삐가 나타났어요!", message, cctv.getGroup().getFcmTopic());
+            fcmClient.sendPush("새로운 움직임을 발견했어요!", message, cctv.getGroup().getFcmTopic());
             log.info("[객체 탐지 알림] {}", "다음과 같은 메시지를 전송했습니다. : " + message);
             log.info(
                     "[객체 탐지 알림] {}",
