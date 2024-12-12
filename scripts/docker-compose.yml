@@ -32,6 +32,7 @@ services:
     env_file: .env
     volumes:
       - "./gmail_client_secret.json:/gmail_client_secret.json"
+      - "./tokens:/tokens"
       - "./monghanyang-21fad-54f38c79a642.json:/monghanyang-21fad-54f38c79a642.json"
       - "./logs:/logs"
     labels:
