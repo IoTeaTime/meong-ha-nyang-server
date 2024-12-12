@@ -12,6 +12,7 @@ import org.ioteatime.meonghanyangserver.auth.dto.request.IssuePasswordRequest;
 import org.ioteatime.meonghanyangserver.auth.dto.request.LoginRequest;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthEntityMapper;
 import org.ioteatime.meonghanyangserver.auth.mapper.AuthResponseMapper;
+import org.ioteatime.meonghanyangserver.clients.google.GoogleMailClient;
 import org.ioteatime.meonghanyangserver.clients.ses.SesClient;
 import org.ioteatime.meonghanyangserver.common.exception.BadRequestException;
 import org.ioteatime.meonghanyangserver.common.exception.NotFoundException;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final JwtUtils jwtUtils;
     private final SesClient sesClient;
+    private final GoogleMailClient googleMailClient;
     private final MemberRepository memberRepository;
     private final GroupMemberRepository deviceRepository;
     private final EmailCodeRepository emailCodeRepository;
@@ -103,7 +105,8 @@ public class AuthService {
                 <p>%s</p>
                 """
                         .formatted(code);
-        sesClient.sendEmail(email, mailSubject, mailContent);
+        googleMailClient.sendMail(email, mailSubject, mailContent);
+//        sesClient.sendEmail(email, mailSubject, mailContent);
     }
 
     private static String getCode() {
@@ -157,6 +160,7 @@ public class AuthService {
                 <p>%s</p>
                 """
                         .formatted(password);
-        sesClient.sendEmail(issuePasswordRequest.email(), mailSubject, mailContent);
+        googleMailClient.sendMail(issuePasswordRequest.email(), mailSubject, mailContent);
+//        sesClient.sendEmail(issuePasswordRequest.email(), mailSubject, mailContent);
     }
 }
