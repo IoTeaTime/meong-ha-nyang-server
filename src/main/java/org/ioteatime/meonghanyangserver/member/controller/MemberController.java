@@ -28,15 +28,15 @@ public class MemberController implements MemberApi {
     }
 
     @DeleteMapping
-    public Api<Object> deleteMember(
+    public Api<?> deleteMember(
             @RequestHeader("Authorization") String authHeader, @LoginMember Long memberId) {
         memberService.deleteMember(authHeader, memberId);
         return Api.success(AuthSuccessType.DELETE_USER);
     }
 
     @PutMapping("/password")
-    public Api<Object> changeMemberPassword(
-            @LoginMember Long memberId, @RequestBody @Valid ChangePasswordRequest request) {
+    public Api<?> changeMemberPassword(
+            @LoginMember Long memberId, @Valid @RequestBody ChangePasswordRequest request) {
         memberService.changeMemberPassword(memberId, request);
         return Api.success(AuthSuccessType.UPDATE_PASSWORD);
     }
@@ -50,7 +50,8 @@ public class MemberController implements MemberApi {
 
     @PatchMapping("/nickname-groupname")
     public Api<UpdateNicknameAndGroupNameResponse> updateNicknameAndGroupName(
-            @LoginMember Long memberId, @RequestBody UpdateNicknameAndGroupNameRequest request) {
+            @LoginMember Long memberId,
+            @Valid @RequestBody UpdateNicknameAndGroupNameRequest request) {
         UpdateNicknameAndGroupNameResponse response =
                 memberService.updateNicknameAndGroupName(memberId, request);
         if (response.groupName() == null) {

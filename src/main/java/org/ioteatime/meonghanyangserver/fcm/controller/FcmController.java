@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.fcm.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.FcmSuccessType;
@@ -17,7 +18,8 @@ public class FcmController implements FcmApi {
 
     @PostMapping("/token")
     public Api<?> saveToken(
-            @LoginMember Long memberId, @RequestBody SaveFcmTokenRequest createFcmTokenRequest) {
+            @LoginMember Long memberId,
+            @Valid @RequestBody SaveFcmTokenRequest createFcmTokenRequest) {
         fcmService.saveToken(memberId, createFcmTokenRequest.token());
         return Api.success(FcmSuccessType.SAVE);
     }

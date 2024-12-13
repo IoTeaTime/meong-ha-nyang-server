@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.groupmember.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.GroupSuccessType;
@@ -25,7 +26,7 @@ public class GroupMemberController implements GroupMemberApi {
     @PostMapping("/viewer")
     public Api<?> joinGroupAsMember(
             @LoginMember Long memberId,
-            @RequestBody JoinGroupMemberRequest joinGroupMemberRequest) {
+            @Valid @RequestBody JoinGroupMemberRequest joinGroupMemberRequest) {
         groupMemberService.joinGroupMember(memberId, joinGroupMemberRequest);
         return Api.success(GroupSuccessType.JOIN_GROUP_MEMBER);
     }

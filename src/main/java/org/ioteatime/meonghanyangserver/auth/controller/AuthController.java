@@ -20,26 +20,26 @@ public class AuthController implements AuthApi {
     private final AuthService authService;
 
     @PostMapping("/sign-up")
-    public Api<Object> registerUser(@RequestBody JoinRequest userDto) {
+    public Api<?> registerUser(@Valid @RequestBody JoinRequest userDto) {
         authService.joinProcess(userDto);
         return Api.success(AuthSuccessType.SIGN_UP);
     }
 
     @PostMapping("/email-verification")
-    public Api<?> sendEmailCode(@RequestBody EmailRequest emailReq) {
+    public Api<?> sendEmailCode(@Valid @RequestBody EmailRequest emailReq) {
         authService.send(emailReq.email());
         return Api.success(AuthSuccessType.SEND_EMAIL_CODE);
     }
 
     @PostMapping("/check-verification")
-    public Api<?> verifyEmail(VerifyEmailRequest verifyEmailRequest) {
+    public Api<?> verifyEmail(@Valid @RequestBody VerifyEmailRequest verifyEmailRequest) {
         authService.verifyEmailCode(verifyEmailRequest.email(), verifyEmailRequest.code());
         return Api.success(AuthSuccessType.VERIFY_EMAIL_CODE);
     }
 
     // Email 중복 확인
     @PostMapping("/check-email")
-    public Api<?> duplicateEmail(@RequestBody EmailRequest emailReq) {
+    public Api<?> duplicateEmail(@Valid @RequestBody EmailRequest emailReq) {
         authService.verifyEmail(emailReq.email());
         return Api.success(AuthSuccessType.EMAIL_VERIFIED);
     }
@@ -51,7 +51,7 @@ public class AuthController implements AuthApi {
     }
 
     @PostMapping("/sign-in")
-    public Api<LoginResponse> login(LoginRequest loginRequest) {
+    public Api<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = authService.login(loginRequest);
         return Api.success(AuthSuccessType.SIGN_IN, loginResponse);
     }
