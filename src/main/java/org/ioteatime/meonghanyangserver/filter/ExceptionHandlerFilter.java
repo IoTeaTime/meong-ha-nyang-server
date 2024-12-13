@@ -43,7 +43,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Api<Object> apiResponse = Api.fail(exception);
+        Api<?> apiResponse = Api.fail(exception);
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(apiResponse);
 

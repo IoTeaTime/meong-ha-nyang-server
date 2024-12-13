@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.cctv.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.cctv.dto.request.CreateCctvRequest;
 import org.ioteatime.meonghanyangserver.cctv.dto.response.CctvSelfInfoResponse;
@@ -17,7 +18,8 @@ public class CctvDeviceController implements CctvDeviceApi {
     private final CctvService cctvService;
 
     @PostMapping
-    public Api<CreateCctvResponse> createCctv(@RequestBody CreateCctvRequest createCctvRequest) {
+    public Api<CreateCctvResponse> createCctv(
+            @Valid @RequestBody CreateCctvRequest createCctvRequest) {
         CreateCctvResponse createCctvResponse = cctvService.createCctv(createCctvRequest);
         return Api.success(CctvSuccessType.CREATE_CCTV, createCctvResponse);
     }

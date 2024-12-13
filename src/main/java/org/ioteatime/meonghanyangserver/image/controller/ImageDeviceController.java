@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.image.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.ImageSuccessType;
@@ -18,7 +19,7 @@ public class ImageDeviceController implements ImageDeviceApi {
 
     @PostMapping("/presigned-url")
     public Api<ImageSaveUrlResponse> getImageSaveUrl(
-            @LoginMember Long cctvId, @RequestBody ImageNameRequest imageNameRequest) {
+            @LoginMember Long cctvId, @Valid @RequestBody ImageNameRequest imageNameRequest) {
         ImageSaveUrlResponse imageSaveUrlResponse =
                 imageService.getImageSaveUrl(cctvId, imageNameRequest.imageName());
         return Api.success(ImageSuccessType.CREATE_PRESIGNED_URL, imageSaveUrlResponse);
@@ -26,7 +27,7 @@ public class ImageDeviceController implements ImageDeviceApi {
 
     @PostMapping
     public Api<?> imageSaveSuccess(
-            @LoginMember Long cctvId, @RequestBody FinishUploadRequest finishUploadRequest) {
+            @LoginMember Long cctvId, @Valid @RequestBody FinishUploadRequest finishUploadRequest) {
         imageService.saveImage(cctvId, finishUploadRequest);
         return Api.success((ImageSuccessType.SUCCESS_UPLOAD_IMAGE));
     }

@@ -95,7 +95,7 @@ public class AuthService {
     }
 
     public void send(String email) {
-        String code = getCode();
+        String code = getCode(6);
         emailCodeRepository.save(EmailCode.builder().email(email).code(code).build());
         String mailSubject = "[\uD83D\uDC36 멍하냥] 이메일 인증 코드입니다.";
         String mailContent =
@@ -109,14 +109,14 @@ public class AuthService {
         //        sesClient.sendEmail(email, mailSubject, mailContent);
     }
 
-    private static String getCode() {
+    private static String getCode(int length) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
         List<String> authStr = new CopyOnWriteArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < length / 2; i++) {
             authStr.add(String.valueOf(random.nextInt(10)));
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < length / 2; i++) {
             authStr.add(String.valueOf((char) (random.nextInt(26) + 65)));
         }
 
@@ -148,7 +148,7 @@ public class AuthService {
                         .findByEmail(issuePasswordRequest.email())
                         .orElseThrow(() -> new NotFoundException(AuthErrorType.NOT_FOUND));
         // 임시비밀번호 발급
-        String password = getCode();
+        String password = getCode(10);
 
         String encodedPassword = bCryptPasswordEncoder.encode(password);
 

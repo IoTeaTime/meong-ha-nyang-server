@@ -21,7 +21,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Api<Object> apiResponse = Api.success(AuthSuccessType.SIGN_OUT);
+        Api<?> apiResponse = Api.success(AuthSuccessType.SIGN_OUT);
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(apiResponse);
 
