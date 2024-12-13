@@ -19,7 +19,8 @@ public enum CommonErrorType implements ErrorTypeCode {
     NO_SUCH_ELEMENT("NO SUCH ELEMENT", "요소가 존재하지 않습니다"),
     IO("I/O", "I/O 오류가 발생하였습니다."),
     ILLEGAL_ARGUMENT("ILLEGAL ARGUMENT", "인자 값이 올바르지 않습니다."),
-    INTERNAL_SERVER("INTERNAL SERVER", "서버 에러가 발생하였습니다. 로그를 확인해 주세요.");
+    INTERNAL_SERVER("INTERNAL SERVER", "서버 에러가 발생하였습니다. 로그를 확인해 주세요."),
+    REQUEST_VALIDATION("INVALID VALUE", "요청 형식이 올바르지 않습니다.");
 
     private final String message;
     private final String description;
