@@ -5,5 +5,5 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 public record VerifyEmailRequest(
-        @Email @NotNull @Schema(description = "이메일", example = "example@gmail.com") String email,
+        @NotNull @Schema(description = "이메일", example = "example@gmail.com") @Email String email,
         @NotNull @Schema(description = "인증 코드", example = "XV23W1") String code) {}

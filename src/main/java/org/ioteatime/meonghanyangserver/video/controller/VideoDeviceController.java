@@ -1,5 +1,6 @@
 package org.ioteatime.meonghanyangserver.video.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ioteatime.meonghanyangserver.common.api.Api;
 import org.ioteatime.meonghanyangserver.common.type.VideoSuccessType;
@@ -17,7 +18,7 @@ public class VideoDeviceController implements VideoDeviceApi {
 
     @PostMapping("/presigned-url")
     public Api<VideoPresignedUrlResponse> getVideoPresignedUrlForUpload(
-            @LoginMember Long cctvId, @RequestBody VideoNameRequest videoNameRequest) {
+            @LoginMember Long cctvId, @Valid @RequestBody VideoNameRequest videoNameRequest) {
         VideoPresignedUrlResponse videoPresignedUrlResponse =
                 videoService.generateVideoPresignedUrl(cctvId, videoNameRequest.videoName());
         return Api.success(VideoSuccessType.GENERATE_PRESIGNED_URL, videoPresignedUrlResponse);
